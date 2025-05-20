@@ -88,6 +88,11 @@ my-website/
 - Safari (latest)
 - Mobile browsers (touch support)
 
+## Live Site
+
+This portfolio is hosted on GitHub Pages and can be viewed at:
+[https://ngorkon.github.io/mywebsite/](https://ngorkon.github.io/mywebsite/)
+
 ## Roadmap
 - WebGL-based 3D physics simulations
 - Dark/light mode toggle with persistence
