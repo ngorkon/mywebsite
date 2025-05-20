@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ng'or Kon - Engineering ideas into reality</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <canvas id="background-reaction-canvas"></canvas> <!-- New background canvas -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="site-branding">
+                <a href="#hero" class="logo-link">
+                    <span class="logo-text-main">Mayom</span>
+                    <span class="logo-text-subtle">Kon</span>
+                </a>
+                <p class="tagline">Engineering ideas into reality...</p>
+            </div>
+            <nav class="main-navigation" id="main-nav">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About Me</a>
+                <a href="#journey" class="nav-link">Journey</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#honors" class="nav-link">Honors</a>
+                <a href="#connect" class="nav-link">Connect</a>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="menu-toggle-icon"></span>
+                <span class="menu-toggle-icon"></span>
+                <span class="menu-toggle-icon"></span>
+            </button>
+        </div>
+    </header>
+    <main>
+        <section id="hero" class="hero"> <!-- Added id="hero" -->
+            <canvas id="hero-particles-canvas"></canvas> <!-- Updated ID -->
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h2>Ng'or Kon</h2>
+                    <p>Engineering ideas into reality...</p>
+                    <div class="hero-cta-buttons">
+                        <button onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'});" class="hero-cta-btn">Explore Projects</button>
+                        <button onclick="document.getElementById('connect').scrollIntoView({behavior: 'smooth'});" class="hero-cta-btn">Contact</button>
+                    </div>
+                </div>
+                <div class="hero-image-container">
+                    <img src="images/ngorkon.png.png" alt="Mayom Kon - Profile Picture" class="profile-picture">
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-me"> <!-- New About Me Section -->
+            <div class="container">
+                <h2>About Me</h2>
+                <div class="about-content">
+                    <p>Highly motivated and detail-oriented student pursuing Honors in Physics-Mathematics and Chemistry at the College of Idaho. Passionate about leveraging technical skills and a collaborative spirit to engineer innovative solutions. Actively involved in academic clubs and leadership roles, demonstrating a commitment to community and continuous learning.</p>
+                    <h3>Skills Summary</h3>
+                    <div class="skills-grid">
+                        <div class="skill-category" style="--animation-order: 1;">
+                            <h4>Software</h4>
+                            <ul>
+                                <li>Microsoft Word</li>
+                                <li>Excel</li>
+                                <li>Google Spreadsheet</li>
+                                <li>Mathematica</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category" style="--animation-order: 2;">
+                            <h4>Technical</h4>
+                            <ul>
+                                <li>Mathematical Visualization</li>
+                                <li>Ethnographic Observation</li>
+                                <li>Notes Taking</li>
+                                <li>Python</li>
+                                <li>Robots Assembling</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category" style="--animation-order: 3;">
+                            <h4>Platforms</h4>
+                            <ul>
+                                <li>Wolfram Mathematica</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Existing Links section - consider removing or repurposing if nav is comprehensive -->
+        <section class="links" style="display: none;"> <!-- Temporarily hiding this as nav is more detailed -->
+            <div class="container">
+                <button>My Journey</button>
+                <button>Projects</button>
+                <button>Reflections</button>
+                <button>Let's Connect</button>
+            </div>
+        </section>
+
+        <section id="journey" class="journey">
+            <div class="container">
+                <h2>My Journey & Education</h2> <!-- Updated title -->
+                <div class="timeline">
+                    <div class="timeline-item education-item leadership-role" style="--animation-order: 1;">
+                        <h3>College of Idaho</h3>
+                        <p class="date">Expected Graduation: May 2027</p>
+                        <p>Honors: Physics-Mathematics and Chemistry</p>
+                        <p>Activities: Member of Physics club, Idaho UiS Stem club, Mandarin club. Treasurer, Interfaith council.</p>
+                    </div>
+                    <div class="timeline-item education-item" style="--animation-order: 2;">
+                        <h3>United World College Maastricht, Netherlands</h3>
+                        <p class="date">Sept 2021 - May 2023</p>
+                        <p>Activities: Robotic club, Musicals club.</p>
+                    </div>
+                    <!-- Original timeline items - can be kept or removed based on preference -->
+                    <div class="timeline-item" style="display:none;"> <!-- Hiding old placeholders -->
+                        <h3>2021</h3>
+                        <p>Began Physics Degree</p>
+                    </div>
+                    <div class="timeline-item" style="display:none;">
+                        <h3>2022</h3>
+                        <p>Built First Animation</p>
+                    </div>
+                    <div class="timeline-item" style="display:none;">
+                        <h3>2023</h3>
+                        <p>Launched TrailerLens</p>
+                    </div>
+                    <div class="timeline-item" style="display:none;">
+                        <h3>2024</h3>
+                        <p>Started SciMation Lab</p>
+                    </div>
+                    <div class="timeline-item" style="display:none;">
+                        <h3>2025</h3>
+                        <p>Created AI Orb Assistant</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects">
+            <div class="container">
+                <h2>Projects</h2>
+                <!-- Filter buttons can be kept if future projects warrant filtering -->
+                <div class="filter-buttons">
+                    <button class="active" data-filter="all">All</button>
+                    <button data-filter="robotics">Robotics</button>
+                    <button data-filter="community">Community</button>
+                    <!-- Add more filters as needed -->
+                </div>
+                <div class="project-grid">
+                    <div class="project-card" data-category="robotics" style="--animation-order: 1;">
+                        <img src="images/smart-bin.png" alt="Smart Bin Project"> <!-- Placeholder image -->
+                        <h3>Robotic Club: Smart Bin</h3>
+                        <p>Designed and built a smart bin using Arduino as part of a sustainability-focused club project, automating waste disposal and reducing pollution.</p>
+                        <div class="tags">
+                            <span>Arduino</span>
+                            <span>Robotics</span>
+                            <span>Sustainability</span>
+                        </div>
+                    </div>
+                    <div class="project-card" data-category="robotics" style="--animation-order: 2;">
+                        <img src="images/smart-pump.png" alt="Smart Irrigation Pump"> <!-- Placeholder image -->
+                        <h3>Robotic Club: Smart Irrigation Pump</h3>
+                        <p>Developed an automated water pump system for a garden club that enabled remote plant maintenance and reduced heat-related plant damage by approximately 20% during summer.</p>
+                        <div class="tags">
+                            <span>Automation</span>
+                            <span>Robotics</span>
+                            <span>Gardening</span>
+                        </div>
+                    </div>
+                    <div class="project-card" data-category="community" style="--animation-order: 3;">
+                        <img src="images/listen-ukraine.png" alt="Listen to Ukraine Project"> <!-- Placeholder image -->
+                        <h3>CODE043: Listen to Ukraine</h3>
+                        <p>Organized movie screenings and discussions, raising awareness of the war in Ukraine. Secured a $500 donation to support a local refugee charity.</p>
+                        <div class="tags">
+                            <span>Community Service</span>
+                            <span>Fundraising</span>
+                            <span>Awareness</span>
+                        </div>
+                    </div>
+                    <!-- Remove old placeholder project cards -->
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="experience"> <!-- New Leadership/Experience Section -->
+            <div class="container">
+                <h2>Leadership & Community</h2>
+                <div class="experience-grid">
+                    <div class="experience-item leadership-role" style="--animation-order: 1;">
+                        <h3>International Students Organization</h3>
+                        <p class="date">April 2024 - Present (Part-Time)</p>
+                        <p>Coordinate cross-cultural events for 100+ international students, collaborating with other clubs. Curate event ideas, manage coordination, and communicate details to ensure inclusive, engaging experiences.</p>
+                    </div>
+                    <div class="experience-item leadership-role" style="--animation-order: 2;">
+                        <h3>Asian Student Association</h3>
+                        <p class="date">April 2024 - Present (Part-Time)</p>
+                        <p>Manage ASA’s social media platforms, increasing engagement and event participation through targeted marketing campaigns.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="honors" class="honors-awards"> <!-- New Honors & Awards Section -->
+            <div class="container">
+                <h2>Honors & Awards</h2>
+                <ul class="awards-list">
+                    <li class="award-item content-card" style="--animation-order: 1;">
+                        <div class="award-decorator"></div>
+                        <div class="award-content">
+                            <h4 class="award-title">PROJECT KE 21 GRANTS: $1000</h4>
+                            <p class="award-meta"><span class="award-issuer">Issued by GOMAD UWCX Initiative</span> <span class="award-date">(May 2022)</span></p>
+                        </div>
+                    </li>
+                    <li class="award-item content-card" style="--animation-order: 2;">
+                        <div class="award-decorator"></div>
+                        <div class="award-content">
+                            <h4 class="award-title">LISTEN TO UKRAINE PROJECT, GRANTS: $500</h4>
+                            <p class="award-meta"><span class="award-issuer">Issued by CODE043</span> <span class="award-date">(April 2023)</span></p>
+                        </div>
+                    </li>
+                    <li class="award-item content-card" style="--animation-order: 3;">
+                        <div class="award-decorator"></div>
+                        <div class="award-content">
+                            <h4 class="award-title">UWC DAVIS SCHOLAR</h4>
+                            <p class="award-meta"><span class="award-date">2023 - 2027</span></p>
+                        </div>
+                    </li>
+                    <li class="award-item content-card" style="--animation-order: 4;">
+                        <div class="award-decorator"></div>
+                        <div class="award-content">
+                            <h4 class="award-title">NOMINEE OF THE NATIONAL SOCIETY OF LEADERSHIP AND SUCCESS (NSLS)</h4>
+                            <p class="award-meta"><span class="award-date">Present</span></p>
+                        </div>
+                    </li>
+                    <li class="award-item content-card" style="--animation-order: 5;">
+                        <div class="award-decorator"></div>
+                        <div class="award-content">
+                            <h4 class="award-title">GIPSON HONORS</h4>
+                            <!-- No extra meta needed based on OCR, an empty p.award-meta can be added if spacing is desired or handled by CSS margins -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="connect" class="connect-section">
+            <div class="container">
+                <h2 class="connect-title">Let's Connect</h2>
+                <div class="connect-grid">
+                    <div class="contact-form-container">
+                        <form action="https://formspree.io/f/xovdbwpw" method="POST">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required placeholder="Your Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required placeholder="Your Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="4" required placeholder="Your Message"></textarea>
+                            </div>
+                            <button type="submit" class="btn-send-message">Send Message</button>
+                        </form>
+                    </div>
+                    <div class="social-icons-container">
+                        <svg id="social-web-svg"></svg> <!-- ADDED SVG element for dynamic web -->
+                        <div class="social-icon-groups-wrapper"> <!-- ADDED WRAPPER -->
+                            <div class="social-icon-group group-1">
+                                <div class="social-icon-wrapper icon-github">
+                                    <a href="https://github.com/ngorkon" target="_blank" class="social-link" aria-label="GitHub">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div> <!-- END WRAPPER -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <footer>
+        <p>&copy; 2025 Mayom Kon (Ng'or Y. Kon). All rights reserved.</p>
+        <p>Engineering ideas into reality.</p>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>
