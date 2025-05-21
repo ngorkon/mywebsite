@@ -104,56 +104,92 @@ function initScrollAnimations() {
 
 // Experience Slideshow Logic
 function initExperienceSlideshow() {
+    console.log('Attempting to initialize Experience Slideshow...');
     const slideshowContainer = document.querySelector('.experience-slideshow-container');
     if (!slideshowContainer) {
-        // console.error('Experience slideshow container not found for init.');
+        console.error('Experience slideshow container NOT FOUND.');
         return;
     }
-    // Check if already initialized by a different path (e.g. if script runs after element is visible)
-    // This check might be redundant if initScrollAnimations is the sole entry point now.
-    // if (slideshowContainer.dataset.slideshowInitialized === 'true' && !slideshowContainer.classList.contains('visible')) {
-        // console.log('Slideshow init called but container not visible yet, deferring or already handled by observer');
-        // return;
-    // }
+    console.log('Slideshow container found:', slideshowContainer);
+
+    // This check is important if initScrollAnimations is the primary entry point.
+    // If the container is not yet visible (styled by CSS or not yet in DOM fully), offsetWidth might be 0.
+    if (!slideshowContainer.classList.contains('visible')) {
+        console.log('Slideshow container is not yet visible. Deferring full init until IntersectionObserver makes it visible.');
+        // We rely on IntersectionObserver to call this function again when '.visible' is added.
+        // However, the initial DOMContentLoaded call might still proceed if not guarded.
+        // Let's ensure it doesn't fully initialize if not visible.
+        return; 
+    }
+    
+    if (slideshowContainer.dataset.slideshowInitialized === 'true') {
+        console.log('Slideshow already marked as initialized. Skipping re-initialization unless forced.');
+        // Potentially add logic here if re-initialization under certain conditions is needed.
+        // For now, if it's marked and visible, assume it's working or another logic path handles it.
+        // return; // This might prevent re-init on resize if not handled carefully.
+    }
+
 
     const slideshowWrapper = slideshowContainer.querySelector('.slideshow-wrapper');
     const track = slideshowContainer.querySelector('.experience-grid');
     const nextButton = slideshowContainer.querySelector('.next-btn');
     const prevButton = slideshowContainer.querySelector('.prev-btn');
 
+    if (!slideshowWrapper) console.error('Slideshow WRAPPER not found.');
+    if (!track) console.error('Slideshow TRACK (experience-grid) not found.');
+    if (!nextButton) console.warn('Slideshow NEXT button not found.');
+    if (!prevButton) console.warn('Slideshow PREV button not found.');
+
     if (!slideshowWrapper || !track) {
-        // console.error('Slideshow wrapper or track not found within visible container.');
+        console.error('Critical slideshow elements (wrapper or track) missing. Aborting init.');
         if(nextButton) nextButton.style.display = 'none';
         if(prevButton) prevButton.style.display = 'none';
         return;
     }
+    console.log('Slideshow wrapper and track found.');
 
     const items = Array.from(track.querySelectorAll('.experience-item'));
+    console.log(`Found ${items.length} experience items.`);
     if (items.length === 0) {
+        console.warn('No experience items found for the slideshow.');
         if(nextButton) nextButton.style.display = 'none';
         if(prevButton) prevButton.style.display = 'none';
         return;
     }
 
-    const itemsPerSlide = 2;
+    let itemsPerSlide = 2;
+    // Update itemsPerSlide based on screen width
+    if (window.innerWidth <= 768) {
+        itemsPerSlide = 1;
+    }
+
     let currentIndex = 0;
     const totalSlides = Math.ceil(items.length / itemsPerSlide);
+    console.log(`Items per slide: ${itemsPerSlide}, Total slides: ${totalSlides}`);
     let autoSlideInterval;
     const autoSlideDelay = 7000;
 
+    // Hide buttons initially, show them if totalSlides > 1
     if(nextButton) nextButton.style.display = 'none';
     if(prevButton) prevButton.style.display = 'none';
 
-    function updateSlideshow() {
+    function updateSlideshow(reason = "general update") {
+        console.log(`updateSlideshow called. Reason: ${reason}. Current index: ${currentIndex}`);
+        if (!slideshowWrapper) {
+            console.error("slideshowWrapper is null in updateSlideshow. Aborting.");
+            return;
+        }
         const slideWidth = slideshowWrapper.offsetWidth;
+        console.log(`Slideshow wrapper offsetWidth: ${slideWidth}`);
+
         if (slideWidth === 0) {
-            // console.warn('Slideshow wrapper has no width during update. Retrying with rAF.');
-            // This might happen if called during a resize before layout is final.
-            requestAnimationFrame(updateSlideshow);
+            console.warn('Slideshow wrapper has 0 width during update. Retrying with rAF.');
+            requestAnimationFrame(() => updateSlideshow("retry after 0 width"));
             return;
         }
 
         track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        console.log(`Track transform: translateX(-${currentIndex * slideWidth}px)`);
 
         items.forEach((item, index) => {
             const itemSlideIndex = Math.floor(index / itemsPerSlide);
@@ -161,73 +197,112 @@ function initExperienceSlideshow() {
                 item.classList.add('slide-active');
                 const itemIndexInSlide = index % itemsPerSlide;
                 item.style.transitionDelay = `${itemIndexInSlide * 0.15}s`;
+                // console.log(`Item ${index} (in slide ${currentIndex}) is ACTIVE. Delay: ${item.style.transitionDelay}`);
             } else {
                 item.classList.remove('slide-active');
                 item.style.transitionDelay = '0s';
+                // console.log(`Item ${index} (in slide ${itemSlideIndex}) is INACTIVE.`);
             }
         });
+        console.log('Finished updating item active states and delays.');
     }
 
     function showNextSlide() {
         currentIndex = (currentIndex + 1) % totalSlides;
-        updateSlideshow();
+        updateSlideshow("next slide");
     }
 
     function showPrevSlide() {
         currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-        updateSlideshow();
+        updateSlideshow("prev slide");
     }
 
     function startAutoSlide() {
         stopAutoSlide(); 
         if (totalSlides > 1) { 
+            console.log(`Starting auto-slide. Delay: ${autoSlideDelay}ms`);
             autoSlideInterval = setInterval(showNextSlide, autoSlideDelay);
+        } else {
+            console.log('Auto-slide not started: totalSlides <= 1.');
         }
     }
 
     function stopAutoSlide() {
+        // console.log('Stopping auto-slide.');
         clearInterval(autoSlideInterval);
     }
 
     if (totalSlides <= 1) {
-        // No buttons or auto-slide for a single slide page
+        console.log('Total slides <= 1. Hiding nav buttons and disabling auto-slide.');
+        if (items.length > 0) { // If there's at least one item, make it active
+            requestAnimationFrame(() => updateSlideshow("single slide setup"));
+        }
     } else {
+        console.log('Multiple slides detected. Setting up navigation and auto-slide.');
         if(nextButton) nextButton.style.display = 'flex';
         if(prevButton) prevButton.style.display = 'flex';
 
         if (nextButton) {
             nextButton.addEventListener('click', () => {
+                console.log('Next button clicked.');
                 showNextSlide();
-                stopAutoSlide();
+                stopAutoSlide(); // Stop auto-slide on manual interaction
+                // Optionally restart auto-slide after a delay if desired
+                // setTimeout(startAutoSlide, autoSlideDelay * 2); 
             });
         }
         if (prevButton) {
             prevButton.addEventListener('click', () => {
+                console.log('Previous button clicked.');
                 showPrevSlide();
-                stopAutoSlide();
+                stopAutoSlide(); // Stop auto-slide on manual interaction
+                // setTimeout(startAutoSlide, autoSlideDelay * 2);
             });
         }
-        slideshowContainer.addEventListener('mouseenter', stopAutoSlide);
-        slideshowContainer.addEventListener('mouseleave', startAutoSlide);
+        slideshowContainer.addEventListener('mouseenter', () => {
+            // console.log('Mouse entered slideshow. Stopping auto-slide.');
+            stopAutoSlide();
+        });
+        slideshowContainer.addEventListener('mouseleave', () => {
+            // console.log('Mouse left slideshow. Starting auto-slide.');
+            startAutoSlide();
+        });
         startAutoSlide();
     }
-
-    // Initial call to set up the first slide, now that container is presumed visible.
-    // Use rAF to ensure dimensions are calculated after any final browser rendering updates.
-    requestAnimationFrame(updateSlideshow);
+    
+    // Initial call to set up the first slide.
+    // Using requestAnimationFrame to ensure dimensions are calculated after any final browser rendering.
+    console.log('Requesting initial updateSlideshow via rAF.');
+    requestAnimationFrame(() => updateSlideshow("initial setup"));
 
     window.addEventListener('resize', () => {
+        console.log('Window resize detected for slideshow.');
         stopAutoSlide();
+        
+        // Update itemsPerSlide on resize
+        if (window.innerWidth <= 768) {
+            itemsPerSlide = 1;
+        } else {
+            itemsPerSlide = 2;
+        }
+        // Recalculate totalSlides as itemsPerSlide might have changed
+        const newTotalSlides = Math.ceil(items.length / itemsPerSlide);
+        // If current index is out of bounds due to change in totalSlides, reset it
+        if (currentIndex >= newTotalSlides) {
+            currentIndex = Math.max(0, newTotalSlides - 1);
+        }
+
         requestAnimationFrame(() => {
-            updateSlideshow(); // Recalculate based on new wrapper width
-            if (totalSlides > 1) {
+            console.log('Updating slideshow due to resize (after rAF).');
+            updateSlideshow("resize"); 
+            if (totalSlides > 1) { // Use the original totalSlides for this check or re-evaluate logic
                 startAutoSlide();
             }
         });
     });
 
-    // Mark as initialized (though the dataset flag is on the container element itself)
-    // console.log('Experience slideshow fully initialized.');
+    slideshowContainer.dataset.slideshowInitialized = 'true';
+    console.log('Experience slideshow initialization process COMPLETED.');
 }
 
 // -------------------- HAMBURGER MENU --------------------
@@ -549,56 +624,92 @@ function initBackgroundReactionAnimation(canvasId) {
 
 // -------------------- EXPERIENCE SLIDESHOW --------------------
 function initExperienceSlideshow() {
+    console.log('Attempting to initialize Experience Slideshow...');
     const slideshowContainer = document.querySelector('.experience-slideshow-container');
     if (!slideshowContainer) {
-        // console.error('Experience slideshow container not found for init.');
+        console.error('Experience slideshow container NOT FOUND.');
         return;
     }
-    // Check if already initialized by a different path (e.g. if script runs after element is visible)
-    // This check might be redundant if initScrollAnimations is the sole entry point now.
-    // if (slideshowContainer.dataset.slideshowInitialized === 'true' && !slideshowContainer.classList.contains('visible')) {
-        // console.log('Slideshow init called but container not visible yet, deferring or already handled by observer');
-        // return;
-    // }
+    console.log('Slideshow container found:', slideshowContainer);
+
+    // This check is important if initScrollAnimations is the primary entry point.
+    // If the container is not yet visible (styled by CSS or not yet in DOM fully), offsetWidth might be 0.
+    if (!slideshowContainer.classList.contains('visible')) {
+        console.log('Slideshow container is not yet visible. Deferring full init until IntersectionObserver makes it visible.');
+        // We rely on IntersectionObserver to call this function again when '.visible' is added.
+        // However, the initial DOMContentLoaded call might still proceed if not guarded.
+        // Let's ensure it doesn't fully initialize if not visible.
+        return; 
+    }
+    
+    if (slideshowContainer.dataset.slideshowInitialized === 'true') {
+        console.log('Slideshow already marked as initialized. Skipping re-initialization unless forced.');
+        // Potentially add logic here if re-initialization under certain conditions is needed.
+        // For now, if it's marked and visible, assume it's working or another logic path handles it.
+        // return; // This might prevent re-init on resize if not handled carefully.
+    }
+
 
     const slideshowWrapper = slideshowContainer.querySelector('.slideshow-wrapper');
     const track = slideshowContainer.querySelector('.experience-grid');
     const nextButton = slideshowContainer.querySelector('.next-btn');
     const prevButton = slideshowContainer.querySelector('.prev-btn');
 
+    if (!slideshowWrapper) console.error('Slideshow WRAPPER not found.');
+    if (!track) console.error('Slideshow TRACK (experience-grid) not found.');
+    if (!nextButton) console.warn('Slideshow NEXT button not found.');
+    if (!prevButton) console.warn('Slideshow PREV button not found.');
+
     if (!slideshowWrapper || !track) {
-        // console.error('Slideshow wrapper or track not found within visible container.');
+        console.error('Critical slideshow elements (wrapper or track) missing. Aborting init.');
         if(nextButton) nextButton.style.display = 'none';
         if(prevButton) prevButton.style.display = 'none';
         return;
     }
+    console.log('Slideshow wrapper and track found.');
 
     const items = Array.from(track.querySelectorAll('.experience-item'));
+    console.log(`Found ${items.length} experience items.`);
     if (items.length === 0) {
+        console.warn('No experience items found for the slideshow.');
         if(nextButton) nextButton.style.display = 'none';
         if(prevButton) prevButton.style.display = 'none';
         return;
     }
 
-    const itemsPerSlide = 2;
+    let itemsPerSlide = 2;
+    // Update itemsPerSlide based on screen width
+    if (window.innerWidth <= 768) {
+        itemsPerSlide = 1;
+    }
+
     let currentIndex = 0;
     const totalSlides = Math.ceil(items.length / itemsPerSlide);
+    console.log(`Items per slide: ${itemsPerSlide}, Total slides: ${totalSlides}`);
     let autoSlideInterval;
     const autoSlideDelay = 7000;
 
+    // Hide buttons initially, show them if totalSlides > 1
     if(nextButton) nextButton.style.display = 'none';
     if(prevButton) prevButton.style.display = 'none';
 
-    function updateSlideshow() {
+    function updateSlideshow(reason = "general update") {
+        console.log(`updateSlideshow called. Reason: ${reason}. Current index: ${currentIndex}`);
+        if (!slideshowWrapper) {
+            console.error("slideshowWrapper is null in updateSlideshow. Aborting.");
+            return;
+        }
         const slideWidth = slideshowWrapper.offsetWidth;
+        console.log(`Slideshow wrapper offsetWidth: ${slideWidth}`);
+
         if (slideWidth === 0) {
-            // console.warn('Slideshow wrapper has no width during update. Retrying with rAF.');
-            // This might happen if called during a resize before layout is final.
-            requestAnimationFrame(updateSlideshow);
+            console.warn('Slideshow wrapper has 0 width during update. Retrying with rAF.');
+            requestAnimationFrame(() => updateSlideshow("retry after 0 width"));
             return;
         }
 
         track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        console.log(`Track transform: translateX(-${currentIndex * slideWidth}px)`);
 
         items.forEach((item, index) => {
             const itemSlideIndex = Math.floor(index / itemsPerSlide);
@@ -606,73 +717,112 @@ function initExperienceSlideshow() {
                 item.classList.add('slide-active');
                 const itemIndexInSlide = index % itemsPerSlide;
                 item.style.transitionDelay = `${itemIndexInSlide * 0.15}s`;
+                // console.log(`Item ${index} (in slide ${currentIndex}) is ACTIVE. Delay: ${item.style.transitionDelay}`);
             } else {
                 item.classList.remove('slide-active');
                 item.style.transitionDelay = '0s';
+                // console.log(`Item ${index} (in slide ${itemSlideIndex}) is INACTIVE.`);
             }
         });
+        console.log('Finished updating item active states and delays.');
     }
 
     function showNextSlide() {
         currentIndex = (currentIndex + 1) % totalSlides;
-        updateSlideshow();
+        updateSlideshow("next slide");
     }
 
     function showPrevSlide() {
         currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-        updateSlideshow();
+        updateSlideshow("prev slide");
     }
 
     function startAutoSlide() {
         stopAutoSlide(); 
         if (totalSlides > 1) { 
+            console.log(`Starting auto-slide. Delay: ${autoSlideDelay}ms`);
             autoSlideInterval = setInterval(showNextSlide, autoSlideDelay);
+        } else {
+            console.log('Auto-slide not started: totalSlides <= 1.');
         }
     }
 
     function stopAutoSlide() {
+        // console.log('Stopping auto-slide.');
         clearInterval(autoSlideInterval);
     }
 
     if (totalSlides <= 1) {
-        // No buttons or auto-slide for a single slide page
+        console.log('Total slides <= 1. Hiding nav buttons and disabling auto-slide.');
+        if (items.length > 0) { // If there's at least one item, make it active
+            requestAnimationFrame(() => updateSlideshow("single slide setup"));
+        }
     } else {
+        console.log('Multiple slides detected. Setting up navigation and auto-slide.');
         if(nextButton) nextButton.style.display = 'flex';
         if(prevButton) prevButton.style.display = 'flex';
 
         if (nextButton) {
             nextButton.addEventListener('click', () => {
+                console.log('Next button clicked.');
                 showNextSlide();
-                stopAutoSlide();
+                stopAutoSlide(); // Stop auto-slide on manual interaction
+                // Optionally restart auto-slide after a delay if desired
+                // setTimeout(startAutoSlide, autoSlideDelay * 2); 
             });
         }
         if (prevButton) {
             prevButton.addEventListener('click', () => {
+                console.log('Previous button clicked.');
                 showPrevSlide();
-                stopAutoSlide();
+                stopAutoSlide(); // Stop auto-slide on manual interaction
+                // setTimeout(startAutoSlide, autoSlideDelay * 2);
             });
         }
-        slideshowContainer.addEventListener('mouseenter', stopAutoSlide);
-        slideshowContainer.addEventListener('mouseleave', startAutoSlide);
+        slideshowContainer.addEventListener('mouseenter', () => {
+            // console.log('Mouse entered slideshow. Stopping auto-slide.');
+            stopAutoSlide();
+        });
+        slideshowContainer.addEventListener('mouseleave', () => {
+            // console.log('Mouse left slideshow. Starting auto-slide.');
+            startAutoSlide();
+        });
         startAutoSlide();
     }
-
-    // Initial call to set up the first slide, now that container is presumed visible.
-    // Use rAF to ensure dimensions are calculated after any final browser rendering updates.
-    requestAnimationFrame(updateSlideshow);
+    
+    // Initial call to set up the first slide.
+    // Using requestAnimationFrame to ensure dimensions are calculated after any final browser rendering.
+    console.log('Requesting initial updateSlideshow via rAF.');
+    requestAnimationFrame(() => updateSlideshow("initial setup"));
 
     window.addEventListener('resize', () => {
+        console.log('Window resize detected for slideshow.');
         stopAutoSlide();
+        
+        // Update itemsPerSlide on resize
+        if (window.innerWidth <= 768) {
+            itemsPerSlide = 1;
+        } else {
+            itemsPerSlide = 2;
+        }
+        // Recalculate totalSlides as itemsPerSlide might have changed
+        const newTotalSlides = Math.ceil(items.length / itemsPerSlide);
+        // If current index is out of bounds due to change in totalSlides, reset it
+        if (currentIndex >= newTotalSlides) {
+            currentIndex = Math.max(0, newTotalSlides - 1);
+        }
+
         requestAnimationFrame(() => {
-            updateSlideshow(); // Recalculate based on new wrapper width
-            if (totalSlides > 1) {
+            console.log('Updating slideshow due to resize (after rAF).');
+            updateSlideshow("resize"); 
+            if (totalSlides > 1) { // Use the original totalSlides for this check or re-evaluate logic
                 startAutoSlide();
             }
         });
     });
 
-    // Mark as initialized (though the dataset flag is on the container element itself)
-    // console.log('Experience slideshow fully initialized.');
+    slideshowContainer.dataset.slideshowInitialized = 'true';
+    console.log('Experience slideshow initialization process COMPLETED.');
 }
 
 // -------------------- DYNAMIC SOCIAL WEB --------------------

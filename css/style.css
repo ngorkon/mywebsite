@@ -440,6 +440,8 @@ a.animated-underline:hover::after {
     color: #B8C8E8;
     font-size: clamp(0.95rem, 1.5vw, 1rem);
     line-height: 1.7;
+    overflow-wrap: break-word; /* Help prevent overflow from long words */
+    word-wrap: break-word; /* Fallback for older browsers */
 }
 
 /* Slideshow Navigation Buttons */
@@ -476,6 +478,33 @@ a.animated-underline:hover::after {
 .next-btn {
     right: 0px; /* Position outside the padding of slideshow-container */
 }
+
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+    .experience-slideshow-container {
+        padding: 0 40px; /* Existing padding for button area */
+    }
+
+    .experience-item {
+        flex: 0 0 100%; /* Each item takes full width */
+        padding: 25px 15px; /* Reduced L/R padding for more content space, T/B 25px */
+    }
+
+    .slideshow-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .prev-btn {
+        left: 5px; /* Adjust button position */
+    }
+
+    .next-btn {
+        right: 5px; /* Adjust button position */
+    }
+}
+
 
 /* Header Refinement for Elegance */
 .site-header {
