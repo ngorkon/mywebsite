@@ -188,7 +188,7 @@ a.animated-underline:hover::after {
     background-color: #00A9FF;
     color: #020024;
     border-color: #00A9FF;
-    box-shadow: 0 0 15px rgba(0, 169, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0,169,255,0.5);
     transform: translateY(-2px);
 }
 
@@ -212,7 +212,7 @@ a.animated-underline:hover::after {
                 opacity 0.5s ease-out, 
                 transform 0.5s ease-out; /* Added opacity and transform for scroll animation */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 
-                inset 0 0 5px rgba(0, 169, 255, 0.1); /* Inner glow */
+                inset 0 0 5px rgba(0,169,255,0.1); /* Inner glow */
     overflow: hidden; /* Ensure image corners are clipped */
     position: relative; /* For pseudo-elements if needed */
 
@@ -334,40 +334,70 @@ a.animated-underline:hover::after {
     background: linear-gradient(135deg, #020024 0%, #03001C 60%, #0b0030 100%); /* Consistent gradient */
     padding-top: 100px;
     padding-bottom: 100px;
+    position: relative; /* For positioning slideshow buttons */
 }
 
 .experience h2 {
-    margin-bottom: 60px; /* This matches global h2, can be kept or removed if desired */
+    margin-bottom: 60px;
+}
+
+.experience-slideshow-container {
+    position: relative;
+    max-width: 1000px; /* Increased from 800px to make columns wider */
+    margin: 0 auto;
+    padding: 0 50px; /* Space for prev/next buttons */
+    /* Initial state for scroll animation */
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out 0.2s; /* Added delay */
+}
+
+.experience-slideshow-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slideshow-wrapper {
+    overflow: hidden; /* Crucial for slideshow effect */
+    width: 100%;
 }
 
 .experience-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Single column layout */
-    gap: 35px;
-    max-width: 800px; /* Content not too wide */
-    margin: 0 auto;
+    display: flex; /* Key for horizontal layout of items */
+    gap: 20px; /* Gap between items, managed by flexbox */
+    transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Smooth slide transition */
 }
 
 .experience-item {
-    background: rgba(20, 30, 55, 0.6); /* Darker, more subdued card background */
-    border-left: 4px solid #00A9FF; /* Accent line on the left */
+    background: rgba(20, 30, 55, 0.6);
+    border-left: 4px solid #00A9FF;
     padding: 30px;
     border-radius: 8px;
-    transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease, opacity 0.5s ease-out, transform 0.5s ease-out;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     position: relative;
     overflow: hidden;
+    box-sizing: border-box; /* Ensure padding/border are within the width/height */
 
-    /* Initial state for scroll animation */
+    flex: 0 0 calc(50% - 10px); /* Each item is 50% of parent minus half the gap (20px / 2 = 10px) */
+    /* margin-right: 20px; Removed, gap property on parent handles spacing */
+
+    /* Initial state for slide-in animation */
     opacity: 0;
-    transform: translateX(-50px); /* Slide in from left */
-    animation-delay: calc(var(--animation-order, 0) * 200ms); /* Staggered animation */
+    transform: translateY(30px) scale(0.95);
+    transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    /* transition-delay will be set by JS for active slides */
 }
 
-.experience-item.visible { /* State when scrolled into view */
+/* .experience-item:last-child { */ /* No longer needed with gap */
+    /* margin-right: 0; */
+/* } */
+
+/* Styles for items that are part of the active slide - JS will add/remove this class */
+.experience-item.slide-active {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0) scale(1);
 }
+
 
 .experience-item::before { /* Subtle top glow element */
     content: '';
@@ -382,7 +412,7 @@ a.animated-underline:hover::after {
 
 .experience-item:hover {
     background-color: rgba(25, 35, 65, 0.8);
-    transform: translateY(-8px) scale(1.01);
+    transform: translateY(-8px) scale(1.01); /* Keep existing hover */
     box-shadow: 0 10px 25px rgba(0, 169, 255, 0.25), 0 5px 15px rgba(0,0,0,0.3);
 }
 
@@ -395,25 +425,57 @@ a.animated-underline:hover::after {
     color: #E0E8FF;
     font-size: clamp(1.4rem, 2.2vw, 1.7rem);
     margin-bottom: 8px;
-    text-shadow: 0 0 4px rgba(135, 206, 250, 0.4); /* Light Sky Blue glow */
+    text-shadow: 0 0 4px rgba(135, 206, 250, 0.4);
 }
 
 .experience-item .date {
     font-family: 'Roboto', sans-serif;
-    color: #87A0C0; /* Subtler color for date */
+    color: #87A0C0;
     font-size: clamp(0.85rem, 1.2vw, 0.9rem);
     margin-bottom: 15px;
     font-style: italic;
 }
 
 .experience-item p:not(.date) {
-    color: #B8C8E8; /* Slightly brighter paragraph text */
+    color: #B8C8E8;
     font-size: clamp(0.95rem, 1.5vw, 1rem);
     line-height: 1.7;
 }
 
-/* Ensure the scroll animation targets .project-card */
-/* No changes needed in script.js if initScrollAnimations already targets '.project-card' or a parent */
+/* Slideshow Navigation Buttons */
+.slideshow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 169, 255, 0.3); /* Semi-transparent cyan */
+    color: #E0E8FF;
+    border: 1px solid rgba(0, 229, 255, 0.5);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 169, 255, 0.2);
+}
+
+.slideshow-btn:hover {
+    background-color: rgba(0, 229, 255, 0.5);
+    border-color: #00E5FF;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+    left: 0px; /* Position outside the padding of slideshow-container */
+}
+
+.next-btn {
+    right: 0px; /* Position outside the padding of slideshow-container */
+}
 
 /* Header Refinement for Elegance */
 .site-header {
@@ -759,7 +821,7 @@ section:not(#hero):not(:last-of-type)::after {
 }
 
 .hero-cta-btn::before {
-    content: \'\';
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1048,7 +1110,7 @@ section:not(#hero):not(:last-of-type)::after {
 }
 
 .skill-category ul li::before { /* Custom bullet point */
-    content: '\\272A'; /* Star-like symbol or use SVG */
+    content: '\272A'; /* Star-like symbol or use SVG */
     color: #00A9FF;
     position: absolute;
     left: 0;
@@ -1159,31 +1221,16 @@ section:not(#hero):not(:last-of-type)::after {
 }
 
 /* Let's Connect Section Styling */
-.connect-section { /* Changed from .connect to avoid conflict if .connect is a more general class */
-    position: relative; /* Needed for absolute positioning of the canvas */
+.connect {
     /* background: linear-gradient(135deg, #020024 0%, #03001C 60%, #0b0030 100%),
                 url('../images/connect-background-overlay.png') no-repeat center center / cover; */
     /* Overlay image can be added if desired */
     padding-top: 100px;
     padding-bottom: 100px;
-    overflow: hidden; /* Prevent canvas overflow issues */
 }
 
-#connect-particles-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Behind connect section content */
-    /* Optional: if the particle colors are too light and clash with light text */
-    /* filter: brightness(0.8); */ 
-}
-
-.connect-section h2 { /* Changed from .connect h2 */
+.connect h2 {
     margin-bottom: 70px;
-    position: relative; /* Ensure h2 is above canvas */
-    z-index: 1;
 }
 
 .connect-grid {
@@ -1193,28 +1240,26 @@ section:not(#hero):not(:last-of-type)::after {
     align-items: start; /* Align items to the start of their grid area */
     max-width: 1100px;
     margin: 0 auto;
-    position: relative; /* Ensure grid content is above canvas */
-    z-index: 1;
 }
 
 /* Styling for form elements and social icons container for scroll animation */
-.connect-section .form-group, /* Changed from .connect */
-.connect-section button[type="submit"],
-.connect-section .social-icons-container {
+.connect .form-group,
+.connect button[type="submit"],
+.connect .social-icons-container {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
     /* Staggering will be handled by JS if it adds .visible with delay, or by CSS if --animation-order is applied in HTML */
 }
 
-.connect-section .form-group { animation-delay: calc(var(--animation-order, 1) * 100ms); }
-.connect-section button[type="submit"] { animation-delay: calc(var(--animation-order, 3) * 100ms); } /* Assuming form groups are 1 and 2 */
-.connect-section .social-icons-container { animation-delay: calc(var(--animation-order, 1) * 100ms); } /* If in a different column */
+.connect .form-group { animation-delay: calc(var(--animation-order, 1) * 100ms); }
+.connect button[type="submit"] { animation-delay: calc(var(--animation-order, 3) * 100ms); } /* Assuming form groups are 1 and 2 */
+.connect .social-icons-container { animation-delay: calc(var(--animation-order, 1) * 100ms); } /* If in a different column */
 
 
-.connect-section .form-group.visible,
-.connect-section button[type="submit"].visible,
-.connect-section .social-icons-container.visible {
+.connect .form-group.visible,
+.connect button[type="submit"].visible,
+.connect .social-icons-container.visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -1226,8 +1271,6 @@ section:not(#hero):not(:last-of-type)::after {
     border-radius: 12px;
     border: 1px solid #253858;
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    position: relative; /* Ensure form content is above canvas */
-    z-index: 1;
 }
 
 .contact-form h3 {
@@ -1296,7 +1339,7 @@ section:not(#hero):not(:last-of-type)::after {
 }
 
 
-.connect-section button[type="submit"] { /* Changed from .connect */
+.connect button[type="submit"] {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(1rem, 1.8vw, 1.1rem);
     padding: 15px 35px;
@@ -1318,8 +1361,8 @@ section:not(#hero):not(:last-of-type)::after {
     margin-top: 10px;
 }
 
-.connect-section button[type="submit"]:hover,
-.connect-section button[type="submit"]:focus {
+.connect button[type="submit"]:hover,
+.connect button[type="submit"]:focus {
     background-color: #00A9FF;
     color: #020024;
     box-shadow: 0 0 20px rgba(0, 169, 255, 0.7), 0 0 30px rgba(0, 229, 255, 0.5), inset 0 0 8px rgba(0, 80, 150, 0.4);
@@ -1405,6 +1448,7 @@ section:not(#hero):not(:last-of-type)::after {
     width: 100%;
     height: 100%;
     z-index: -1; /* Behind social icons but above section background */
+    opacity: 0.3; /* Make it subtle */
 }
 
 
@@ -1446,377 +1490,376 @@ section:not(#hero):not(:last-of-type)::after {
 
 
 /* Footer Styling */
-.site-footer {
-    background: rgba(5, 10, 25, 0.9); /* Darker, slightly transparent */
-    color: #A0B8D8; /* Softer text color */
-    padding: 40px 0;
-    text-align: center;
-    font-size: 0.9rem;
-    border-top: 1px solid rgba(0, 169, 255, 0.15); /* Subtle top border */
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); /* Shadow upwards */
-}
+/* ...existing code... */
 
-.site-footer p {
-    margin: 0.5em 0;
-    color: #A0B8D8; /* Ensure paragraph color is consistent */
-}
+/* -------------------- MEDIA QUERIES FOR RESPONSIVENESS -------------------- */
 
-.site-footer a {
-    color: #00A9FF;
-    text-decoration: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.site-footer a:hover {
-    color: #00E5FF;
-    text-shadow: 0 0 6px rgba(0, 229, 255, 0.6);
-}
-
-.footer-social-icons {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.footer-social-icons .social-icon { /* Re-use .social-icon styling but maybe smaller */
-    display: inline-block;
-    width: 35px; /* Smaller for footer */
-    height: 35px;
-    margin: 0 10px;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    filter: drop-shadow(0 0 3px rgba(0, 229, 255, 0.4));
-}
-
-.footer-social-icons .social-icon svg {
-    width: 100%;
-    height: 100%;
-    fill: #87A0C0; /* Subtler icon color for footer */
-    transition: fill 0.3s ease;
-}
-
-.footer-social-icons .social-icon:hover {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.7));
-}
-
-.footer-social-icons .social-icon:hover svg {
-    fill: #00E5FF;
-}
-
-/* Back to Top Button - Optional, but good for long pages */
-.back-to-top {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    background-color: rgba(0, 169, 255, 0.6);
-    color: #E0E8FF;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 45px; /* Vertically center icon/text */
-    font-size: 1.5rem; /* Size of arrow or text */
-    box-shadow: 0 4px 12px rgba(0, 169, 255, 0.4);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
-    transform: translateY(20px);
-}
-
-.back-to-top.visible { /* JS will add this class on scroll */
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.back-to-top:hover {
-    background-color: #00A9FF;
-    transform: translateY(-3px) scale(1.05);
-}
-
-/* MEDIA QUERIES */
-/* Tablet (Portrait and Landscape) */
+/* Medium Devices (Tablets, smaller desktops - e.g., up to 1024px) */
 @media (max-width: 1024px) {
-    /* ... existing 1024px styles ... */
-
-    .site-header {
-        padding: 10px 0; /* Slightly reduce header padding */
+    body {
+        padding-top: 70px; /* Adjust if header height changes */
     }
+
+    .container, .header-container {
+        width: 90%;
+    }
+
+    h1 { font-size: clamp(2.2rem, 4.5vw, 3.5rem); }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 50px; }
+    h3 { font-size: clamp(1.4rem, 2.8vw, 1.8rem); }
+
+    section {
+        padding: 60px 0;
+    }
+
+    .hero-text {
+        padding-right: 20px;
+    }
+
+    .hero-text h2 {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+    }
+
+    .hero-text p {
+        font-size: clamp(1rem, 2vw, 1.3rem);
+    }
+
+    .profile-picture {
+        width: clamp(240px, 28vw, 320px);
+        height: clamp(240px, 28vw, 320px);
+    }
+
+    .project-grid {
+        gap: 30px;
+    }
+    .project-card {
+        padding: 20px;
+    }
+
+    .timeline {
+        max-width: 700px;
+    }
+    
+    .connect-grid {
+        gap: 30px;
+    }
+}
+
+
+/* Small Devices (Portrait Tablets, Large Phones - e.g., up to 768px) */
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px; /* Header height for mobile */
+        line-height: 1.6;
+    }
+    
+    .site-header {
+        padding: 10px 0;
+    }
+
     .header-container {
         width: 95%;
+        padding: 0 10px; /* Ensure some padding */
     }
+    
     .main-navigation {
-        /* Styles for when hamburger menu is active */
-        display: none; /* Hide by default */
         position: absolute;
-        top: 100%; /* Position below header */
+        top: 60px; /* Match header height */
         left: 0;
         width: 100%;
-        background-color: rgba(10, 20, 45, 0.95); /* Match header, slightly more opaque */
+        background: rgba(10, 20, 45, 0.95); /* Slightly more opaque for readability */
         backdrop-filter: blur(10px) saturate(150%);
-        padding: 20px 0;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        border-top: 1px solid rgba(0, 169, 255, 0.1);
-    }
-    .main-navigation.active { /* JS toggles this class */
-        display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 10px 0;
+        display: none; /* Hidden by default */
+        box-shadow: 0 10px 15px rgba(0,0,0,0.2);
     }
+
+    .main-navigation.active { /* This class will be toggled by JS */
+        display: flex; 
+    }
+
     .main-navigation .nav-link {
         padding: 12px 20px;
-        margin: 8px 0; /* Stack vertically */
-        width: 80%;
+        width: 100%;
         text-align: center;
-        border-radius: 4px;
+        margin-left: 0;
+        border-bottom: 1px solid rgba(0, 169, 255, 0.1);
+    }
+    .main-navigation .nav-link:last-child {
+        border-bottom: none;
     }
     .main-navigation .nav-link:hover,
     .main-navigation .nav-link.active {
-        background-color: rgba(0, 169, 255, 0.15);
+        background-color: rgba(0, 169, 255, 0.2);
     }
-    .main-navigation .nav-link::before { /* Adjust underline for stacked items */
-        bottom: 2px;
-        height: 2px;
+    .main-navigation .nav-link:hover::before,
+    .main-navigation .nav-link.active::before {
+        width: 40%; /* Underline for mobile nav */
     }
+
+
     .menu-toggle {
         display: block; /* Show hamburger icon */
     }
 
+    .logo-text-main { font-size: clamp(1.5rem, 2.5vw, 1.8rem); }
+    .logo-text-subtle { font-size: clamp(1.4rem, 2.4vw, 1.7rem); }
+    .tagline { display: none; } /* Hide tagline on smaller screens to save space */
+
+
+    .hero {
+        min-height: auto; /* Allow hero to shrink if needed */
+        padding: 60px 15px;
+        text-align: center;
+    }
+
     .hero-content {
         flex-direction: column;
-        text-align: center;
+        gap: 40px;
     }
+
     .hero-text {
         padding-right: 0;
-        margin-bottom: 40px;
-        text-align: center; /* Center text on mobile */
+        text-align: center;
+        order: 2; /* Text below image */
     }
-    .hero-text h2, .hero-text p {
+    .hero-text h2 {
         text-align: center;
     }
+    .hero-text p {
+        text-align: center;
+        margin-bottom: 30px;
+    }
     .hero-image-container {
-        margin-top: 30px;
+        order: 1; /* Image above text */
+        margin-bottom: 20px; /* Space below image */
     }
     .profile-picture {
-        width: clamp(220px, 40vw, 300px);
-        height: clamp(220px, 40vw, 300px);
+        width: clamp(200px, 45vw, 280px);
+        height: clamp(200px, 45vw, 280px);
+        margin: 0 auto; /* Center profile picture */
     }
     .hero-cta-buttons {
         justify-content: center; /* Center buttons */
-        flex-direction: column; /* Stack buttons on smaller tablets */
+        flex-direction: column; /* Stack buttons */
         align-items: center;
+        gap: 15px;
     }
     .hero-cta-btn {
-        width: 80%;
+        width: 100%;
         max-width: 300px; /* Max width for stacked buttons */
-        margin-bottom: 15px; /* Space between stacked buttons */
-    }
-    .hero-cta-btn:last-child {
-        margin-bottom: 0;
+        padding: 15px 30px;
+        font-size: clamp(0.9rem, 1.8vw, 1.1rem);
     }
 
-    .timeline::before {
-        left: 20px; /* Move timeline bar to the left */
-        transform: translateX(0);
-    }
-    .timeline-item {
-        width: calc(100% - 40px); /* Full width minus some padding */
-        margin-left: 40px; /* Space from the new bar position */
-        padding-left: 25px;
-        padding-right: 25px;
-    }
-    .timeline-item:nth-child(odd),
-    .timeline-item:nth-child(even) {
-        left: 0; /* Align all items to the left of the bar */
-        transform: translateX(0); /* Reset horizontal transform */
-        margin-bottom: 25px;
-    }
-    .timeline-item:nth-child(odd)::after,
-    .timeline-item:nth-child(even)::after {
-        left: -31px; /* Adjust dot position: -20px (half of 40px margin-left) - 9px (half of dot width) - 2px (half of bar width) */
-        top: 25px;
-    }
-    .timeline-item h3 { font-size: clamp(1.2rem, 1.8vw, 1.5rem); }
-    .timeline-item p { font-size: clamp(0.85rem, 1.3vw, 0.9rem); }
-
-
-    .project-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 30px;
-    }
-    .project-card { padding: 20px; }
-    .project-card h3 { font-size: clamp(1.2rem, 1.8vw, 1.5rem); }
-    .project-card p { font-size: clamp(0.85rem, 1.3vw, 0.9rem); }
-
-    .skills-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px;
-    }
-    .skill-category { padding: 20px; }
-
-    .experience-grid {
-        gap: 25px;
-    }
-    .experience-item { padding: 25px; }
-
-    .awards-list {
-        grid-template-columns: 1fr; /* Stack awards on smaller tablets */
-        gap: 25px;
-    }
-    .award-item { padding: 20px; }
-
-    .connect-grid {
-        grid-template-columns: 1fr; /* Stack form and social info */
-        gap: 35px;
-    }
-    .contact-form { padding: 30px; }
-    .social-connection-info { margin-top: 20px; }
-    .social-icon-groups-wrapper { gap: 20px; }
-    .social-icon { width: 50px; height: 50px; }
-
-    h2 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 50px; }
+    h2 { font-size: clamp(1.6rem, 5vw, 2.2rem); margin-bottom: 40px; }
     h2::before { width: 80px; height: 3px; }
     h2::after { width: 8px; height: 8px; bottom: -12px; }
     h2:hover::before { width: 120px; }
 
-    section { padding: 60px 0; }
-}
+    p { font-size: clamp(0.9rem, 2.5vw, 1rem); }
 
-/* Smartphone (Portrait and Landscape) */
-@media (max-width: 767px) {
-    body {
-        padding-top: 70px; /* Adjust for potentially smaller fixed header */
-        font-size: 15px; /* Slightly smaller base font */
+    .project-grid {
+        grid-template-columns: 1fr; /* Single column for projects */
+        gap: 25px;
     }
-    .site-header {
-        padding: 8px 0;
+    .project-card img {
+        height: 180px;
     }
-    .header-container {
-        width: 90%;
-    }
-    .logo-text-main { font-size: clamp(1.5rem, 2.5vw, 1.8rem); }
-    .logo-text-subtle { font-size: clamp(1.4rem, 2.4vw, 1.7rem); }
-    .tagline { display: none; } /* Hide tagline on very small screens */
-
-    .main-navigation .nav-link {
-        font-size: clamp(0.8rem, 1.4vw, 0.9rem);
-        padding: 10px 15px;
-        width: 90%;
-    }
-
-    .hero { min-height: auto; padding: 60px 15px; } /* Less padding, no min-height needed */
-    .hero-text h2 { font-size: clamp(2.2rem, 6vw, 3.5rem); }
-    .hero-text p { font-size: clamp(1rem, 2.2vw, 1.3rem); margin-bottom: 30px; }
-    .profile-picture {
-        width: clamp(180px, 45vw, 250px);
-        height: clamp(180px, 45vw, 250px);
-        border-width: 4px;
-    }
-    .hero-cta-btn {
-        font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-        padding: 15px 30px;
-        width: 90%;
-    }
-
-    .timeline { padding: 10px 0; }
-    .timeline::before { left: 15px; width: 3px; }
-    .timeline-item {
-        margin-left: 30px; /* Adjust for new bar position */
-        padding: 15px;
-    }
-    .timeline-item:nth-child(odd)::after,
-    .timeline-item:nth-child(even)::after {
-        left: -24px; /* Adjust dot: -15px (half of 30px margin) - 7.5px (half of dot) - 1.5px (half of bar) */
-        width: 15px;
-        height: 15px;
-        border-width: 2px;
-        top: 20px;
-    }
-    .timeline-item h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); }
-    .timeline-item .date { font-size: clamp(0.75rem, 1.1vw, 0.8rem); }
-    .timeline-item p { font-size: clamp(0.8rem, 1.2vw, 0.85rem); }
 
     .filter-buttons {
-        flex-wrap: wrap; /* Allow buttons to wrap */
+        flex-wrap: wrap; /* Allow filter buttons to wrap */
         gap: 10px;
-        margin-bottom: 30px;
     }
     .filter-buttons button {
         padding: 8px 20px;
         font-size: 0.8rem;
     }
-    .project-grid {
-        grid-template-columns: 1fr; /* Single column for projects */
-        gap: 25px;
-    }
-    .project-card { padding: 15px; }
-    .project-card img { height: 180px; }
-    .project-card h3 { font-size: clamp(1.1rem, 1.7vw, 1.4rem); }
-    .project-card p { font-size: clamp(0.8rem, 1.2vw, 0.9rem); min-height: 50px; }
-    .project-card .tags span { font-size: 0.7rem; padding: 5px 10px; }
 
-    .skills-grid {
-        grid-template-columns: 1fr; /* Single column for skills */
+    .timeline {
+        padding: 0 10px; /* Add some horizontal padding */
+    }
+    .timeline::before { /* Central bar */
+        left: 20px; /* Move bar to the left */
+        transform: translateX(0);
+    }
+    .timeline-item {
+        width: calc(100% - 40px); /* Full width minus some padding */
+        left: 0 !important; /* Override inline left for even items */
+        transform: translateX(0) !important; /* Reset transform */
+        margin-left: 40px; /* Space from the timeline bar */
+        padding: 15px 20px;
+    }
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        left: 0; /* Align all to the new bar position */
+        transform: translateX(0); /* Reset animation offset */
+    }
+    .timeline-item::after { /* Connector dot */
+        left: -29px; /* Adjust to new bar position: - (margin-left/2 + bar_left_position - dot_width/2) approx */
+        /* Recalculate: - ( (40px - 20px_item_padding_left_effectively) / 2 + 4px_bar/2 + 18px_dot/2 ) = -(10+2+9) = -21px. Let's try -29px to align with bar */
+    }
+     .timeline-item:nth-child(odd)::after,
+     .timeline-item:nth-child(even)::after {
+        left: -29px; /* (item_margin_left - bar_left_position - dot_width/2) = (40 - 20 - 9) = 11. This is wrong.
+                        It's relative to the item. Bar is at 20px. Item starts at 40px.
+                        Dot center needs to be at 20px absolute. Item left border is 40px absolute.
+                        Dot center relative to item: 20 - 40 = -20px.
+                        Dot left edge: -20px - (dot_width/2) = -20px - 9px = -29px.
+                      */
+    }
+
+
+    .skills-grid, .awards-list {
+        grid-template-columns: 1fr; /* Single column */
         gap: 20px;
     }
-    .skill-category { padding: 15px; }
-    .skill-category .skill-icon { font-size: 2.5rem; }
-    .skill-category h4 { font-size: clamp(1.1rem, 1.8vw, 1.3rem); }
-    .skill-category ul li { font-size: clamp(0.8rem, 1.2vw, 0.85rem); }
+    .skill-category, .award-item {
+        padding: 20px;
+    }
 
-    .experience-grid { gap: 20px; }
-    .experience-item { padding: 20px; border-left-width: 3px; }
-    .experience-item h3 { font-size: clamp(1.2rem, 1.9vw, 1.5rem); }
-    .experience-item .date { font-size: clamp(0.8rem, 1.2vw, 0.85rem); }
-
-    .awards-list { gap: 20px; }
-    .award-item { padding: 15px; border-left-width: 3px; }
-    .award-item h3 { font-size: clamp(1.1rem, 1.7vw, 1.4rem); }
-
-    .contact-form { padding: 25px; }
-    .contact-form h3 { font-size: clamp(1.3rem, 2.2vw, 1.6rem); }
+    .connect-grid {
+        grid-template-columns: 1fr; /* Stack form and social info */
+    }
+    .contact-form {
+        padding: 25px;
+    }
     .form-group input[type="text"],
     .form-group input[type="email"],
     .form-group textarea {
         padding: 12px;
-        font-size: 0.95rem;
     }
-    .connect-section button[type="submit"] {
+    .connect button[type="submit"] {
         padding: 12px 25px;
-        font-size: clamp(0.9rem, 1.6vw, 1rem);
     }
-    .social-connection-info h3 { font-size: clamp(1.3rem, 2.2vw, 1.6rem); margin-bottom: 25px; }
-    .social-icon-groups-wrapper { gap: 15px; }
+    .social-icon-groups-wrapper {
+        gap: 20px;
+    }
+    .social-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Extra Small Devices (Phones - e.g., up to 576px) */
+@media (max-width: 576px) {
+    body {
+        padding-top: 55px; /* Slightly smaller header */
+    }
+    .site-header {
+        padding: 8px 0;
+    }
+    .main-navigation {
+        top: 55px; /* Match new header height */
+    }
+    .logo-text-main { font-size: 1.3rem; }
+    .logo-text-subtle { font-size: 1.2rem; }
+    .menu-toggle-icon { width: 22px; }
+    .menu-toggle-icon::before { top: -6px; }
+    .menu-toggle-icon::after { bottom: -6px; }
+
+
+    .hero { padding: 40px 10px; }
+    .hero-text h2 { font-size: clamp(2rem, 8vw, 3rem); }
+    .hero-text p { font-size: clamp(0.9rem, 4vw, 1.1rem); }
+    .profile-picture {
+        width: clamp(160px, 40vw, 220px);
+        height: clamp(160px, 40vw, 220px);
+        border-width: 4px;
+    }
+
+    h2 { font-size: clamp(1.5rem, 6vw, 2rem); margin-bottom: 30px; }
+    h2::before { width: 70px; }
+    h2::after { bottom: -10px; }
+    h2:hover::before { width: 100px; }
+
+    section { padding: 40px 0; }
+
+    .container { padding: 0 10px; } /* Reduce horizontal padding for container */
+
+    .project-card h3 { font-size: clamp(1.1rem, 4vw, 1.4rem); }
+    .project-card p { font-size: clamp(0.85rem, 3.5vw, 0.9rem); min-height: auto; }
+    .project-card .tags span { font-size: 0.7rem; padding: 5px 10px; }
+
+    .timeline::before { left: 15px; } /* Bar further left */
+    .timeline-item {
+        margin-left: 30px; /* Space from the timeline bar */
+        padding: 15px;
+    }
+    .timeline-item::after {
+        left: -24px; /* (30 - 15 - 9) = 6. No. -15px - 9px = -24px */
+    }
+    .timeline-item:nth-child(odd)::after,
+    .timeline-item:nth-child(even)::after {
+        left: -24px;
+    }
+    .timeline-item h3 { font-size: clamp(1.1rem, 4vw, 1.4rem); }
+    .timeline-item .date { font-size: clamp(0.75rem, 3vw, 0.8rem); }
+    .timeline-item p:not(.date) { font-size: clamp(0.85rem, 3.5vw, 0.9rem); }
+
+
+    .skill-category h4 { font-size: clamp(1.1rem, 4vw, 1.3rem); }
+    .skill-category ul li { font-size: clamp(0.8rem, 3vw, 0.85rem); }
+    .skill-category .skill-icon { font-size: 2.2rem; }
+
+    .award-item h3 { font-size: clamp(1.1rem, 4vw, 1.3rem); }
+    .award-item .award-issuer, .award-item .award-date { font-size: clamp(0.75rem, 3vw, 0.8rem); }
+    .award-item p:not(.award-issuer):not(.award-date) { font-size: clamp(0.85rem, 3.5vw, 0.9rem); }
+
+    .contact-form { padding: 20px; }
+    .contact-form h3 { font-size: clamp(1.3rem, 5vw, 1.6rem); }
+    .form-group label { font-size: 0.85rem; }
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group textarea { font-size: 0.9rem; padding: 10px; }
+    .connect button[type="submit"] { font-size: clamp(0.9rem, 3.5vw, 1rem); padding:  10px 20px; }
+
+    .social-connection-info h3 { font-size: clamp(1.3rem, 5vw, 1.6rem); }
     .social-icon { width: 45px; height: 45px; }
     .social-icon-text { font-size: 0.8rem; }
 
-    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 40px; }
-    h2::before { width: 70px; height: 2px; }
-    h2::after { width: 7px; height: 7px; bottom: -10px; }
-    h2:hover::before { width: 100px; }
-
-    section { padding: 50px 0; }
-
-    .site-footer { padding: 30px 0; font-size: 0.85rem; }
-    .footer-social-icons .social-icon { width: 30px; height: 30px; margin: 0 8px; }
-    .back-to-top { width: 40px; height: 40px; line-height: 40px; font-size: 1.3rem; bottom: 20px; right: 20px; }
 }
 
-/* Further adjustments for very small screens if necessary */
-@media (max-width: 480px) {
-    .hero-text h2 { font-size: clamp(1.8rem, 5vw, 2.8rem); }
-    .hero-text p { font-size: clamp(0.9rem, 2vw, 1.1rem); }
+/* Adjustments for landscape on small devices if necessary */
+@media (max-height: 450px) and (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: auto; /* Prevent excessive height */
+        padding: 40px 15px;
+    }
+    .hero-content {
+        flex-direction: row; /* Keep side-by-side if enough width */
+        align-items: center;
+    }
+    .hero-text {
+        order: 1; /* Text left */
+        text-align: left;
+        flex-basis: 50%;
+    }
+     .hero-text h2, .hero-text p {
+        text-align: left;
+    }
+    .hero-image-container {
+        order: 2; /* Image right */
+        flex-basis: 40%;
+    }
     .profile-picture {
-        width: clamp(150px, 40vw, 200px);
-        height: clamp(150px, 40vw, 200px);
+        width: clamp(150px, 25vh, 200px); /* Base size on viewport height */
+        height: clamp(150px, 25vh, 200px);
+    }
+    .hero-cta-buttons {
+        flex-direction: row; /* Buttons side-by-side */
+        justify-content: flex-start;
+        gap: 15px;
+    }
+    .hero-cta-btn {
+        width: auto; /* Auto width for buttons */
+        max-width: none;
     }
 
-    .timeline-item { margin-left: 25px; }
-    .timeline-item:nth-child(odd)::after,
-    .timeline-item:nth-child(even)::after {
-        left: -20px; /* Adjust dot: -12.5px (half of 25px margin) - 7.5px (half of dot) - ~0px (half of bar) */
-        width: 12px;
-        height: 12px;
+    .main-navigation {
+        max-height: calc(100vh - 60px); /* Prevent nav from being too tall */
+        overflow-y: auto;
     }
-    .project-card img { height: 160px; }
 }

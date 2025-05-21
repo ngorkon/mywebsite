@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150" style="background-color: #1a1a2e;">
-    <rect x="60" y="40" width="80" height="90" rx="5" ry="5" style="fill: #3a3a5e; stroke: #00a9ff; stroke-width:2;"/>
-    <rect x="70" y="25" width="60" height="15" rx="3" ry="3" style="fill: #2a2a4e;"/>
-    <circle cx="100" cy="85" r="10" style="fill: #00a9ff; opacity: 0.7;"/>
-    <path d="M 80 50 L 120 50 M 80 65 L 120 65 M 80 80 L 120 80 M 80 95 L 120 95 M 80 110 L 120 110" style="stroke: #00a9ff; stroke-width:1.5; stroke-dasharray: 3 3; opacity: 0.5;"/>
-    <text x="100" y="140" font-family="Orbitron, sans-serif" font-size="12" fill="#c0c0f0" text-anchor="middle">Smart Bin</text>
-</svg>

@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="hero-image-container">
-                    <img src="images/ngorkon.png.png" alt="Mayom Kon - Profile Picture" class="profile-picture">
+                    <img src="../images/ngorkon.png.png" alt="Mayom Kon - Profile Picture" class="profile-picture">
                 </div>
             </div>
         </section>
@@ -151,7 +151,7 @@
                 </div>
                 <div class="project-grid">
                     <div class="project-card" data-category="robotics" style="--animation-order: 1;">
-                        <img src="images/smart-bin.png" alt="Smart Bin Project"> <!-- Placeholder image -->
+                        <img src="images/placeholder-smart-bin.png" alt="Smart Bin Project"> <!-- Placeholder image -->
                         <h3>Robotic Club: Smart Bin</h3>
                         <p>Designed and built a smart bin using Arduino as part of a sustainability-focused club project, automating waste disposal and reducing pollution.</p>
                         <div class="tags">
@@ -161,7 +161,7 @@
                         </div>
                     </div>
                     <div class="project-card" data-category="robotics" style="--animation-order: 2;">
-                        <img src="images/smart-pump.png" alt="Smart Irrigation Pump"> <!-- Placeholder image -->
+                        <img src="images/placeholder-smart-pump.png" alt="Smart Irrigation Pump"> <!-- Placeholder image -->
                         <h3>Robotic Club: Smart Irrigation Pump</h3>
                         <p>Developed an automated water pump system for a garden club that enabled remote plant maintenance and reduced heat-related plant damage by approximately 20% during summer.</p>
                         <div class="tags">
@@ -171,7 +171,7 @@
                         </div>
                     </div>
                     <div class="project-card" data-category="community" style="--animation-order: 3;">
-                        <img src="images/listen-ukraine.png" alt="Listen to Ukraine Project"> <!-- Placeholder image -->
+                        <img src="images/placeholder-listen-ukraine.png" alt="Listen to Ukraine Project"> <!-- Placeholder image -->
                         <h3>CODE043: Listen to Ukraine</h3>
                         <p>Organized movie screenings and discussions, raising awareness of the war in Ukraine. Secured a $500 donation to support a local refugee charity.</p>
                         <div class="tags">
@@ -188,17 +188,39 @@
         <section id="experience" class="experience"> <!-- New Leadership/Experience Section -->
             <div class="container">
                 <h2>Leadership & Community</h2>
-                <div class="experience-grid">
-                    <div class="experience-item leadership-role" style="--animation-order: 1;">
-                        <h3>International Students Organization</h3>
-                        <p class="date">April 2024 - Present (Part-Time)</p>
-                        <p>Coordinate cross-cultural events for 100+ international students, collaborating with other clubs. Curate event ideas, manage coordination, and communicate details to ensure inclusive, engaging experiences.</p>
+                <div class="experience-slideshow-container"> <!-- Slideshow Container -->
+                    <button class="slideshow-btn prev-btn" aria-label="Previous slide">&#10094;</button>
+                    <div class="slideshow-wrapper"> <!-- To hide overflowing items -->
+                        <div class="experience-grid"> <!-- This will be the track -->
+                            <div class="experience-item" style="--animation-order: 1;">
+                                <h3>Academic Tutor - The College of Idaho</h3>
+                                <p class="date">May 2024 - Present (1 year 1 month)</p>
+                                <p>As an Academic Tutor at The College of Idaho, I support students in mastering both Calculus and Education courses. My goal is to break down complex concepts—whether it’s solving challenging calculus problems or navigating intricate educational theories—into manageable, clear steps. By fostering an inclusive and supportive learning environment, I aim to empower students to overcome academic challenges with confidence.</p>
+                                <p>The most rewarding part of my role is witnessing those “aha” moments—the instant when a concept clicks, and a student’s understanding shifts. Those moments of clarity remind me why I’m passionate about education and the transformative power of learning. (Location: United States)</p>
+                            </div>
+                            <div class="experience-item leadership-role" style="--animation-order: 2;">
+                                <h3>International Students Organization</h3>
+                                <p class="date">April 2024 - Present (Part-Time)</p>
+                                <p>Coordinate cross-cultural events for 100+ international students, collaborating with other clubs. Curate event ideas, manage coordination, and communicate details to ensure inclusive, engaging experiences.</p>
+                            </div>
+                            <div class="experience-item leadership-role" style="--animation-order: 3;">
+                                <h3>Asian Student Association</h3>
+                                <p class="date">April 2024 - Present (Part-Time)</p>
+                                <p>Manage ASA’s social media platforms, increasing engagement and event participation through targeted marketing campaigns.</p>
+                            </div>
+                            <div class="experience-item leadership-role" style="--animation-order: 4;">
+                                <h3>Co-Founder & Board Member - Project 21 Kenya</h3>
+                                <p class="date">February 2021 - August 2023 (2 years 7 months)</p>
+                                <p>Project 21 is a youth coalition based on eradicating extremely muddied destitution affecting communities primarily Kakuma Refugees Camp by initiating projects that will end the hurdles in the Camp and at large. At the moment, the project is based on providing tailoring materials to women who know how to sew to start a business. (Location: Turkana West, Turkana, Kenya)</p>
+                            </div>
+                            <div class="experience-item leadership-role" style="--animation-order: 5;">
+                                <h3>Co-Founder & Director of Technology - Project 21 Kenya</h3>
+                                <p class="date">February 2021 - August 2023 (2 years 7 months)</p>
+                                <p>I worked with a team of highly motivated individuals whose desires have impacted a lot of people at the camp. As a technology director and co-founder, I have been able to lead in funding acquisition for the programs where we have been able to conduct a lot of charity work such as constructing a house for a needy homeless mother whose house had been carried away by flood. The work we have done in the last two years has set a foundation for learning while giving back to my community. I hope to continue this in the future. (Location: Kakuma, Turkana County, Kenya)</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="experience-item leadership-role" style="--animation-order: 2;">
-                        <h3>Asian Student Association</h3>
-                        <p class="date">April 2024 - Present (Part-Time)</p>
-                        <p>Manage ASA’s social media platforms, increasing engagement and event participation through targeted marketing campaigns.</p>
-                    </div>
+                    <button class="slideshow-btn next-btn" aria-label="Next slide">&#10095;</button>
                 </div>
             </div>
         </section>
@@ -247,7 +269,6 @@
         </section>
 
         <section id="connect" class="connect-section">
-            <canvas id="connect-particles-canvas"></canvas> <!-- Added for particle background -->
             <div class="container">
                 <h2 class="connect-title">Let's Connect</h2>
                 <div class="connect-grid">
@@ -286,7 +307,7 @@
 
     </main>
     <footer>
-        <p>&copy; 2025 Mayom Kon (N.K). All rights reserved.</p>
+        <p>&copy; 2025 Mayom Kon (Ng'or Y. Kon). All rights reserved.</p>
         <p>Engineering ideas into reality.</p>
     </footer>
     <script src="js/script.js"></script>

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150" style="background-color: #1a1a2e;">
-    <rect x="30" y="30" width="140" height="90" rx="5" ry="5" style="fill: #2a2a4e; stroke: #00a9ff; stroke-width:2;"/>
-    <polygon points="85,55 85,95 125,75" style="fill:#00a9ff; opacity: 0.8;"/>
-    <path d="M 40 45 h 20 M 40 55 h 30 M 40 65 h 25 M 40 75 h 35 M 40 85 h 20 M 40 95 h 30 M 40 105 h 25" style="stroke: #00a9ff; stroke-width:1.5; opacity: 0.4;"/>
-    <circle cx="150" cy="45" r="8" style="fill: #00a9ff; opacity: 0.6;"/>
-    <circle cx="155" cy="105" r="6" style="fill: #00a9ff; opacity: 0.5;"/>
-    <text x="100" y="135" font-family="Orbitron, sans-serif" font-size="12" fill="#c0c0f0" text-anchor="middle">Listen to Ukraine</text>
-</svg>
