@@ -9,7 +9,7 @@ my-website/
 ├── css/
 │   └── style.css        # Advanced CSS with physics-inspired, animated UI
 ├── images/
-│   └── ngorkon.png.png  # Profile image
+│   └── ngorkon.png      # Profile image (Corrected)
 │   └── placeholder-smart-bin.png
 │   └── placeholder-smart-pump.png
 │   └── placeholder-listen-ukraine.png
@@ -17,9 +17,16 @@ my-website/
 │   └── script.js        # Modular JS for animation, SVG, and interactivity
 ├── index.html           # Semantic, accessible HTML structure
 ├── src/
-│   └── components/          # (For future React migration)
+│   └── components/      # (For future React migration)
 └── README.md
 ```
+
+## Technologies Used
+-   **Frontend:** HTML5, CSS3, JavaScript (ES6+)
+-   **Animations:** CSS Keyframes, JavaScript (Canvas API, SVG manipulation)
+-   **Interactivity:** DOM manipulation, Event Listeners
+-   **Deployment:** GitHub Pages
+-   **Form Handling:** Formspree (for contact form)
 
 ## Key Features
 
