@@ -4,11 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initHamburgerMenu();
     initTypingAnimation();
-    initHeroParticles();
-    initBackgroundReactionAnimation();
-    initSocialWeb();
-    initConnectParticles(); // Added call for connect section particles
-    // initProfilePicAnimation(); // Placeholder for specific profile animation if needed
+
+    // Initialize Hero Particles
+    if (document.getElementById('hero-particles-canvas')) {
+        initHeroParticles('hero-particles-canvas');
+    }
+
+    // Initialize Background Reaction Animation
+    if (document.getElementById('background-reaction-canvas')) {
+        initBackgroundReactionAnimation('background-reaction-canvas');
+    }
+
+    // Initialize Social Web Animation
+    if (document.getElementById('social-web-svg')) {
+        initSocialWeb('social-web-svg');
+    }
+
+    // Initialize Experience Slideshow
+    initExperienceSlideshow();
 });
 
 // -------------------- SMOOTH SCROLLING --------------------
@@ -62,71 +75,159 @@ function initActiveNavHighlighting() {
 
 // -------------------- SCROLL-TRIGGERED ANIMATIONS (Intersection Observer) --------------------
 function initScrollAnimations() {
-    console.log("ScrollAnimations: Initializing...");
+    const observer = new IntersectionObserver((entries, observerInstance) => { // Renamed observer to observerInstance to avoid conflict
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // If the experience slideshow container becomes visible, initialize it
+                if (entry.target.classList.contains('experience-slideshow-container')) {
+                    if (!entry.target.dataset.slideshowInitialized) {
+                        // console.log('Initializing experience slideshow via IntersectionObserver');
+                        initExperienceSlideshow(); 
+                        entry.target.dataset.slideshowInitialized = 'true';
+                        // observerInstance.unobserve(entry.target); // Optionally unobserve if it only needs to init once
+                    }
+                }
+                // observerInstance.unobserve(entry.target); // Original unobserve, decide if still needed for all elements
+            } else {
+                // Optional: Remove 'visible' class if element scrolls out of view and you want animations to re-trigger
+                // entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
 
-    // Elements that animate individually
-    const individualAnimatedElements = document.querySelectorAll(
-        '.timeline-item, .project-card, .skill-category, .experience-item, ' 
-        + '.award-item, ' // Added .award-item for individual animation
-        + 'section > h2, section .about-content > h3, section > p, section .content-wrapper, '
-        + 'section .container > ul, section .container > ol'
-        // Removed .awards-list from individual, it's a container now
-    );
-    console.log("ScrollAnimations: Individual elements found:", individualAnimatedElements.length, individualAnimatedElements);
+    document.querySelectorAll('.timeline-item, .project-card, .skill-category, .award-item, .connect .form-group, .connect button[type=\"submit\"], .connect .social-icons-container, section > .container > h2, .about-content > p, .about-content > h3, .experience-slideshow-container').forEach(el => {
+        observer.observe(el);
+    });
+}
 
-    // Containers whose children should animate when the container is visible
-    const containerAnimatedElements = document.querySelectorAll(
-        '.connect-grid' // .awards-list is handled by individual .award-item now
-    );
-    console.log("ScrollAnimations: Container elements found:", containerAnimatedElements.length, containerAnimatedElements);
+// Experience Slideshow Logic
+function initExperienceSlideshow() {
+    const slideshowContainer = document.querySelector('.experience-slideshow-container');
+    if (!slideshowContainer) {
+        // console.error('Experience slideshow container not found for init.');
+        return;
+    }
+    // Check if already initialized by a different path (e.g. if script runs after element is visible)
+    // This check might be redundant if initScrollAnimations is the sole entry point now.
+    // if (slideshowContainer.dataset.slideshowInitialized === 'true' && !slideshowContainer.classList.contains('visible')) {
+        // console.log('Slideshow init called but container not visible yet, deferring or already handled by observer');
+        // return;
+    // }
 
-    if (individualAnimatedElements.length === 0 && containerAnimatedElements.length === 0) {
-        console.warn("ScrollAnimations: No animated elements or containers found. Check selectors.");
+    const slideshowWrapper = slideshowContainer.querySelector('.slideshow-wrapper');
+    const track = slideshowContainer.querySelector('.experience-grid');
+    const nextButton = slideshowContainer.querySelector('.next-btn');
+    const prevButton = slideshowContainer.querySelector('.prev-btn');
+
+    if (!slideshowWrapper || !track) {
+        // console.error('Slideshow wrapper or track not found within visible container.');
+        if(nextButton) nextButton.style.display = 'none';
+        if(prevButton) prevButton.style.display = 'none';
         return;
     }
 
-    const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                console.log("ScrollAnimations: Element intersecting:", entry.target);
+    const items = Array.from(track.querySelectorAll('.experience-item'));
+    if (items.length === 0) {
+        if(nextButton) nextButton.style.display = 'none';
+        if(prevButton) prevButton.style.display = 'none';
+        return;
+    }
 
-                // If it's an individual element, just add the class
-                // Check against the live NodeList directly or convert to array if manipulation is needed before check
-                if (Array.from(individualAnimatedElements).includes(entry.target)) {
-                     entry.target.classList.add('visible');
-                     console.log("ScrollAnimations: Added .visible to individual element:", entry.target);
-                     obs.unobserve(entry.target); // Unobserve after animation
-                }
+    const itemsPerSlide = 2;
+    let currentIndex = 0;
+    const totalSlides = Math.ceil(items.length / itemsPerSlide);
+    let autoSlideInterval;
+    const autoSlideDelay = 7000;
 
-                // If it's a container, find its animatable children and add the class
-                // Removed .awards-list specific handling as .award-item is now individual
+    if(nextButton) nextButton.style.display = 'none';
+    if(prevButton) prevButton.style.display = 'none';
 
-                if (entry.target.classList.contains('connect-grid')) {
-                     console.log("ScrollAnimations: Connect grid container intersecting.");
-                    // Target specific children within connect-grid for staggered animation
-                    // The CSS already has animation-delay based on --animation-order
-                    // So we just need to make the children visible.
-                    // The children are .form-group, button, .social-icons-container
-                    const connectElements = entry.target.querySelectorAll('.form-group, button[type="submit"], .social-icons-container');
-                     connectElements.forEach(el => {
-                         el.classList.add('visible');
-                         console.log("ScrollAnimations: Added .visible to connect element:", el);
-                     });
-                    obs.unobserve(entry.target); // Unobserve the container
-                }
+    function updateSlideshow() {
+        const slideWidth = slideshowWrapper.offsetWidth;
+        if (slideWidth === 0) {
+            // console.warn('Slideshow wrapper has no width during update. Retrying with rAF.');
+            // This might happen if called during a resize before layout is final.
+            requestAnimationFrame(updateSlideshow);
+            return;
+        }
+
+        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+
+        items.forEach((item, index) => {
+            const itemSlideIndex = Math.floor(index / itemsPerSlide);
+            if (itemSlideIndex === currentIndex) {
+                item.classList.add('slide-active');
+                const itemIndexInSlide = index % itemsPerSlide;
+                item.style.transitionDelay = `${itemIndexInSlide * 0.15}s`;
+            } else {
+                item.classList.remove('slide-active');
+                item.style.transitionDelay = '0s';
             }
         });
-    }, { threshold: 0.1 });
+    }
 
-    // Observe individual elements
-    individualAnimatedElements.forEach(el => {
-        observer.observe(el);
+    function showNextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlideshow();
+    }
+
+    function showPrevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlideshow();
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide(); 
+        if (totalSlides > 1) { 
+            autoSlideInterval = setInterval(showNextSlide, autoSlideDelay);
+        }
+    }
+
+    function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+    }
+
+    if (totalSlides <= 1) {
+        // No buttons or auto-slide for a single slide page
+    } else {
+        if(nextButton) nextButton.style.display = 'flex';
+        if(prevButton) prevButton.style.display = 'flex';
+
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                showNextSlide();
+                stopAutoSlide();
+            });
+        }
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                showPrevSlide();
+                stopAutoSlide();
+            });
+        }
+        slideshowContainer.addEventListener('mouseenter', stopAutoSlide);
+        slideshowContainer.addEventListener('mouseleave', startAutoSlide);
+        startAutoSlide();
+    }
+
+    // Initial call to set up the first slide, now that container is presumed visible.
+    // Use rAF to ensure dimensions are calculated after any final browser rendering updates.
+    requestAnimationFrame(updateSlideshow);
+
+    window.addEventListener('resize', () => {
+        stopAutoSlide();
+        requestAnimationFrame(() => {
+            updateSlideshow(); // Recalculate based on new wrapper width
+            if (totalSlides > 1) {
+                startAutoSlide();
+            }
+        });
     });
 
-    // Observe containers
-    containerAnimatedElements.forEach(el => {
-        observer.observe(el);
-    });
+    // Mark as initialized (though the dataset flag is on the container element itself)
+    // console.log('Experience slideshow fully initialized.');
 }
 
 // -------------------- HAMBURGER MENU --------------------
@@ -181,8 +282,8 @@ function initTypingAnimation() {
 }
 
 // -------------------- HERO PARTICLES ANIMATION --------------------
-function initHeroParticles() {
-    const canvas = document.getElementById('hero-particles-canvas');
+function initHeroParticles(canvasId) {
+    const canvas = document.getElementById(canvasId);
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let particlesArray;
@@ -343,170 +444,10 @@ function initHeroParticles() {
     });
 }
 
-// -------------------- CONNECT PARTICLES ANIMATION --------------------
-function initConnectParticles() {
-    const canvas = document.getElementById('connect-particles-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let particlesArray;
-    let mouse = { x: null, y: null, radius: 70 }; // Mouse interaction radius for connect section
-
-    window.addEventListener('mousemove', (event) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = event.clientX - rect.left;
-        mouse.y = event.clientY - rect.top;
-    });
-    window.addEventListener('mouseout', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    function setCanvasSize() {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-    }
-    setCanvasSize();
-
-    class Particle {
-        constructor(x, y, directionX, directionY, size, color) {
-            this.x = x;
-            this.y = y;
-            this.originX = x;
-            this.originY = y;
-            this.directionX = directionX;
-            this.directionY = directionY;
-            this.size = size;
-            this.color = color;
-            this.density = (Math.random() * 25) + 5; // Adjusted density
-            this.baseAlpha = parseFloat(this.color.split(',')[3]);
-        }
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-            const gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.1, this.x, this.y, this.size * 1.2);
-            gradient.addColorStop(0, this.color.replace(/[^,]+(?=\))/, '1)'));
-            gradient.addColorStop(0.8, this.color);
-            gradient.addColorStop(1, this.color.replace(/[^,]+(?=\))/, '0)'));
-            ctx.fillStyle = gradient;
-            ctx.fill();
-        }
-        update() {
-            if (mouse.x !== null && mouse.y !== null) {
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                let force = (maxDistance - distance) / maxDistance;
-                
-                if (distance < mouse.radius) {
-                    this.x -= forceDirectionX * force * this.density * 0.07;
-                    this.y -= forceDirectionY * force * this.density * 0.07;
-                } else {
-                    if (this.x !== this.originX) {
-                        let dxo = this.originX - this.x;
-                        this.x += dxo * 0.015; // Slower return
-                    }
-                    if (this.y !== this.originY) {
-                        let dyo = this.originY - this.y;
-                        this.y += dyo * 0.015;
-                    }
-                }
-            } else {
-                if (this.x !== this.originX) this.x += (this.originX - this.x) * 0.015;
-                if (this.y !== this.originY) this.y += (this.originY - this.y) * 0.015;
-            }
-
-            if (this.x + this.size > canvas.width || this.x - this.size < 0) {
-                this.directionX = -this.directionX;
-                if(this.x + this.size > canvas.width) this.x = canvas.width - this.size;
-                if(this.x - this.size < 0) this.x = this.size;
-            }
-            if (this.y + this.size > canvas.height || this.y - this.size < 0) {
-                this.directionY = -this.directionY;
-                if(this.y + this.size > canvas.height) this.y = canvas.height - this.size;
-                if(this.y - this.size < 0) this.y = this.size;
-            }
-
-            if (mouse.x === null || Math.sqrt(Math.pow(mouse.x - this.x, 2) + Math.pow(mouse.y - this.y, 2)) > mouse.radius * 1.5) {
-                 this.x += this.directionX * 0.25; 
-                 this.y += this.directionY * 0.25;
-            }
-            
-            this.draw();
-        }
-    }
-
-    function initParticles() {
-        particlesArray = [];
-        const numberOfParticles = Math.min(80, (canvas.height * canvas.width) / 12000); // Adjusted density for connect section
-        for (let i = 0; i < numberOfParticles; i++) {
-            const size = (Math.random() * 2.2) + 0.8; 
-            const x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2);
-            const y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
-            const directionX = (Math.random() * 0.5) - 0.25;
-            const directionY = (Math.random() * 0.5) - 0.25;
-            // Color scheme for connect section: shades of purple/magenta
-            const r = Math.floor(Math.random() * 50 + 150); // 150-200
-            const g = Math.floor(Math.random() * 50 + 20);  // 20-70
-            const b = Math.floor(Math.random() * 50 + 150); // 150-200
-            const alpha = Math.random() * 0.3 + 0.2; // 0.2-0.5
-            const color = `rgba(${r}, ${g}, ${b}, ${alpha})`;
-            particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-        }
-    }
-
-    function connectParticles() {
-        let opacityValue;
-        for (let a = 0; a < particlesArray.length; a++) {
-            for (let b = a + 1; b < particlesArray.length; b++) {
-                const distance = Math.sqrt(
-                    Math.pow(particlesArray[a].x - particlesArray[b].x, 2) +
-                    Math.pow(particlesArray[a].y - particlesArray[b].y, 2)
-                );
-                const connectionRadius = Math.min(canvas.width, canvas.height) / 7; // Adjusted connection radius
-
-                if (distance < connectionRadius) {
-                    opacityValue = 1 - (distance / connectionRadius);
-                    // Line color matching particle color base, but more transparent
-                    const baseColor = particlesArray[a].color.substring(0, particlesArray[a].color.lastIndexOf(','));
-                    ctx.strokeStyle = `${baseColor}, ${opacityValue * 0.4})`; 
-                    ctx.lineWidth = Math.max(0.05, opacityValue * 1.2); 
-                    ctx.beginPath();
-                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                    ctx.stroke();
-                }
-            }
-        }
-    }
-    
-    function animateParticles() {
-        requestAnimationFrame(animateParticles);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-        }
-        connectParticles();
-    }
-
-    initParticles();
-    animateParticles();
-
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            setCanvasSize();
-            initParticles(); 
-        }, 250);
-    });
-}
 
 // -------------------- BACKGROUND REACTION ANIMATION --------------------
-function initBackgroundReactionAnimation() {
-    const canvas = document.getElementById('background-reaction-canvas'); // Ensure this ID exists
+function initBackgroundReactionAnimation(canvasId) {
+    const canvas = document.getElementById(canvasId); // Ensure this ID exists
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
@@ -606,10 +547,137 @@ function initBackgroundReactionAnimation() {
     });
 }
 
+// -------------------- EXPERIENCE SLIDESHOW --------------------
+function initExperienceSlideshow() {
+    const slideshowContainer = document.querySelector('.experience-slideshow-container');
+    if (!slideshowContainer) {
+        // console.error('Experience slideshow container not found for init.');
+        return;
+    }
+    // Check if already initialized by a different path (e.g. if script runs after element is visible)
+    // This check might be redundant if initScrollAnimations is the sole entry point now.
+    // if (slideshowContainer.dataset.slideshowInitialized === 'true' && !slideshowContainer.classList.contains('visible')) {
+        // console.log('Slideshow init called but container not visible yet, deferring or already handled by observer');
+        // return;
+    // }
+
+    const slideshowWrapper = slideshowContainer.querySelector('.slideshow-wrapper');
+    const track = slideshowContainer.querySelector('.experience-grid');
+    const nextButton = slideshowContainer.querySelector('.next-btn');
+    const prevButton = slideshowContainer.querySelector('.prev-btn');
+
+    if (!slideshowWrapper || !track) {
+        // console.error('Slideshow wrapper or track not found within visible container.');
+        if(nextButton) nextButton.style.display = 'none';
+        if(prevButton) prevButton.style.display = 'none';
+        return;
+    }
+
+    const items = Array.from(track.querySelectorAll('.experience-item'));
+    if (items.length === 0) {
+        if(nextButton) nextButton.style.display = 'none';
+        if(prevButton) prevButton.style.display = 'none';
+        return;
+    }
+
+    const itemsPerSlide = 2;
+    let currentIndex = 0;
+    const totalSlides = Math.ceil(items.length / itemsPerSlide);
+    let autoSlideInterval;
+    const autoSlideDelay = 7000;
+
+    if(nextButton) nextButton.style.display = 'none';
+    if(prevButton) prevButton.style.display = 'none';
+
+    function updateSlideshow() {
+        const slideWidth = slideshowWrapper.offsetWidth;
+        if (slideWidth === 0) {
+            // console.warn('Slideshow wrapper has no width during update. Retrying with rAF.');
+            // This might happen if called during a resize before layout is final.
+            requestAnimationFrame(updateSlideshow);
+            return;
+        }
+
+        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+
+        items.forEach((item, index) => {
+            const itemSlideIndex = Math.floor(index / itemsPerSlide);
+            if (itemSlideIndex === currentIndex) {
+                item.classList.add('slide-active');
+                const itemIndexInSlide = index % itemsPerSlide;
+                item.style.transitionDelay = `${itemIndexInSlide * 0.15}s`;
+            } else {
+                item.classList.remove('slide-active');
+                item.style.transitionDelay = '0s';
+            }
+        });
+    }
+
+    function showNextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlideshow();
+    }
+
+    function showPrevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlideshow();
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide(); 
+        if (totalSlides > 1) { 
+            autoSlideInterval = setInterval(showNextSlide, autoSlideDelay);
+        }
+    }
+
+    function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+    }
+
+    if (totalSlides <= 1) {
+        // No buttons or auto-slide for a single slide page
+    } else {
+        if(nextButton) nextButton.style.display = 'flex';
+        if(prevButton) prevButton.style.display = 'flex';
+
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                showNextSlide();
+                stopAutoSlide();
+            });
+        }
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                showPrevSlide();
+                stopAutoSlide();
+            });
+        }
+        slideshowContainer.addEventListener('mouseenter', stopAutoSlide);
+        slideshowContainer.addEventListener('mouseleave', startAutoSlide);
+        startAutoSlide();
+    }
+
+    // Initial call to set up the first slide, now that container is presumed visible.
+    // Use rAF to ensure dimensions are calculated after any final browser rendering updates.
+    requestAnimationFrame(updateSlideshow);
+
+    window.addEventListener('resize', () => {
+        stopAutoSlide();
+        requestAnimationFrame(() => {
+            updateSlideshow(); // Recalculate based on new wrapper width
+            if (totalSlides > 1) {
+                startAutoSlide();
+            }
+        });
+    });
+
+    // Mark as initialized (though the dataset flag is on the container element itself)
+    // console.log('Experience slideshow fully initialized.');
+}
 
 // -------------------- DYNAMIC SOCIAL WEB --------------------
-function initSocialWeb() {
-    const svgContainer = document.getElementById('social-web-svg');
+function initSocialWeb(svgId) {
+    const svgContainer = document.getElementById(svgId);
     if (!svgContainer) return;
 
     const socialIconWrappers = Array.from(document.querySelectorAll('#connect .social-icon-wrapper'));

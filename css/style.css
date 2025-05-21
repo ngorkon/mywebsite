@@ -1159,16 +1159,31 @@ section:not(#hero):not(:last-of-type)::after {
 }
 
 /* Let's Connect Section Styling */
-.connect {
+.connect-section { /* Changed from .connect to avoid conflict if .connect is a more general class */
+    position: relative; /* Needed for absolute positioning of the canvas */
     /* background: linear-gradient(135deg, #020024 0%, #03001C 60%, #0b0030 100%),
                 url('../images/connect-background-overlay.png') no-repeat center center / cover; */
     /* Overlay image can be added if desired */
     padding-top: 100px;
     padding-bottom: 100px;
+    overflow: hidden; /* Prevent canvas overflow issues */
 }
 
-.connect h2 {
+#connect-particles-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Behind connect section content */
+    /* Optional: if the particle colors are too light and clash with light text */
+    /* filter: brightness(0.8); */ 
+}
+
+.connect-section h2 { /* Changed from .connect h2 */
     margin-bottom: 70px;
+    position: relative; /* Ensure h2 is above canvas */
+    z-index: 1;
 }
 
 .connect-grid {
@@ -1178,26 +1193,28 @@ section:not(#hero):not(:last-of-type)::after {
     align-items: start; /* Align items to the start of their grid area */
     max-width: 1100px;
     margin: 0 auto;
+    position: relative; /* Ensure grid content is above canvas */
+    z-index: 1;
 }
 
 /* Styling for form elements and social icons container for scroll animation */
-.connect .form-group,
-.connect button[type="submit"],
-.connect .social-icons-container {
+.connect-section .form-group, /* Changed from .connect */
+.connect-section button[type="submit"],
+.connect-section .social-icons-container {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
     /* Staggering will be handled by JS if it adds .visible with delay, or by CSS if --animation-order is applied in HTML */
 }
 
-.connect .form-group { animation-delay: calc(var(--animation-order, 1) * 100ms); }
-.connect button[type="submit"] { animation-delay: calc(var(--animation-order, 3) * 100ms); } /* Assuming form groups are 1 and 2 */
-.connect .social-icons-container { animation-delay: calc(var(--animation-order, 1) * 100ms); } /* If in a different column */
+.connect-section .form-group { animation-delay: calc(var(--animation-order, 1) * 100ms); }
+.connect-section button[type="submit"] { animation-delay: calc(var(--animation-order, 3) * 100ms); } /* Assuming form groups are 1 and 2 */
+.connect-section .social-icons-container { animation-delay: calc(var(--animation-order, 1) * 100ms); } /* If in a different column */
 
 
-.connect .form-group.visible,
-.connect button[type="submit"].visible,
-.connect .social-icons-container.visible {
+.connect-section .form-group.visible,
+.connect-section button[type="submit"].visible,
+.connect-section .social-icons-container.visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -1209,6 +1226,8 @@ section:not(#hero):not(:last-of-type)::after {
     border-radius: 12px;
     border: 1px solid #253858;
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    position: relative; /* Ensure form content is above canvas */
+    z-index: 1;
 }
 
 .contact-form h3 {
@@ -1277,7 +1296,7 @@ section:not(#hero):not(:last-of-type)::after {
 }
 
 
-.connect button[type="submit"] {
+.connect-section button[type="submit"] { /* Changed from .connect */
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(1rem, 1.8vw, 1.1rem);
     padding: 15px 35px;
@@ -1299,8 +1318,8 @@ section:not(#hero):not(:last-of-type)::after {
     margin-top: 10px;
 }
 
-.connect button[type="submit"]:hover,
-.connect button[type="submit"]:focus {
+.connect-section button[type="submit"]:hover,
+.connect-section button[type="submit"]:focus {
     background-color: #00A9FF;
     color: #020024;
     box-shadow: 0 0 20px rgba(0, 169, 255, 0.7), 0 0 30px rgba(0, 229, 255, 0.5), inset 0 0 8px rgba(0, 80, 150, 0.4);
@@ -1386,7 +1405,6 @@ section:not(#hero):not(:last-of-type)::after {
     width: 100%;
     height: 100%;
     z-index: -1; /* Behind social icons but above section background */
-    opacity: 0.3; /* Make it subtle */
 }
 
 
@@ -1763,7 +1781,7 @@ section:not(#hero):not(:last-of-type)::after {
         padding: 12px;
         font-size: 0.95rem;
     }
-    .connect button[type="submit"] {
+    .connect-section button[type="submit"] {
         padding: 12px 25px;
         font-size: clamp(0.9rem, 1.6vw, 1rem);
     }
