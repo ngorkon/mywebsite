@@ -40,7 +40,8 @@
             <div class="container hero-content">
                 <div class="hero-text">
                     <h2>Ng'or Kon</h2>
-                    <p>Engineering ideas into reality...</p>
+                    <p class="hero-subtitle">Physics & Chemistry Student ⚛️ | Python Developer 🐍 | ML Enthusiast 🤖</p>
+                    <p class="hero-tagline">Engineering ideas into reality...</p>
                     <div class="hero-cta-buttons">
                         <button onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'});" class="hero-cta-btn">Explore Projects</button>
                         <button onclick="document.getElementById('connect').scrollIntoView({behavior: 'smooth'});" class="hero-cta-btn">Contact</button>
@@ -57,31 +58,73 @@
                 <h2>About Me</h2>
                 <div class="about-content">
                     <p>Highly motivated and detail-oriented student pursuing Honors in Physics-Mathematics and Chemistry at the College of Idaho. Passionate about leveraging technical skills and a collaborative spirit to engineer innovative solutions. Actively involved in academic clubs and leadership roles, demonstrating a commitment to community and continuous learning.</p>
+                    
+                    <div class="philosophy-section">
+                        <h4>Philosophy</h4>
+                        <blockquote class="philosophy-quote">
+                            "Curiosity drives discovery, but action creates impact."
+                        </blockquote>
+                        <p>I'm someone who doesn't just wonder about how things work – I dive deep, experiment, and build solutions. Whether it's understanding quantum mechanics, developing a machine learning model, or simulating molecular interactions, I always take that extra step to bring concepts from theory to practice.</p>
+                    </div>
+
+                    <div class="research-interests">
+                        <h4>Research Interests</h4>
+                        <ul class="research-list">
+                            <li>ML Applications in Quantum Physics</li>
+                            <li>Computational Chemistry & Molecular Dynamics</li>
+                            <li>Data-Driven Materials Science</li>
+                            <li>Quantum Machine Learning</li>
+                            <li>Interdisciplinary R&D</li>
+                        </ul>
+                    </div>
+
+                    <div class="currently-learning">
+                        <h4>Currently Learning</h4>
+                        <ul class="learning-list">
+                            <li>Deep Learning & Neural Networks</li>
+                            <li>Quantum Machine Learning</li>
+                            <li>Computational Physics Simulations</li>
+                            <li>Advanced Python Applications</li>
+                        </ul>
+                    </div>
                     <h3>Skills Summary</h3>
                     <div class="skills-grid">
                         <div class="skill-category" style="--animation-order: 1;">
-                            <h4>Software</h4>
+                            <h4>Programming Languages</h4>
                             <ul>
-                                <li>Microsoft Word</li>
-                                <li>Excel</li>
-                                <li>Google Spreadsheet</li>
-                                <li>Mathematica</li>
+                                <li>Python</li>
+                                <li>JavaScript</li>
+                                <li>HTML5</li>
+                                <li>MATLAB</li>
                             </ul>
                         </div>
                         <div class="skill-category" style="--animation-order: 2;">
-                            <h4>Technical</h4>
+                            <h4>Machine Learning & Data Science</h4>
                             <ul>
-                                <li>Mathematical Visualization</li>
-                                <li>Ethnographic Observation</li>
-                                <li>Notes Taking</li>
-                                <li>Python</li>
-                                <li>Robots Assembling</li>
+                                <li>TensorFlow</li>
+                                <li>NumPy</li>
+                                <li>Pandas</li>
+                                <li>scikit-learn</li>
+                                <li>SciPy</li>
+                                <li>Matplotlib</li>
                             </ul>
                         </div>
                         <div class="skill-category" style="--animation-order: 3;">
-                            <h4>Platforms</h4>
+                            <h4>Physics & Chemistry Tools</h4>
                             <ul>
+                                <li>Jupyter Notebook</li>
                                 <li>Wolfram Mathematica</li>
+                                <li>Mathematical Visualization</li>
+                                <li>Computational Simulations</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category" style="--animation-order: 4;">
+                            <h4>Software & Platforms</h4>
+                            <ul>
+                                <li>Microsoft Office Suite</li>
+                                <li>Google Workspace</li>
+                                <li>Git/GitHub</li>
+                                <li>Robotics Assembly</li>
                             </ul>
                         </div>
                     </div>
@@ -146,12 +189,45 @@
                 <div class="filter-buttons">
                     <button class="active" data-filter="all">All</button>
                     <button data-filter="robotics">Robotics</button>
+                    <button data-filter="software">Software</button>
                     <button data-filter="community">Community</button>
-                    <!-- Add more filters as needed -->
                 </div>
                 <div class="project-grid">
-                    <div class="project-card" data-category="robotics" style="--animation-order: 1;">
-                        <img src="images/placeholder-smart-bin.png" alt="Smart Bin Project"> <!-- Placeholder image -->
+                    <div class="project-card" data-category="software" style="--animation-order: 1;">
+                        <img src="images/placeholder-studious.png" alt="Studious Project">
+                        <h3>Studious</h3>
+                        <p>Academic management and study optimization tool designed to enhance learning efficiency and track academic progress.</p>
+                        <div class="tags">
+                            <span>Python</span>
+                            <span>Academic</span>
+                            <span>Productivity</span>
+                        </div>
+                        <a href="https://github.com/ngorkon/studious" target="_blank" class="project-link">View on GitHub</a>
+                    </div>
+                    <div class="project-card" data-category="software" style="--animation-order: 2;">
+                        <img src="images/placeholder-videoix.png" alt="Videoix Project">
+                        <h3>Videoix</h3>
+                        <p>Advanced video processing application with machine learning capabilities for enhanced video analysis and manipulation.</p>
+                        <div class="tags">
+                            <span>Machine Learning</span>
+                            <span>Video Processing</span>
+                            <span>Python</span>
+                        </div>
+                        <a href="https://github.com/ngorkon/videoix" target="_blank" class="project-link">View on GitHub</a>
+                    </div>
+                    <div class="project-card" data-category="software" style="--animation-order: 3;">
+                        <img src="images/placeholder-trailerlens.png" alt="TrailerLens Project">
+                        <h3>TrailerLens 2.1</h3>
+                        <p>Enhanced video analysis and ML tool for advanced trailer and video content analysis with improved algorithms.</p>
+                        <div class="tags">
+                            <span>Computer Vision</span>
+                            <span>Analysis</span>
+                            <span>Machine Learning</span>
+                        </div>
+                        <a href="https://github.com/ngorkon/trailerlens.2.1" target="_blank" class="project-link">View on GitHub</a>
+                    </div>
+                    <div class="project-card" data-category="robotics" style="--animation-order: 4;">
+                        <img src="images/placeholder-smart-bin.png" alt="Smart Bin Project">
                         <h3>Robotic Club: Smart Bin</h3>
                         <p>Designed and built a smart bin using Arduino as part of a sustainability-focused club project, automating waste disposal and reducing pollution.</p>
                         <div class="tags">
@@ -160,8 +236,8 @@
                             <span>Sustainability</span>
                         </div>
                     </div>
-                    <div class="project-card" data-category="robotics" style="--animation-order: 2;">
-                        <img src="images/placeholder-smart-pump.png" alt="Smart Irrigation Pump"> <!-- Placeholder image -->
+                    <div class="project-card" data-category="robotics" style="--animation-order: 5;">
+                        <img src="images/placeholder-smart-pump.png" alt="Smart Irrigation Pump">
                         <h3>Robotic Club: Smart Irrigation Pump</h3>
                         <p>Developed an automated water pump system for a garden club that enabled remote plant maintenance and reduced heat-related plant damage by approximately 20% during summer.</p>
                         <div class="tags">
@@ -170,8 +246,8 @@
                             <span>Gardening</span>
                         </div>
                     </div>
-                    <div class="project-card" data-category="community" style="--animation-order: 3;">
-                        <img src="images/placeholder-listen-ukraine.png" alt="Listen to Ukraine Project"> <!-- Placeholder image -->
+                    <div class="project-card" data-category="community" style="--animation-order: 6;">
+                        <img src="images/placeholder-listen-ukraine.png" alt="Listen to Ukraine Project">
                         <h3>CODE043: Listen to Ukraine</h3>
                         <p>Organized movie screenings and discussions, raising awareness of the war in Ukraine. Secured a $500 donation to support a local refugee charity.</p>
                         <div class="tags">
@@ -180,7 +256,6 @@
                             <span>Awareness</span>
                         </div>
                     </div>
-                    <!-- Remove old placeholder project cards -->
                 </div>
             </div>
         </section>

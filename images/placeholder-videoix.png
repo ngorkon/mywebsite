@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150" style="background-color: #1a1a2e;">
+    <path d="M 30 120 Q 60 90 100 100 T 170 70" style="fill: none; stroke: #00a9ff; stroke-width:3;"/>
+    <circle cx="100" cy="100" r="15" style="fill: #3a3a5e; stroke: #00a9ff; stroke-width:2;"/>
+    <rect x="95" y="60" width="10" height="40" style="fill: #2a2a4e;"/>
+    <path d="M 90 60 Q 100 40 110 60" style="fill: #00a9ff; opacity:0.7;"/>
+    <circle cx="40" cy="115" r="5" style="fill: #00a9ff; opacity:0.5;"/>
+    <circle cx="70" cy="95" r="4" style="fill: #00a9ff; opacity:0.4;"/>
+    <circle cx="130" cy="85" r="6" style="fill: #00a9ff; opacity:0.6;"/>
+    <circle cx="160" cy="75" r="3" style="fill: #00a9ff; opacity:0.3;"/>
+    <text x="100" y="140" font-family="Orbitron, sans-serif" font-size="12" fill="#c0c0f0" text-anchor="middle">Smart Pump</text>
+</svg>
