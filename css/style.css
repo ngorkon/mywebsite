@@ -1892,3 +1892,108 @@ section:not(#hero):not(:last-of-type)::after {
         overflow-y: auto;
     }
 }
+
+/* New styles for GitHub README integration */
+
+/* Hero section enhancements */
+.hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: #87CEEB;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.hero-tagline {
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    color: #C0C8D8;
+    margin-bottom: 1.5rem;
+}
+
+/* About section enhancements */
+.philosophy-section, .research-interests, .currently-learning {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(15, 25, 45, 0.6);
+    border-radius: 10px;
+    border-left: 4px solid #00A9FF;
+}
+
+.philosophy-quote {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #87CEEB;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(0, 169, 255, 0.1);
+    border-radius: 8px;
+    border-left: 3px solid #00E5FF;
+}
+
+.research-list, .learning-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.8rem;
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.research-list li, .learning-list li {
+    background: rgba(0, 169, 255, 0.1);
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    border-left: 3px solid #00A9FF;
+    color: #E0E8FF;
+    transition: all 0.3s ease;
+}
+
+.research-list li:hover, .learning-list li:hover {
+    background: rgba(0, 169, 255, 0.2);
+    transform: translateX(5px);
+    border-left-color: #00E5FF;
+}
+
+/* Projects section enhancements */
+.project-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #00A9FF, #0078D4);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.project-link:hover {
+    background: linear-gradient(135deg, #00E5FF, #00A9FF);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 169, 255, 0.3);
+}
+
+/* Enhanced skills grid for 4 columns */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .philosophy-section, .research-interests, .currently-learning {
+        margin-top: 1.5rem;
+        padding: 1rem;
+    }
+    
+    .research-list, .learning-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .skills-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+}
+}
