@@ -550,6 +550,223 @@ a:hover { color: var(--cyan2); }
   .hero-btns { justify-content: center; }
   .hero-desc { margin: 0 auto 32px; }
   .skills-wrap { grid-template-columns: 1fr; }
+
+/* ─── Journey Map Section ───────────────────── */
+.journey-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  margin-top: 32px;
+  align-items: stretch;
+}
+@media (max-width: 900px) {
+  .journey-wrapper { grid-template-columns: 1fr; }
+}
+
+.journey-map {
+  width: 100%;
+  height: 520px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 200, 255, 0.25);
+  box-shadow: 0 0 30px rgba(0, 200, 255, 0.15), inset 0 0 40px rgba(0, 200, 255, 0.05);
+  background: #0a1525;
+}
+.journey-map .leaflet-container {
+  background: #0a1525;
+  font-family: 'Inter', sans-serif;
+}
+.journey-map .leaflet-control-attribution {
+  background: rgba(10, 21, 37, 0.7);
+  color: #88a;
+  font-size: 10px;
+}
+.journey-map .leaflet-control-attribution a { color: #00c8ff; }
+.journey-map .leaflet-control-zoom a {
+  background: #0e1a30;
+  color: #00c8ff;
+  border-color: rgba(0, 200, 255, 0.3);
+}
+.journey-map .leaflet-control-zoom a:hover { background: #112440; }
+
+/* Custom marker pin */
+.jm-marker { background: transparent !important; border: none !important; }
+.jm-pin {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #00e6ff 0%, #007aa3 70%, #003a55 100%);
+  border: 2px solid #00c8ff;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 14px;
+  box-shadow: 0 0 14px rgba(0, 200, 255, 0.8), 0 0 30px rgba(0, 200, 255, 0.4);
+  animation: jm-pulse 2s ease-in-out infinite;
+}
+@keyframes jm-pulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(0, 200, 255, 0.8), 0 0 30px rgba(0, 200, 255, 0.4); }
+  50%      { box-shadow: 0 0 22px rgba(0, 200, 255, 1),   0 0 50px rgba(0, 200, 255, 0.7); }
+}
+.jm-num { pointer-events: none; }
+
+/* Plane */
+.jm-plane {
+  background: transparent !important;
+  border: none !important;
+  color: #fff;
+  font-size: 22px;
+  text-align: center;
+  line-height: 28px;
+  text-shadow: 0 0 8px #00c8ff, 0 0 16px #00c8ff;
+  filter: drop-shadow(0 0 6px #00c8ff);
+}
+
+/* Dashed path animation */
+.jm-path { animation: jm-dash 1.4s linear infinite; }
+@keyframes jm-dash {
+  to { stroke-dashoffset: -18; }
+}
+
+/* Map popup */
+.leaflet-popup-content-wrapper {
+  background: linear-gradient(135deg, rgba(15, 30, 55, 0.97), rgba(10, 21, 37, 0.97));
+  color: #cfe9ff;
+  border: 1px solid rgba(0, 200, 255, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+.leaflet-popup-tip { background: rgba(15, 30, 55, 0.97); border: 1px solid rgba(0, 200, 255, 0.35); }
+.jm-popup h4 { margin: 0 0 4px; color: #00c8ff; font-family: 'Orbitron', sans-serif; font-size: 15px; }
+.jm-popup .jm-date { display:block; color:#7bb; font-size:11px; margin-bottom:6px; letter-spacing:.5px; }
+.jm-popup strong { display:block; color:#cfe9ff; font-size:13px; margin-bottom:6px; }
+.jm-popup p { margin:0; font-size:12px; line-height:1.5; color:#9cb8d4; }
+
+/* Journey steps list */
+.journey-steps {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex; flex-direction: column;
+  gap: 14px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.journey-steps::-webkit-scrollbar { width: 6px; }
+.journey-steps::-webkit-scrollbar-thumb { background: rgba(0,200,255,0.3); border-radius: 3px; }
+.jm-step {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  background: rgba(10, 21, 37, 0.6);
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+.jm-step:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 200, 255, 0.55);
+  box-shadow: 0 6px 18px rgba(0, 200, 255, 0.18);
+}
+.jm-step-num {
+  flex: 0 0 36px; height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #00e6ff, #006a8c);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700;
+  box-shadow: 0 0 12px rgba(0, 200, 255, 0.6);
+}
+.jm-step-body { flex: 1; }
+.jm-step-date { font-size: 11px; color: #7bb; letter-spacing: .5px; text-transform: uppercase; }
+.jm-step-body h3 { margin: 4px 0 6px; color: #00c8ff; font-size: 15px; font-family: 'Orbitron', sans-serif; }
+.jm-step-body p { margin: 0; font-size: 13px; line-height: 1.55; color: #b6cbe2; }
+
+/* ─── GitHub Feed Repo Cards ────────────────── */
+.github-feed {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+.feed-loading {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px;
+  padding: 40px 0;
+  color: #88aabb;
+}
+.loader-ring {
+  width: 28px; height: 28px;
+  border: 3px solid rgba(0, 200, 255, 0.2);
+  border-top-color: #00c8ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.feed-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 32px;
+  border: 1px dashed rgba(255, 100, 100, 0.4);
+  border-radius: 12px;
+  background: rgba(60, 10, 10, 0.2);
+  color: #ffb6b6;
+}
+.feed-error p { margin: 0 0 14px; }
+.feed-error .btn-secondary {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: rgba(0, 200, 255, 0.1);
+  border: 1px solid rgba(0, 200, 255, 0.4);
+  color: #00c8ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+.feed-error .btn-secondary:hover { background: rgba(0, 200, 255, 0.2); }
+.feed-empty { grid-column: 1 / -1; text-align: center; color: #88a; padding: 30px 0; }
+
+.repo-card {
+  display: flex; flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  background: rgba(10, 21, 37, 0.7);
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+  color: #cfe9ff;
+}
+.repo-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 200, 255, 0.6);
+  box-shadow: 0 10px 26px rgba(0, 200, 255, 0.2);
+}
+.repo-name {
+  font-family: 'Orbitron', sans-serif;
+  color: #00c8ff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.repo-desc {
+  font-size: 13px;
+  color: #aac3da;
+  line-height: 1.5;
+  flex: 1;
+}
+.repo-meta {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  font-size: 11px;
+  color: #88aabb;
+  letter-spacing: .3px;
+  margin-top: 4px;
+}
+.repo-meta > span { display: inline-flex; align-items: center; gap: 4px; }
+.repo-lang {
+  width: 10px; height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
   #sim-canvas { height: 300px; }
   .project-grid { grid-template-columns: 1fr; }
   .github-feed  { grid-template-columns: 1fr; }
