@@ -6,6 +6,8 @@
 <title>Ng'or (Mayom) Kon — Physics · Code · Impact</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
@@ -207,55 +209,37 @@
   <section id="experience" class="experience section">
     <div class="container">
       <h2 class="section-title">Journey &amp; Experience</h2>
-      <div class="timeline" id="timeline">
-        <div class="tl-item reveal" style="--i:0">
-          <div class="tl-dot"></div>
-          <div class="tl-card">
-            <span class="tl-date">May 2024 – Present</span>
-            <h3>Academic Tutor · The College of Idaho</h3>
-            <p>Supporting students in Calculus and Education courses — breaking down complex concepts into clear steps. Fostering inclusive learning environments where "aha" moments happen.</p>
-          </div>
-        </div>
-        <div class="tl-item reveal" style="--i:1">
-          <div class="tl-dot"></div>
-          <div class="tl-card">
-            <span class="tl-date">Apr 2024 – Present</span>
-            <h3>International Students Organization</h3>
-            <p>Coordinate cross-cultural events for 100+ international students. Curate event ideas, manage logistics, and ensure inclusive, engaging experiences.</p>
-          </div>
-        </div>
-        <div class="tl-item reveal" style="--i:2">
-          <div class="tl-dot"></div>
-          <div class="tl-card">
-            <span class="tl-date">Apr 2024 – Present</span>
-            <h3>Asian Student Association</h3>
-            <p>Manage ASA's social media platforms, increasing engagement and event participation through targeted marketing campaigns.</p>
-          </div>
-        </div>
-        <div class="tl-item reveal" style="--i:3">
-          <div class="tl-dot"></div>
-          <div class="tl-card">
-            <span class="tl-date">Sept 2021 – May 2023</span>
-            <h3>United World College Maastricht</h3>
-            <p>IB Diploma Programme. Member of Robotics Club and Musicals Club.</p>
-          </div>
-        </div>
-        <div class="tl-item reveal" style="--i:4">
-          <div class="tl-dot"></div>
-          <div class="tl-card">
-            <span class="tl-date">Feb 2021 – Aug 2023</span>
-            <h3>Co-Founder &amp; Director of Technology · Project 21 Kenya</h3>
-            <p>Youth coalition eradicating poverty in Kakuma Refugees Camp. Led funding acquisition, tech initiatives, and community projects including building homes for flood-displaced families.</p>
-          </div>
-        </div>
-        <div class="tl-item reveal" style="--i:5">
-          <div class="tl-dot"></div>
-          <div class="tl-card">
-            <span class="tl-date">Expected May 2027</span>
-            <h3>The College of Idaho — BS Physics-Math &amp; Chemistry</h3>
-            <p>Honors program. Member: Physics Club, Idaho UiS STEM Club, Mandarin Club. Treasurer: Interfaith Council.</p>
-          </div>
-        </div>
+      <p class="section-sub">From Kakuma to Maastricht to Idaho — a real-world map of the journey so far.</p>
+
+      <div class="journey-wrapper reveal">
+        <div id="journey-map" class="journey-map" aria-label="Interactive journey map"></div>
+
+        <ol class="journey-steps">
+          <li class="jm-step" data-step="0">
+            <span class="jm-step-num">1</span>
+            <div class="jm-step-body">
+              <span class="jm-step-date">Feb 2021 – Aug 2023</span>
+              <h3>Kakuma, Kenya</h3>
+              <p>Co-Founder &amp; Director of Technology · Project 21 Kenya. Eradicating poverty in Kakuma Refugee Camp — built homes for flood-displaced families, led funding and tech initiatives.</p>
+            </div>
+          </li>
+          <li class="jm-step" data-step="1">
+            <span class="jm-step-num">2</span>
+            <div class="jm-step-body">
+              <span class="jm-step-date">Sept 2021 – May 2023</span>
+              <h3>UWC Maastricht, Netherlands</h3>
+              <p>IB Diploma Programme at United World College Maastricht. Robotics Club and Musicals Club. International, multicultural environment that sharpened my global outlook.</p>
+            </div>
+          </li>
+          <li class="jm-step" data-step="2">
+            <span class="jm-step-num">3</span>
+            <div class="jm-step-body">
+              <span class="jm-step-date">May 2024 – Present</span>
+              <h3>The College of Idaho, USA</h3>
+              <p>Academic Tutor in Calculus and Education. Coordinating cross-cultural events for 100+ international students through the International Students Organization.</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </section>
