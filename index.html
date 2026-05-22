@@ -1,344 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ng'or (Mayom) Kon — Physics · Code · Impact</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ng'or (Mayom) Kon — Physics · Code · Impact</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Portfolio of Ng'or (Mayom) Kon — Physics and Chemistry student at The College of Idaho. Building ML models, simulating molecular dynamics, and turning equations into running code.">
+  <meta name="theme-color" content="#050814">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ngorkon.github.io/mywebsite/">
+  <meta property="og:title" content="Ng'or (Mayom) Kon — Physics · Code · Impact">
+  <meta property="og:description" content="Physics and Chemistry student at The College of Idaho. ML models, molecular dynamics, and computational physics.">
+  <meta property="og:image" content="https://ngorkon.github.io/mywebsite/images/ngorkon.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon (inline SVG data URI) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23050814'/%3E%3Ctext y='68' x='50' text-anchor='middle' font-size='52' font-family='Arial' font-weight='bold' fill='%2300c8ff'%3EMK%3C/text%3E%3C/svg%3E">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script defer src="js/script.js"></script>
 </head>
 <body>
-<canvas id="bg-canvas"></canvas>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-<header class="site-header" id="site-header">
-  <div class="header-container">
-    <a href="#hero" class="logo-link">
-      <span class="logo-main">Mayom</span><span class="logo-sub">Kon</span>
-    </a>
-    <nav class="main-nav" id="main-nav">
-      <a href="#hero" class="nav-link active">Home</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#simulation" class="nav-link">Simulation</a>
-      <a href="#projects" class="nav-link">Projects</a>
-      <a href="#experience" class="nav-link">Experience</a>
-      <a href="#honors" class="nav-link">Honors</a>
-      <a href="#connect" class="nav-link">Connect</a>
-    </nav>
-    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
-
-<main>
-  <!-- ══════════════ HERO ══════════════ -->
-  <section id="hero" class="hero">
-    <canvas id="hero-canvas"></canvas>
-    <div class="hero-content container">
-      <div class="hero-text">
-        <p class="hero-eyebrow">Hello, I'm</p>
-        <h1 class="hero-name">Ng'or Kon</h1>
-        <p class="hero-role">
-          <span id="typed-text"></span><span class="cursor">|</span>
-        </p>
-        <p class="hero-desc">Physics &amp; Chemistry student at The College of Idaho.
-          I build ML models, simulate molecular dynamics, and turn equations into running code.</p>
-        <div class="hero-btns">
-          <a href="#projects" class="btn-primary">View Projects</a>
-          <a href="#connect" class="btn-outline">Get in Touch</a>
-        </div>
-      </div>
-      <div class="hero-img-wrap">
-        <div class="orbit-ring ring-1"></div>
-        <div class="orbit-ring ring-2"></div>
-        <div class="orbit-ring ring-3"></div>
-        <img src="images/ngorkon.png" alt="Ng'or (Mayom) Kon" class="profile-pic" id="profile-pic">
-      </div>
+  <header class="site-header" id="site-header">
+    <div class="header-container">
+      <a href="#hero" class="logo-link">
+        <span class="logo-main">Mayom</span><span class="logo-sub">Kon</span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#simulation" class="nav-link">Playground</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#honors" class="nav-link">Honors</a>
+        <a href="#connect" class="nav-link">Connect</a>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span><span></span>
+      </button>
     </div>
-    <div class="scroll-hint"><span></span></div>
-  </section>
+  </header>
 
-  <!-- ══════════════ ABOUT ══════════════ -->
-  <section id="about" class="about section">
-    <div class="container">
-      <h2 class="section-title">About Me</h2>
-      <div class="about-grid">
-        <div class="about-bio reveal">
-          <p>Highly motivated student pursuing <strong>Honors in Physics-Mathematics &amp; Chemistry</strong> at The College of Idaho (UWC Davis Scholar). I'm passionate about bridging theoretical physics with real-world software — from quantum ML to computational chemistry.</p>
-          <blockquote class="quote">"Curiosity drives discovery, but action creates impact."</blockquote>
-          <div class="tag-row">
-            <span class="tag">ML Applications in QM</span>
-            <span class="tag">Molecular Dynamics</span>
-            <span class="tag">Data-Driven Materials</span>
-            <span class="tag">Quantum ML</span>
-            <span class="tag">Computational Physics</span>
+  <main id="main-content">
+    <section id="hero" class="hero">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-content container">
+        <div class="hero-text">
+          <p class="hero-eyebrow">Hello, I'm</p>
+          <h1 class="hero-name">Ng'or Kon</h1>
+          <p class="hero-role"><span id="typed-text"></span><span class="cursor" aria-hidden="true">|</span></p>
+          <p class="hero-desc">Physics and Chemistry student at The College of Idaho. I build ML models, simulate molecular dynamics, and turn equations into running code.</p>
+          <div class="hero-btns">
+            <a href="#projects" class="btn-primary">View Projects</a>
+            <a href="#connect" class="btn-outline">Get in Touch</a>
+            <a href="resume.pdf" class="btn-cv" target="_blank" rel="noopener" aria-label="Download CV (PDF)">Download CV</a>
           </div>
         </div>
-        <div class="skills-wrap reveal">
-          <div class="skill-card" style="--i:0">
-            <div class="skill-icon">⚛️</div>
-            <h4>Physics &amp; Math</h4>
-            <ul><li>Quantum Mechanics</li><li>Statistical Mechanics</li><li>Mathematica</li><li>MATLAB</li></ul>
+        <div class="hero-img-wrap">
+          <div class="orbit-ring ring-1"></div>
+          <div class="orbit-ring ring-2"></div>
+          <div class="orbit-ring ring-3"></div>
+          <img src="images/ngorkon.png" alt="Ng'or (Mayom) Kon" class="profile-pic" id="profile-pic" width="280" height="280" loading="eager">
+        </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span></span></div>
+    </section>
+
+    <section id="about" class="about section">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-grid">
+          <div class="about-bio reveal">
+            <p>Highly motivated student pursuing <strong>Honors in Physics-Mathematics and Chemistry</strong> at The College of Idaho (UWC Davis Scholar). Passionate about bridging theoretical physics with real-world software — from quantum ML to computational chemistry.</p>
+            <blockquote class="quote">"Curiosity drives discovery, but action creates impact."</blockquote>
+            <div class="tag-row">
+              <span class="tag">ML Applications in QM</span>
+              <span class="tag">Molecular Dynamics</span>
+              <span class="tag">Data-Driven Materials</span>
+              <span class="tag">Quantum ML</span>
+              <span class="tag">Computational Physics</span>
+            </div>
           </div>
-          <div class="skill-card" style="--i:1">
-            <div class="skill-icon">🤖</div>
-            <h4>ML &amp; Data Science</h4>
-            <ul><li>TensorFlow / PyTorch</li><li>scikit-learn</li><li>NumPy / Pandas</li><li>Matplotlib / SciPy</li></ul>
-          </div>
-          <div class="skill-card" style="--i:2">
-            <div class="skill-icon">🐍</div>
-            <h4>Programming</h4>
-            <ul><li>Python</li><li>JavaScript</li><li>HTML5 / CSS3</li><li>Jupyter Notebooks</li></ul>
-          </div>
-          <div class="skill-card" style="--i:3">
-            <div class="skill-icon">🔧</div>
-            <h4>Tools &amp; Platforms</h4>
-            <ul><li>Git / GitHub</li><li>Google Workspace</li><li>Robotics Assembly</li><li>VS Code</li></ul>
+          <div class="skills-wrap reveal">
+            <div class="skill-card" data-index="0">
+              <div class="skill-icon" aria-hidden="true">⚛️</div>
+              <h4>Physics and Math</h4>
+              <ul><li>Quantum Mechanics</li><li>Statistical Mechanics</li><li>Mathematica</li><li>MATLAB</li></ul>
+            </div>
+            <div class="skill-card" data-index="1">
+              <div class="skill-icon" aria-hidden="true">🤖</div>
+              <h4>ML and Data Science</h4>
+              <ul><li>TensorFlow / PyTorch</li><li>scikit-learn</li><li>NumPy / Pandas</li><li>Matplotlib / SciPy</li></ul>
+            </div>
+            <div class="skill-card" data-index="2">
+              <div class="skill-icon" aria-hidden="true">🐍</div>
+              <h4>Programming</h4>
+              <ul><li>Python</li><li>JavaScript</li><li>HTML5 / CSS3</li><li>Jupyter Notebooks</li></ul>
+            </div>
+            <div class="skill-card" data-index="3">
+              <div class="skill-icon" aria-hidden="true">🔧</div>
+              <h4>Tools and Platforms</h4>
+              <ul><li>Git / GitHub</li><li>Google Workspace</li><li>Robotics Assembly</li><li>VS Code</li></ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ══════════════ SIMULATION ══════════════ -->
-  <section id="simulation" class="simulation section">
-    <div class="container">
-      <h2 class="section-title">Interactive Physics Simulation</h2>
-      <p class="section-sub">A real-time N-body gravitational simulation with trail rendering. Drag to create new bodies. Click a body to inspect its stats.</p>
-      <div class="sim-wrapper reveal">
-        <div class="sim-controls">
-          <button id="sim-play-pause" class="sim-btn active">⏸ Pause</button>
-          <button id="sim-reset" class="sim-btn">↺ Reset</button>
-          <button id="sim-add-body" class="sim-btn">＋ Add Body</button>
-          <label class="sim-label">G: <input type="range" id="sim-gravity" min="0.1" max="5" step="0.1" value="1"></label>
-          <label class="sim-label">Bodies: <span id="sim-body-count">0</span></label>
-        </div>
-        <canvas id="sim-canvas"></canvas>
-        <div id="sim-info" class="sim-info"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════ PROJECTS ══════════════ -->
-  <section id="projects" class="projects section">
-    <div class="container">
-      <h2 class="section-title">Projects</h2>
-      <p class="section-sub">GitHub feed — live repositories</p>
-
-      <!-- GitHub Live Feed -->
-      <div id="github-feed" class="github-feed">
-        <div class="feed-loading">
-          <div class="loader-ring"></div>
-          <span>Fetching repositories…</span>
+    <section id="simulation" class="simulation section">
+      <div class="container">
+        <h2 class="section-title">Interactive Physics Playground</h2>
+        <p class="section-sub">A real-time N-body gravitational simulation with trail rendering. Drag to create new bodies. Click a body to inspect its stats. <strong>Try it below.</strong></p>
+        <div class="sim-wrapper reveal">
+          <div class="sim-controls">
+            <button id="sim-play-pause" class="sim-btn active">Pause</button>
+            <button id="sim-reset" class="sim-btn">Reset</button>
+            <button id="sim-add-body" class="sim-btn">Add Body</button>
+            <label class="sim-label">G: <input type="range" id="sim-gravity" min="0.1" max="5" step="0.1" value="1" aria-label="Gravitational constant"></label>
+            <label class="sim-label">Bodies: <span id="sim-body-count">0</span></label>
+          </div>
+          <canvas id="sim-canvas" aria-label="Interactive N-body gravitational simulation"></canvas>
+          <div id="sim-info" class="sim-info" aria-live="polite"></div>
         </div>
       </div>
+    </section>
 
-      <!-- Static Featured Projects -->
-      <h3 class="subsection-title">Featured Projects</h3>
-      <div class="filter-row">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="software">Software</button>
-        <button class="filter-btn" data-filter="robotics">Robotics</button>
-        <button class="filter-btn" data-filter="community">Community</button>
+    <section id="projects" class="projects section">
+      <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <p class="section-sub">A selection of software, physics, and community projects.</p>
+        <div class="filter-row" role="group" aria-label="Filter projects by category">
+          <button class="filter-btn active" data-cat="all">All</button>
+          <button class="filter-btn" data-cat="software">Software</button>
+          <button class="filter-btn" data-cat="robotics">Robotics</button>
+          <button class="filter-btn" data-cat="community">Community</button>
+        </div>
+        <div class="projects-grid" id="projects-grid">
+
+          <div class="project-card reveal" data-cat="software" style="--i:0">
+            <div class="card-glow"></div>
+            <div class="card-header">
+              <span class="card-icon" aria-hidden="true">📚</span>
+              <h3>Studious</h3>
+            </div>
+            <p>Academic management and study optimization tool to enhance learning efficiency and track academic progress.</p>
+            <div class="tag-row"><span class="tag">Python</span><span class="tag">Academic</span><span class="tag">Productivity</span></div>
+            <a href="https://github.com/ngorkon/studious" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+
+          <div class="project-card reveal" data-cat="software" style="--i:1">
+            <div class="card-glow"></div>
+            <div class="card-header">
+              <span class="card-icon" aria-hidden="true">📹</span>
+              <h3>Videoix</h3>
+            </div>
+            <p>Advanced video processing application with machine learning capabilities for enhanced video analysis and manipulation.</p>
+            <div class="tag-row"><span class="tag">ML</span><span class="tag">Video</span><span class="tag">Python</span></div>
+            <a href="https://github.com/ngorkon/videoix" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+
+          <div class="project-card reveal" data-cat="software" style="--i:2">
+            <div class="card-glow"></div>
+            <div class="card-header">
+              <span class="card-icon" aria-hidden="true">🔍</span>
+              <h3>TrailerLens 2.1</h3>
+            </div>
+            <p>Enhanced video analysis and ML tool for advanced trailer and video content analysis with improved algorithms.</p>
+            <div class="tag-row"><span class="tag">Computer Vision</span><span class="tag">ML</span></div>
+            <a href="https://github.com/ngorkon/trailerlens.2.1" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+
+          <div class="project-card reveal has-slideshow" data-cat="robotics" style="--i:3">
+            <div class="card-glow"></div>
+            <div class="card-slideshow">
+              <div class="slideshow-track" id="slideshow-smart-bin">
+                <img src="images/smart-bin/1.png" alt="Smart Bin project" class="slide-img" loading="lazy" onerror="this.closest('.card-slideshow').style.display='none'">
+              </div>
+              <button class="slide-prev" aria-label="Previous image">&#8249;</button>
+              <button class="slide-next" aria-label="Next image">&#8250;</button>
+              <div class="slide-dots" aria-hidden="true"></div>
+            </div>
+            <div class="card-header">
+              <span class="card-icon" aria-hidden="true">🗑️</span>
+              <h3>Smart Bin (Robotics)</h3>
+            </div>
+            <p>Designed and built an Arduino-powered smart bin to automate waste disposal as part of a sustainability-focused club project.</p>
+            <div class="tag-row"><span class="tag">Arduino</span><span class="tag">Robotics</span><span class="tag">Sustainability</span></div>
+          </div>
+
+          <div class="project-card reveal has-slideshow" data-cat="robotics" style="--i:4">
+            <div class="card-glow"></div>
+            <div class="card-slideshow">
+              <div class="slideshow-track" id="slideshow-smart-pump">
+                <img src="images/smart-pump/1.png" alt="Smart Irrigation Pump project" class="slide-img" loading="lazy" onerror="this.closest('.card-slideshow').style.display='none'">
+              </div>
+              <button class="slide-prev" aria-label="Previous image">&#8249;</button>
+              <button class="slide-next" aria-label="Next image">&#8250;</button>
+              <div class="slide-dots" aria-hidden="true"></div>
+            </div>
+            <div class="card-header">
+              <span class="card-icon" aria-hidden="true">💧</span>
+              <h3>Smart Irrigation Pump</h3>
+            </div>
+            <p>Automated water pump system for remote plant maintenance — reduced heat-related plant damage by ~20% during summer.</p>
+            <div class="tag-row"><span class="tag">Automation</span><span class="tag">Robotics</span><span class="tag">IoT</span></div>
+          </div>
+
+          <div class="project-card reveal has-slideshow" data-cat="community" style="--i:5">
+            <div class="card-glow"></div>
+            <div class="card-slideshow">
+              <div class="slideshow-track" id="slideshow-listen-ukraine">
+                <img src="images/listen-ukraine/1.png" alt="Listen to Ukraine project" class="slide-img" loading="lazy" onerror="this.closest('.card-slideshow').style.display='none'">
+              </div>
+              <button class="slide-prev" aria-label="Previous image">&#8249;</button>
+              <button class="slide-next" aria-label="Next image">&#8250;</button>
+              <div class="slide-dots" aria-hidden="true"></div>
+            </div>
+            <div class="card-header">
+              <span class="card-icon" aria-hidden="true">🇺🇦</span>
+              <h3>Listen to Ukraine</h3>
+            </div>
+            <p>Organized movie screenings raising awareness of the war in Ukraine. Secured a $500 donation for local refugee charity.</p>
+            <div class="tag-row"><span class="tag">Community</span><span class="tag">Fundraising</span><span class="tag">Awareness</span></div>
+          </div>
+
+        </div>
       </div>
-      <div class="project-grid" id="project-grid">
-        <div class="project-card reveal" data-cat="software" style="--i:0">
-          <div class="card-glow"></div>
-          <div class="card-header">
-            <span class="card-icon">📚</span>
-            <h3>Studious</h3>
-          </div>
-          <p>Academic management and study optimization tool designed to enhance learning efficiency and track academic progress.</p>
-          <div class="tag-row"><span class="tag">Python</span><span class="tag">Academic</span><span class="tag">Productivity</span></div>
-          <a href="https://github.com/ngorkon/studious" target="_blank" class="card-link">View on GitHub →</a>
-        </div>
-        <div class="project-card reveal" data-cat="software" style="--i:1">
-          <div class="card-glow"></div>
-          <div class="card-header">
-            <span class="card-icon">🎬</span>
-            <h3>Videoix</h3>
-          </div>
-          <p>Advanced video processing application with machine learning capabilities for enhanced video analysis and manipulation.</p>
-          <div class="tag-row"><span class="tag">ML</span><span class="tag">Video</span><span class="tag">Python</span></div>
-          <a href="https://github.com/ngorkon/videoix" target="_blank" class="card-link">View on GitHub →</a>
-        </div>
-        <div class="project-card reveal" data-cat="software" style="--i:2">
-          <div class="card-glow"></div>
-          <div class="card-header">
-            <span class="card-icon">🔍</span>
-            <h3>TrailerLens 2.1</h3>
-          </div>
-          <p>Enhanced video analysis and ML tool for advanced trailer and video content analysis with improved algorithms.</p>
-          <div class="tag-row"><span class="tag">Computer Vision</span><span class="tag">ML</span></div>
-          <a href="https://github.com/ngorkon/trailerlens.2.1" target="_blank" class="card-link">View on GitHub →</a>
-        </div>
-        <div class="project-card reveal" data-cat="robotics" style="--i:3">
-          <div class="card-glow"></div>
-          <div class="card-header">
-            <span class="card-icon">🗑️</span>
-            <h3>Smart Bin (Robotics)</h3>
-          </div>
-          <p>Designed and built an Arduino-powered smart bin to automate waste disposal as part of a sustainability-focused club project.</p>
-          <div class="tag-row"><span class="tag">Arduino</span><span class="tag">Robotics</span><span class="tag">Sustainability</span></div>
-        </div>
-        <div class="project-card reveal" data-cat="robotics" style="--i:4">
-          <div class="card-glow"></div>
-          <div class="card-header">
-            <span class="card-icon">💧</span>
-            <h3>Smart Irrigation Pump</h3>
-          </div>
-          <p>Automated water pump system for remote plant maintenance — reduced heat-related plant damage by ~20% during summer.</p>
-          <div class="tag-row"><span class="tag">Automation</span><span class="tag">Robotics</span><span class="tag">IoT</span></div>
-        </div>
-        <div class="project-card reveal" data-cat="community" style="--i:5">
-          <div class="card-glow"></div>
-          <div class="card-header">
-            <span class="card-icon">🇺🇦</span>
-            <h3>Listen to Ukraine</h3>
-          </div>
-          <p>Organized movie screenings raising awareness of the war in Ukraine. Secured a $500 donation for local refugee charity.</p>
-          <div class="tag-row"><span class="tag">Community</span><span class="tag">Fundraising</span><span class="tag">Awareness</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ══════════════ EXPERIENCE ══════════════ -->
-  <section id="experience" class="experience section">
-    <div class="container">
-      <h2 class="section-title">Journey &amp; Experience</h2>
-      <p class="section-sub">From Kakuma to Maastricht to Idaho — a real-world map of the journey so far.</p>
-
-      <div class="journey-wrapper reveal">
-        <div id="journey-map" class="journey-map" aria-label="Interactive journey map"></div>
-
-        <ol class="journey-steps">
-          <li class="jm-step" data-step="0">
+    <section id="experience" class="experience section">
+      <div class="container">
+        <h2 class="section-title">Journey and Experience</h2>
+        <p class="section-sub">From Kakuma to Maastricht to Idaho — a real-world map of the journey so far.</p>
+        <div class="journey-wrapper reveal">
+          <div id="journey-map" class="journey-map" aria-label="Interactive journey map"></div>
+        </div>
+        <h3 class="subsection-title">Timeline</h3>
+        <div class="timeline reveal" id="timeline">
+          <div class="jm-step" data-step="0">
             <span class="jm-step-num">1</span>
-            <div class="jm-step-body">
-              <span class="jm-step-date">Feb 2021 – Aug 2023</span>
-              <h3>Kakuma, Kenya</h3>
-              <p>Co-Founder &amp; Director of Technology · Project 21 Kenya. Eradicating poverty in Kakuma Refugee Camp — built homes for flood-displaced families, led funding and tech initiatives.</p>
+            <div class="jm-step-content">
+              <h4>Kakuma Refugee Camp, Kenya</h4>
+              <p>Early education and formative years; developed resilience and community focus.</p>
             </div>
-          </li>
-          <li class="jm-step" data-step="1">
+          </div>
+          <div class="jm-step" data-step="1">
             <span class="jm-step-num">2</span>
-            <div class="jm-step-body">
-              <span class="jm-step-date">Sept 2021 – May 2023</span>
-              <h3>UWC Maastricht, Netherlands</h3>
-              <p>IB Diploma Programme at United World College Maastricht. Robotics Club and Musicals Club. International, multicultural environment that sharpened my global outlook.</p>
+            <div class="jm-step-content">
+              <h4>UWC Maastricht, Netherlands</h4>
+              <p>International Baccalaureate; physics, chemistry, and mathematics focus. UWC Davis Scholar selection.</p>
             </div>
-          </li>
-          <li class="jm-step" data-step="2">
+          </div>
+          <div class="jm-step" data-step="2">
             <span class="jm-step-num">3</span>
-            <div class="jm-step-body">
-              <span class="jm-step-date">May 2024 – Present</span>
-              <h3>The College of Idaho, USA</h3>
-              <p>Academic Tutor in Calculus and Education. Coordinating cross-cultural events for 100+ international students through the International Students Organization.</p>
+            <div class="jm-step-content">
+              <h4>The College of Idaho, USA</h4>
+              <p>B.S. Honors Physics-Mathematics and Chemistry. ML research, robotics, and computational physics.</p>
             </div>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════ HONORS ══════════════ -->
-  <section id="honors" class="honors section">
-    <div class="container">
-      <h2 class="section-title">Honors &amp; Awards</h2>
-      <div class="honors-grid">
-        <div class="honor-card reveal" style="--i:0">
-          <div class="honor-icon">🏆</div>
-          <h4>UWC Davis Scholar</h4>
-          <p>2023 – 2027 · Highly competitive international scholarship.</p>
-        </div>
-        <div class="honor-card reveal" style="--i:1">
-          <div class="honor-icon">🎖️</div>
-          <h4>NSLS Nominee</h4>
-          <p>Nominee, National Society of Leadership &amp; Success.</p>
-        </div>
-        <div class="honor-card reveal" style="--i:2">
-          <div class="honor-icon">🎓</div>
-          <h4>Gipson Honors</h4>
-          <p>Honors program recognition at The College of Idaho.</p>
-        </div>
-        <div class="honor-card reveal" style="--i:3">
-          <div class="honor-icon">💰</div>
-          <h4>Project KE21 Grant: $1,000</h4>
-          <p>Issued by GOMAD UWCX Initiative · May 2022.</p>
-        </div>
-        <div class="honor-card reveal" style="--i:4">
-          <div class="honor-icon">🌍</div>
-          <h4>Listen to Ukraine Grant: $500</h4>
-          <p>Issued by CODE043 · April 2023.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════ CONNECT ══════════════ -->
-  <section id="connect" class="connect section">
-    <div class="container">
-      <h2 class="section-title">Let's Connect</h2>
-      <div class="connect-grid">
-        <div class="contact-form-wrap reveal">
-          <form action="https://formspree.io/f/xovdbwpw" method="POST" class="contact-form">
-            <div class="form-field">
-              <input type="text" id="name" name="name" required placeholder=" ">
-              <label for="name">Your Name</label>
-            </div>
-            <div class="form-field">
-              <input type="email" id="email" name="email" required placeholder=" ">
-              <label for="email">Your Email</label>
-            </div>
-            <div class="form-field">
-              <textarea id="message" name="message" rows="5" required placeholder=" "></textarea>
-              <label for="message">Your Message</label>
-            </div>
-            <button type="submit" class="btn-primary full-width">Send Message ✦</button>
-          </form>
-        </div>
-        <div class="social-wrap reveal">
-          <h3>Find Me Online</h3>
-          <div class="social-list">
-            <a href="https://github.com/ngorkon" target="_blank" class="social-item" aria-label="GitHub">
-              <div class="social-icon-box">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-              </div>
-              <div class="social-text">
-                <span class="social-name">GitHub</span>
-                <span class="social-handle">@ngorkon</span>
-              </div>
-            </a>
-            <a href="https://linkedin.com/in/ngorkon" target="_blank" class="social-item" aria-label="LinkedIn">
-              <div class="social-icon-box">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-              </div>
-              <div class="social-text">
-                <span class="social-name">LinkedIn</span>
-                <span class="social-handle">Ng'or (Mayom) Kon</span>
-              </div>
-            </a>
           </div>
-          <div class="availability-badge">
-            <span class="pulse-dot"></span>
-            Available for research collaborations &amp; internships
+        </div>
+        <h3 class="subsection-title">GitHub Activity</h3>
+        <div class="github-feed reveal" id="github-feed">
+          <p class="feed-loading">Loading recent repositories…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="honors" class="honors section">
+      <div class="container">
+        <h2 class="section-title">Honors and Awards</h2>
+        <div class="honors-grid">
+          <div class="honor-card reveal" style="--i:0">
+            <div class="honor-icon" aria-hidden="true">🎓</div>
+            <h4>UWC Davis Scholar</h4>
+            <p>2023 – 2027 · Highly competitive international scholarship.</p>
+          </div>
+          <div class="honor-card reveal" style="--i:1">
+            <div class="honor-icon" aria-hidden="true">🏆</div>
+            <h4>NSLS Nominee</h4>
+            <p>Nominee, National Society of Leadership and Success.</p>
+          </div>
+          <div class="honor-card reveal" style="--i:2">
+            <div class="honor-icon" aria-hidden="true">🎖️</div>
+            <h4>Gipson Honors</h4>
+            <p>Honors program recognition at The College of Idaho.</p>
+          </div>
+          <div class="honor-card reveal" style="--i:3">
+            <div class="honor-icon" aria-hidden="true">🔥</div>
+            <h4>Project KE21 Grant: $1,000</h4>
+            <p>Issued by GOMAD UWCX Initiative · May 2022.</p>
+          </div>
+          <div class="honor-card reveal" style="--i:4">
+            <div class="honor-icon" aria-hidden="true">🌍</div>
+            <h4>Listen to Ukraine Grant: $500</h4>
+            <p>Issued by CODE043 · April 2023.</p>
           </div>
         </div>
       </div>
+    </section>
+
+    <section id="connect" class="connect section">
+      <div class="container">
+        <h2 class="section-title">Connect</h2>
+        <p class="section-sub">Have a project, research idea, or just want to say hi? Reach out.</p>
+        <div class="connect-grid">
+          <div class="contact-form-wrap reveal">
+            <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+              <div class="form-group">
+                <label for="contact-name">Name</label>
+                <input type="text" id="contact-name" name="name" required placeholder="Your name" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="contact-email">Email</label>
+                <input type="email" id="contact-email" name="email" required placeholder="your@email.com" autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" name="message" rows="5" required placeholder="Your message…"></textarea>
+              </div>
+              <button type="submit" class="btn-primary btn-submit">Send Message</button>
+            </form>
+          </div>
+          <div class="social-wrap reveal">
+            <svg class="social-web" viewBox="0 0 300 300" aria-hidden="true" id="social-svg"></svg>
+            <div class="social-icons" id="social-icons">
+              <a href="https://github.com/ngorkon" target="_blank" rel="noopener" class="social-item" aria-label="GitHub">
+                <div class="social-icon-box">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.57.1.78-.25.78-.55v-2.1c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 2.87-.39c.97 0 1.95.13 2.87.39 2.18-1.49 3.14-1.18 3.14-1.18.63 1.58.24 2.75.12 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.13v3.16c0 .31.2.66.79.55C20.21 21.38 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/></svg>
+                </div>
+                <div class="social-text">
+                  <span class="social-name">GitHub</span>
+                  <span class="social-handle">@ngorkon</span>
+                </div>
+              </a>
+              <a href="https://linkedin.com/in/ngorkon" target="_blank" rel="noopener" class="social-item" aria-label="LinkedIn">
+                <div class="social-icon-box">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </div>
+                <div class="social-text">
+                  <span class="social-name">LinkedIn</span>
+                  <span class="social-handle">Ng'or (Mayom) Kon</span>
+                </div>
+              </a>
+            </div>
+            <div class="availability-badge">
+              <span class="pulse-dot"></span>
+              Available for research collaborations and internships
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>2025 Ng'or (Mayom) Kon · Engineering ideas into reality.</p>
+      <p class="footer-sub">Built with HTML, CSS and JavaScript · Hosted on GitHub Pages</p>
+      <a href="#hero" class="footer-top-link" aria-label="Back to top">Back to top</a>
     </div>
-  </section>
-</main>
+  </footer>
 
-<footer class="site-footer">
-  <div class="container">
-    <p>© 2025 Ng'or (Mayom) Kon · Engineering ideas into reality.</p>
-    <p class="footer-sub">Built with HTML, CSS &amp; JavaScript · Hosted on GitHub Pages</p>
-  </div>
-</footer>
-
-<script src="js/script.js"></script>
 </body>
 </html>
