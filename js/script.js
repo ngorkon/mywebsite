@@ -451,6 +451,3 @@ function initJourneyMap() {
   // Recompute on tab/visibility changes
   window.addEventListener('resize', () => map.invalidateSize());
 }
-
-window.addEventListener('resize', () => map.invalidateSize());
-}
