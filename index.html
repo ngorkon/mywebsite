@@ -1,390 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ng'or Kon - Engineering ideas into reality</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ng'or (Mayom) Kon — Physics · Code · Impact</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <canvas id="background-reaction-canvas"></canvas> <!-- New background canvas -->
-    <header class="site-header">
-        <div class="header-container">
-            <div class="site-branding">
-                <a href="#hero" class="logo-link">
-                    <span class="logo-text-main">Mayom</span>
-                    <span class="logo-text-subtle">Kon</span>
-                </a>
-                <p class="tagline">Engineering ideas into reality...</p>
-            </div>
-            <nav class="main-navigation" id="main-nav">
-                <a href="#hero" class="nav-link active">Home</a>
-                <a href="#about" class="nav-link">About Me</a>
-                <a href="#journey" class="nav-link">Journey</a>
-                <a href="#projects" class="nav-link">Projects</a>
-                <a href="#experience" class="nav-link">Experience</a>
-                <a href="#honors" class="nav-link">Honors</a>
-                <a href="#connect" class="nav-link">Connect</a>
-            </nav>
-            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                <span class="menu-toggle-icon"></span>
-                <span class="menu-toggle-icon"></span>
-                <span class="menu-toggle-icon"></span>
-            </button>
+<canvas id="bg-canvas"></canvas>
+
+<header class="site-header" id="site-header">
+  <div class="header-container">
+    <a href="#hero" class="logo-link">
+      <span class="logo-main">Mayom</span><span class="logo-sub">Kon</span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="#hero" class="nav-link active">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#simulation" class="nav-link">Simulation</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#experience" class="nav-link">Experience</a>
+      <a href="#honors" class="nav-link">Honors</a>
+      <a href="#connect" class="nav-link">Connect</a>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- ══════════════ HERO ══════════════ -->
+  <section id="hero" class="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content container">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Hello, I'm</p>
+        <h1 class="hero-name">Ng'or Kon</h1>
+        <p class="hero-role">
+          <span id="typed-text"></span><span class="cursor">|</span>
+        </p>
+        <p class="hero-desc">Physics &amp; Chemistry student at The College of Idaho.
+          I build ML models, simulate molecular dynamics, and turn equations into running code.</p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn-primary">View Projects</a>
+          <a href="#connect" class="btn-outline">Get in Touch</a>
         </div>
-    </header>
-    <main>
-        <section id="hero" class="hero"> <!-- Added id="hero" -->
-            <canvas id="hero-particles-canvas"></canvas> <!-- Updated ID -->
-            <div class="container hero-content">
-                <div class="hero-text">
-                    <h2>Ng'or Kon</h2>
-                    <p class="hero-subtitle">Physics & Chemistry Student ⚛️ | Python Developer 🐍 | ML Enthusiast 🤖</p>
-                    <p class="hero-tagline">Engineering ideas into reality...</p>
-                    <div class="hero-cta-buttons">
-                        <button onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'});" class="hero-cta-btn">Explore Projects</button>
-                        <button onclick="document.getElementById('connect').scrollIntoView({behavior: 'smooth'});" class="hero-cta-btn">Contact</button>
-                    </div>
-                </div>
-                <div class="hero-image-container">
-                    <img src="images/ngorkon.png" alt="Mayom Kon - Profile Picture" class="profile-picture">
-                </div>
+      </div>
+      <div class="hero-img-wrap">
+        <div class="orbit-ring ring-1"></div>
+        <div class="orbit-ring ring-2"></div>
+        <div class="orbit-ring ring-3"></div>
+        <img src="images/ngorkon.png" alt="Ng'or (Mayom) Kon" class="profile-pic" id="profile-pic">
+      </div>
+    </div>
+    <div class="scroll-hint"><span></span></div>
+  </section>
+
+  <!-- ══════════════ ABOUT ══════════════ -->
+  <section id="about" class="about section">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="about-bio reveal">
+          <p>Highly motivated student pursuing <strong>Honors in Physics-Mathematics &amp; Chemistry</strong> at The College of Idaho (UWC Davis Scholar). I'm passionate about bridging theoretical physics with real-world software — from quantum ML to computational chemistry.</p>
+          <blockquote class="quote">"Curiosity drives discovery, but action creates impact."</blockquote>
+          <div class="tag-row">
+            <span class="tag">ML Applications in QM</span>
+            <span class="tag">Molecular Dynamics</span>
+            <span class="tag">Data-Driven Materials</span>
+            <span class="tag">Quantum ML</span>
+            <span class="tag">Computational Physics</span>
+          </div>
+        </div>
+        <div class="skills-wrap reveal">
+          <div class="skill-card" style="--i:0">
+            <div class="skill-icon">⚛️</div>
+            <h4>Physics &amp; Math</h4>
+            <ul><li>Quantum Mechanics</li><li>Statistical Mechanics</li><li>Mathematica</li><li>MATLAB</li></ul>
+          </div>
+          <div class="skill-card" style="--i:1">
+            <div class="skill-icon">🤖</div>
+            <h4>ML &amp; Data Science</h4>
+            <ul><li>TensorFlow / PyTorch</li><li>scikit-learn</li><li>NumPy / Pandas</li><li>Matplotlib / SciPy</li></ul>
+          </div>
+          <div class="skill-card" style="--i:2">
+            <div class="skill-icon">🐍</div>
+            <h4>Programming</h4>
+            <ul><li>Python</li><li>JavaScript</li><li>HTML5 / CSS3</li><li>Jupyter Notebooks</li></ul>
+          </div>
+          <div class="skill-card" style="--i:3">
+            <div class="skill-icon">🔧</div>
+            <h4>Tools &amp; Platforms</h4>
+            <ul><li>Git / GitHub</li><li>Google Workspace</li><li>Robotics Assembly</li><li>VS Code</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SIMULATION ══════════════ -->
+  <section id="simulation" class="simulation section">
+    <div class="container">
+      <h2 class="section-title">Interactive Physics Simulation</h2>
+      <p class="section-sub">A real-time N-body gravitational simulation with trail rendering. Drag to create new bodies. Click a body to inspect its stats.</p>
+      <div class="sim-wrapper reveal">
+        <div class="sim-controls">
+          <button id="sim-play-pause" class="sim-btn active">⏸ Pause</button>
+          <button id="sim-reset" class="sim-btn">↺ Reset</button>
+          <button id="sim-add-body" class="sim-btn">＋ Add Body</button>
+          <label class="sim-label">G: <input type="range" id="sim-gravity" min="0.1" max="5" step="0.1" value="1"></label>
+          <label class="sim-label">Bodies: <span id="sim-body-count">0</span></label>
+        </div>
+        <canvas id="sim-canvas"></canvas>
+        <div id="sim-info" class="sim-info"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ PROJECTS ══════════════ -->
+  <section id="projects" class="projects section">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-sub">GitHub feed — live repositories</p>
+
+      <!-- GitHub Live Feed -->
+      <div id="github-feed" class="github-feed">
+        <div class="feed-loading">
+          <div class="loader-ring"></div>
+          <span>Fetching repositories…</span>
+        </div>
+      </div>
+
+      <!-- Static Featured Projects -->
+      <h3 class="subsection-title">Featured Projects</h3>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="software">Software</button>
+        <button class="filter-btn" data-filter="robotics">Robotics</button>
+        <button class="filter-btn" data-filter="community">Community</button>
+      </div>
+      <div class="project-grid" id="project-grid">
+        <div class="project-card reveal" data-cat="software" style="--i:0">
+          <div class="card-glow"></div>
+          <div class="card-header">
+            <span class="card-icon">📚</span>
+            <h3>Studious</h3>
+          </div>
+          <p>Academic management and study optimization tool designed to enhance learning efficiency and track academic progress.</p>
+          <div class="tag-row"><span class="tag">Python</span><span class="tag">Academic</span><span class="tag">Productivity</span></div>
+          <a href="https://github.com/ngorkon/studious" target="_blank" class="card-link">View on GitHub →</a>
+        </div>
+        <div class="project-card reveal" data-cat="software" style="--i:1">
+          <div class="card-glow"></div>
+          <div class="card-header">
+            <span class="card-icon">🎬</span>
+            <h3>Videoix</h3>
+          </div>
+          <p>Advanced video processing application with machine learning capabilities for enhanced video analysis and manipulation.</p>
+          <div class="tag-row"><span class="tag">ML</span><span class="tag">Video</span><span class="tag">Python</span></div>
+          <a href="https://github.com/ngorkon/videoix" target="_blank" class="card-link">View on GitHub →</a>
+        </div>
+        <div class="project-card reveal" data-cat="software" style="--i:2">
+          <div class="card-glow"></div>
+          <div class="card-header">
+            <span class="card-icon">🔍</span>
+            <h3>TrailerLens 2.1</h3>
+          </div>
+          <p>Enhanced video analysis and ML tool for advanced trailer and video content analysis with improved algorithms.</p>
+          <div class="tag-row"><span class="tag">Computer Vision</span><span class="tag">ML</span></div>
+          <a href="https://github.com/ngorkon/trailerlens.2.1" target="_blank" class="card-link">View on GitHub →</a>
+        </div>
+        <div class="project-card reveal" data-cat="robotics" style="--i:3">
+          <div class="card-glow"></div>
+          <div class="card-header">
+            <span class="card-icon">🗑️</span>
+            <h3>Smart Bin (Robotics)</h3>
+          </div>
+          <p>Designed and built an Arduino-powered smart bin to automate waste disposal as part of a sustainability-focused club project.</p>
+          <div class="tag-row"><span class="tag">Arduino</span><span class="tag">Robotics</span><span class="tag">Sustainability</span></div>
+        </div>
+        <div class="project-card reveal" data-cat="robotics" style="--i:4">
+          <div class="card-glow"></div>
+          <div class="card-header">
+            <span class="card-icon">💧</span>
+            <h3>Smart Irrigation Pump</h3>
+          </div>
+          <p>Automated water pump system for remote plant maintenance — reduced heat-related plant damage by ~20% during summer.</p>
+          <div class="tag-row"><span class="tag">Automation</span><span class="tag">Robotics</span><span class="tag">IoT</span></div>
+        </div>
+        <div class="project-card reveal" data-cat="community" style="--i:5">
+          <div class="card-glow"></div>
+          <div class="card-header">
+            <span class="card-icon">🇺🇦</span>
+            <h3>Listen to Ukraine</h3>
+          </div>
+          <p>Organized movie screenings raising awareness of the war in Ukraine. Secured a $500 donation for local refugee charity.</p>
+          <div class="tag-row"><span class="tag">Community</span><span class="tag">Fundraising</span><span class="tag">Awareness</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ EXPERIENCE ══════════════ -->
+  <section id="experience" class="experience section">
+    <div class="container">
+      <h2 class="section-title">Journey &amp; Experience</h2>
+      <div class="timeline" id="timeline">
+        <div class="tl-item reveal" style="--i:0">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-date">May 2024 – Present</span>
+            <h3>Academic Tutor · The College of Idaho</h3>
+            <p>Supporting students in Calculus and Education courses — breaking down complex concepts into clear steps. Fostering inclusive learning environments where "aha" moments happen.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal" style="--i:1">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-date">Apr 2024 – Present</span>
+            <h3>International Students Organization</h3>
+            <p>Coordinate cross-cultural events for 100+ international students. Curate event ideas, manage logistics, and ensure inclusive, engaging experiences.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal" style="--i:2">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-date">Apr 2024 – Present</span>
+            <h3>Asian Student Association</h3>
+            <p>Manage ASA's social media platforms, increasing engagement and event participation through targeted marketing campaigns.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal" style="--i:3">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-date">Sept 2021 – May 2023</span>
+            <h3>United World College Maastricht</h3>
+            <p>IB Diploma Programme. Member of Robotics Club and Musicals Club.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal" style="--i:4">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-date">Feb 2021 – Aug 2023</span>
+            <h3>Co-Founder &amp; Director of Technology · Project 21 Kenya</h3>
+            <p>Youth coalition eradicating poverty in Kakuma Refugees Camp. Led funding acquisition, tech initiatives, and community projects including building homes for flood-displaced families.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal" style="--i:5">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-date">Expected May 2027</span>
+            <h3>The College of Idaho — BS Physics-Math &amp; Chemistry</h3>
+            <p>Honors program. Member: Physics Club, Idaho UiS STEM Club, Mandarin Club. Treasurer: Interfaith Council.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ HONORS ══════════════ -->
+  <section id="honors" class="honors section">
+    <div class="container">
+      <h2 class="section-title">Honors &amp; Awards</h2>
+      <div class="honors-grid">
+        <div class="honor-card reveal" style="--i:0">
+          <div class="honor-icon">🏆</div>
+          <h4>UWC Davis Scholar</h4>
+          <p>2023 – 2027 · Highly competitive international scholarship.</p>
+        </div>
+        <div class="honor-card reveal" style="--i:1">
+          <div class="honor-icon">🎖️</div>
+          <h4>NSLS Nominee</h4>
+          <p>Nominee, National Society of Leadership &amp; Success.</p>
+        </div>
+        <div class="honor-card reveal" style="--i:2">
+          <div class="honor-icon">🎓</div>
+          <h4>Gipson Honors</h4>
+          <p>Honors program recognition at The College of Idaho.</p>
+        </div>
+        <div class="honor-card reveal" style="--i:3">
+          <div class="honor-icon">💰</div>
+          <h4>Project KE21 Grant: $1,000</h4>
+          <p>Issued by GOMAD UWCX Initiative · May 2022.</p>
+        </div>
+        <div class="honor-card reveal" style="--i:4">
+          <div class="honor-icon">🌍</div>
+          <h4>Listen to Ukraine Grant: $500</h4>
+          <p>Issued by CODE043 · April 2023.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CONNECT ══════════════ -->
+  <section id="connect" class="connect section">
+    <div class="container">
+      <h2 class="section-title">Let's Connect</h2>
+      <div class="connect-grid">
+        <div class="contact-form-wrap reveal">
+          <form action="https://formspree.io/f/xovdbwpw" method="POST" class="contact-form">
+            <div class="form-field">
+              <input type="text" id="name" name="name" required placeholder=" ">
+              <label for="name">Your Name</label>
             </div>
-        </section>
-
-        <section id="about" class="about-me"> <!-- New About Me Section -->
-            <div class="container">
-                <h2>About Me</h2>
-                <div class="about-content">
-                    <p>Highly motivated and detail-oriented student pursuing Honors in Physics-Mathematics and Chemistry at the College of Idaho. Passionate about leveraging technical skills and a collaborative spirit to engineer innovative solutions. Actively involved in academic clubs and leadership roles, demonstrating a commitment to community and continuous learning.</p>
-                    
-                    <div class="philosophy-section">
-                        <h4>Philosophy</h4>
-                        <blockquote class="philosophy-quote">
-                            "Curiosity drives discovery, but action creates impact."
-                        </blockquote>
-                        <p>I'm someone who doesn't just wonder about how things work – I dive deep, experiment, and build solutions. Whether it's understanding quantum mechanics, developing a machine learning model, or simulating molecular interactions, I always take that extra step to bring concepts from theory to practice.</p>
-                    </div>
-
-                    <div class="research-interests">
-                        <h4>Research Interests</h4>
-                        <ul class="research-list">
-                            <li>ML Applications in Quantum Physics</li>
-                            <li>Computational Chemistry & Molecular Dynamics</li>
-                            <li>Data-Driven Materials Science</li>
-                            <li>Quantum Machine Learning</li>
-                            <li>Interdisciplinary R&D</li>
-                        </ul>
-                    </div>
-
-                    <div class="currently-learning">
-                        <h4>Currently Learning</h4>
-                        <ul class="learning-list">
-                            <li>Deep Learning & Neural Networks</li>
-                            <li>Quantum Machine Learning</li>
-                            <li>Computational Physics Simulations</li>
-                            <li>Advanced Python Applications</li>
-                        </ul>
-                    </div>
-                    <h3>Skills Summary</h3>
-                    <div class="skills-grid">
-                        <div class="skill-category" style="--animation-order: 1;">
-                            <h4>Programming Languages</h4>
-                            <ul>
-                                <li>Python</li>
-                                <li>JavaScript</li>
-                                <li>HTML5</li>
-                                <li>MATLAB</li>
-                            </ul>
-                        </div>
-                        <div class="skill-category" style="--animation-order: 2;">
-                            <h4>Machine Learning & Data Science</h4>
-                            <ul>
-                                <li>TensorFlow</li>
-                                <li>NumPy</li>
-                                <li>Pandas</li>
-                                <li>scikit-learn</li>
-                                <li>SciPy</li>
-                                <li>Matplotlib</li>
-                            </ul>
-                        </div>
-                        <div class="skill-category" style="--animation-order: 3;">
-                            <h4>Physics & Chemistry Tools</h4>
-                            <ul>
-                                <li>Jupyter Notebook</li>
-                                <li>Wolfram Mathematica</li>
-                                <li>Mathematical Visualization</li>
-                                <li>Computational Simulations</li>
-                            </ul>
-                        </div>
-                        <div class="skill-category" style="--animation-order: 4;">
-                            <h4>Software & Platforms</h4>
-                            <ul>
-                                <li>Microsoft Office Suite</li>
-                                <li>Google Workspace</li>
-                                <li>Git/GitHub</li>
-                                <li>Robotics Assembly</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-field">
+              <input type="email" id="email" name="email" required placeholder=" ">
+              <label for="email">Your Email</label>
             </div>
-        </section>
-
-        <!-- Existing Links section - consider removing or repurposing if nav is comprehensive -->
-        <section class="links" style="display: none;"> <!-- Temporarily hiding this as nav is more detailed -->
-            <div class="container">
-                <button>My Journey</button>
-                <button>Projects</button>
-                <button>Reflections</button>
-                <button>Let's Connect</button>
+            <div class="form-field">
+              <textarea id="message" name="message" rows="5" required placeholder=" "></textarea>
+              <label for="message">Your Message</label>
             </div>
-        </section>
+            <button type="submit" class="btn-primary full-width">Send Message ✦</button>
+          </form>
+        </div>
+        <div class="social-wrap reveal">
+          <h3>Find Me Online</h3>
+          <div class="social-list">
+            <a href="https://github.com/ngorkon" target="_blank" class="social-item" aria-label="GitHub">
+              <div class="social-icon-box">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              </div>
+              <div class="social-text">
+                <span class="social-name">GitHub</span>
+                <span class="social-handle">@ngorkon</span>
+              </div>
+            </a>
+            <a href="https://linkedin.com/in/ngorkon" target="_blank" class="social-item" aria-label="LinkedIn">
+              <div class="social-icon-box">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </div>
+              <div class="social-text">
+                <span class="social-name">LinkedIn</span>
+                <span class="social-handle">Ng'or (Mayom) Kon</span>
+              </div>
+            </a>
+          </div>
+          <div class="availability-badge">
+            <span class="pulse-dot"></span>
+            Available for research collaborations &amp; internships
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-        <section id="journey" class="journey">
-            <div class="container">
-                <h2>My Journey & Education</h2> <!-- Updated title -->
-                <div class="timeline">
-                    <div class="timeline-item education-item leadership-role" style="--animation-order: 1;">
-                        <h3>College of Idaho</h3>
-                        <p class="date">Expected Graduation: May 2027</p>
-                        <p>Honors: Physics-Mathematics and Chemistry</p>
-                        <p>Activities: Member of Physics club, Idaho UiS Stem club, Mandarin club. Treasurer, Interfaith council.</p>
-                    </div>
-                    <div class="timeline-item education-item" style="--animation-order: 2;">
-                        <h3>United World College Maastricht, Netherlands</h3>
-                        <p class="date">Sept 2021 - May 2023</p>
-                        <p>Activities: Robotic club, Musicals club.</p>
-                    </div>
-                    <!-- Original timeline items - can be kept or removed based on preference -->
-                    <div class="timeline-item" style="display:none;"> <!-- Hiding old placeholders -->
-                        <h3>2021</h3>
-                        <p>Began Physics Degree</p>
-                    </div>
-                    <div class="timeline-item" style="display:none;">
-                        <h3>2022</h3>
-                        <p>Built First Animation</p>
-                    </div>
-                    <div class="timeline-item" style="display:none;">
-                        <h3>2023</h3>
-                        <p>Launched TrailerLens</p>
-                    </div>
-                    <div class="timeline-item" style="display:none;">
-                        <h3>2024</h3>
-                        <p>Started SciMation Lab</p>
-                    </div>
-                    <div class="timeline-item" style="display:none;">
-                        <h3>2025</h3>
-                        <p>Created AI Orb Assistant</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2025 Ng'or (Mayom) Kon · Engineering ideas into reality.</p>
+    <p class="footer-sub">Built with HTML, CSS &amp; JavaScript · Hosted on GitHub Pages</p>
+  </div>
+</footer>
 
-        <section id="projects" class="projects">
-            <div class="container">
-                <h2>Projects</h2>
-                <!-- Filter buttons can be kept if future projects warrant filtering -->
-                <div class="filter-buttons">
-                    <button class="active" data-filter="all">All</button>
-                    <button data-filter="robotics">Robotics</button>
-                    <button data-filter="software">Software</button>
-                    <button data-filter="community">Community</button>
-                </div>
-                <div class="project-grid">
-                    <div class="project-card" data-category="software" style="--animation-order: 1;">
-                        <img src="images/placeholder-studious.png" alt="Studious Project">
-                        <h3>Studious</h3>
-                        <p>Academic management and study optimization tool designed to enhance learning efficiency and track academic progress.</p>
-                        <div class="tags">
-                            <span>Python</span>
-                            <span>Academic</span>
-                            <span>Productivity</span>
-                        </div>
-                        <a href="https://github.com/ngorkon/studious" target="_blank" class="project-link">View on GitHub</a>
-                    </div>
-                    <div class="project-card" data-category="software" style="--animation-order: 2;">
-                        <img src="images/placeholder-videoix.png" alt="Videoix Project">
-                        <h3>Videoix</h3>
-                        <p>Advanced video processing application with machine learning capabilities for enhanced video analysis and manipulation.</p>
-                        <div class="tags">
-                            <span>Machine Learning</span>
-                            <span>Video Processing</span>
-                            <span>Python</span>
-                        </div>
-                        <a href="https://github.com/ngorkon/videoix" target="_blank" class="project-link">View on GitHub</a>
-                    </div>
-                    <div class="project-card" data-category="software" style="--animation-order: 3;">
-                        <img src="images/placeholder-trailerlens.png" alt="TrailerLens Project">
-                        <h3>TrailerLens 2.1</h3>
-                        <p>Enhanced video analysis and ML tool for advanced trailer and video content analysis with improved algorithms.</p>
-                        <div class="tags">
-                            <span>Computer Vision</span>
-                            <span>Analysis</span>
-                            <span>Machine Learning</span>
-                        </div>
-                        <a href="https://github.com/ngorkon/trailerlens.2.1" target="_blank" class="project-link">View on GitHub</a>
-                    </div>
-                    <div class="project-card" data-category="robotics" style="--animation-order: 4;">
-                        <img src="images/placeholder-smart-bin.png" alt="Smart Bin Project">
-                        <h3>Robotic Club: Smart Bin</h3>
-                        <p>Designed and built a smart bin using Arduino as part of a sustainability-focused club project, automating waste disposal and reducing pollution.</p>
-                        <div class="tags">
-                            <span>Arduino</span>
-                            <span>Robotics</span>
-                            <span>Sustainability</span>
-                        </div>
-                    </div>
-                    <div class="project-card" data-category="robotics" style="--animation-order: 5;">
-                        <img src="images/placeholder-smart-pump.png" alt="Smart Irrigation Pump">
-                        <h3>Robotic Club: Smart Irrigation Pump</h3>
-                        <p>Developed an automated water pump system for a garden club that enabled remote plant maintenance and reduced heat-related plant damage by approximately 20% during summer.</p>
-                        <div class="tags">
-                            <span>Automation</span>
-                            <span>Robotics</span>
-                            <span>Gardening</span>
-                        </div>
-                    </div>
-                    <div class="project-card" data-category="community" style="--animation-order: 6;">
-                        <img src="images/placeholder-listen-ukraine.png" alt="Listen to Ukraine Project">
-                        <h3>CODE043: Listen to Ukraine</h3>
-                        <p>Organized movie screenings and discussions, raising awareness of the war in Ukraine. Secured a $500 donation to support a local refugee charity.</p>
-                        <div class="tags">
-                            <span>Community Service</span>
-                            <span>Fundraising</span>
-                            <span>Awareness</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="experience" class="experience"> <!-- New Leadership/Experience Section -->
-            <div class="container">
-                <h2>Leadership & Community</h2>
-                <div class="experience-slideshow-container"> <!-- Slideshow Container -->
-                    <button class="slideshow-btn prev-btn" aria-label="Previous slide">&#10094;</button>
-                    <div class="slideshow-wrapper"> <!-- To hide overflowing items -->
-                        <div class="experience-grid"> <!-- This will be the track -->
-                            <div class="experience-item" style="--animation-order: 1;">
-                                <h3>Academic Tutor - The College of Idaho</h3>
-                                <p class="date">May 2024 - Present (1 year 1 month)</p>
-                                <p>As an Academic Tutor at The College of Idaho, I support students in mastering both Calculus and Education courses. My goal is to break down complex concepts—whether it’s solving challenging calculus problems or navigating intricate educational theories—into manageable, clear steps. By fostering an inclusive and supportive learning environment, I aim to empower students to overcome academic challenges with confidence.</p>
-                                <p>The most rewarding part of my role is witnessing those “aha” moments—the instant when a concept clicks, and a student’s understanding shifts. Those moments of clarity remind me why I’m passionate about education and the transformative power of learning. (Location: United States)</p>
-                            </div>
-                            <div class="experience-item leadership-role" style="--animation-order: 2;">
-                                <h3>International Students Organization</h3>
-                                <p class="date">April 2024 - Present (Part-Time)</p>
-                                <p>Coordinate cross-cultural events for 100+ international students, collaborating with other clubs. Curate event ideas, manage coordination, and communicate details to ensure inclusive, engaging experiences.</p>
-                            </div>
-                            <div class="experience-item leadership-role" style="--animation-order: 3;">
-                                <h3>Asian Student Association</h3>
-                                <p class="date">April 2024 - Present (Part-Time)</p>
-                                <p>Manage ASA’s social media platforms, increasing engagement and event participation through targeted marketing campaigns.</p>
-                            </div>
-                            <div class="experience-item leadership-role" style="--animation-order: 4;">
-                                <h3>Co-Founder & Board Member - Project 21 Kenya</h3>
-                                <p class="date">February 2021 - August 2023 (2 years 7 months)</p>
-                                <p>Project 21 is a youth coalition based on eradicating extremely muddied destitution affecting communities primarily Kakuma Refugees Camp by initiating projects that will end the hurdles in the Camp and at large. At the moment, the project is based on providing tailoring materials to women who know how to sew to start a business. (Location: Turkana West, Turkana, Kenya)</p>
-                            </div>
-                            <div class="experience-item leadership-role" style="--animation-order: 5;">
-                                <h3>Co-Founder & Director of Technology - Project 21 Kenya</h3>
-                                <p class="date">February 2021 - August 2023 (2 years 7 months)</p>
-                                <p>I worked with a team of highly motivated individuals whose desires have impacted a lot of people at the camp. As a technology director and co-founder, I have been able to lead in funding acquisition for the programs where we have been able to conduct a lot of charity work such as constructing a house for a needy homeless mother whose house had been carried away by flood. The work we have done in the last two years has set a foundation for learning while giving back to my community. I hope to continue this in the future. (Location: Kakuma, Turkana County, Kenya)</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="slideshow-btn next-btn" aria-label="Next slide">&#10095;</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="honors" class="honors-awards"> <!-- New Honors & Awards Section -->
-            <div class="container">
-                <h2>Honors & Awards</h2>
-                <ul class="awards-list">
-                    <li class="award-item content-card" style="--animation-order: 1;">
-                        <div class="award-decorator"></div>
-                        <div class="award-content">
-                            <h4 class="award-title">PROJECT KE 21 GRANTS: $1000</h4>
-                            <p class="award-meta"><span class="award-issuer">Issued by GOMAD UWCX Initiative</span> <span class="award-date">(May 2022)</span></p>
-                        </div>
-                    </li>
-                    <li class="award-item content-card" style="--animation-order: 2;">
-                        <div class="award-decorator"></div>
-                        <div class="award-content">
-                            <h4 class="award-title">LISTEN TO UKRAINE PROJECT, GRANTS: $500</h4>
-                            <p class="award-meta"><span class="award-issuer">Issued by CODE043</span> <span class="award-date">(April 2023)</span></p>
-                        </div>
-                    </li>
-                    <li class="award-item content-card" style="--animation-order: 3;">
-                        <div class="award-decorator"></div>
-                        <div class="award-content">
-                            <h4 class="award-title">UWC DAVIS SCHOLAR</h4>
-                            <p class="award-meta"><span class="award-date">2023 - 2027</span></p>
-                        </div>
-                    </li>
-                    <li class="award-item content-card" style="--animation-order: 4;">
-                        <div class="award-decorator"></div>
-                        <div class="award-content">
-                            <h4 class="award-title">NOMINEE OF THE NATIONAL SOCIETY OF LEADERSHIP AND SUCCESS (NSLS)</h4>
-                            <p class="award-meta"><span class="award-date">Present</span></p>
-                        </div>
-                    </li>
-                    <li class="award-item content-card" style="--animation-order: 5;">
-                        <div class="award-decorator"></div>
-                        <div class="award-content">
-                            <h4 class="award-title">GIPSON HONORS</h4>
-                            <!-- No extra meta needed based on OCR, an empty p.award-meta can be added if spacing is desired or handled by CSS margins -->
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="connect" class="connect-section">
-            <div class="container">
-                <h2 class="connect-title">Let's Connect</h2>
-                <div class="connect-grid">
-                    <div class="contact-form-container">
-                        <form action="https://formspree.io/f/xovdbwpw" method="POST">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" name="name" required placeholder="Your Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" required placeholder="Your Email">
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea id="message" name="message" rows="4" required placeholder="Your Message"></textarea>
-                            </div>
-                            <button type="submit" class="btn-send-message">Send Message</button>
-                        </form>
-                    </div>
-                    <div class="social-icons-container">
-                        <svg id="social-web-svg"></svg> <!-- ADDED SVG element for dynamic web -->
-                        <div class="social-icon-groups-wrapper"> <!-- ADDED WRAPPER -->
-                            <div class="social-icon-group group-1">
-                                <div class="social-icon-wrapper icon-github">
-                                    <a href="https://github.com/ngorkon" target="_blank" class="social-link" aria-label="GitHub">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-                                    </a>
-                                </div>
-                            </div>
-                        </div> <!-- END WRAPPER -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-    <footer>
-        <p>&copy; 2025 Mayom Kon (Ng'or Y. Kon). All rights reserved.</p>
-        <p>Engineering ideas into reality.</p>
-    </footer>
-    <script src="js/script.js"></script>
+<script src="js/script.js"></script>
 </body>
 </html>
