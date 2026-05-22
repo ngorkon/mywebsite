@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initGithubFeed();
     initProfilePulse();
     initJourneyMap();
+    initSlideshow();
+    initCanvasPause();
 });
 
 // ─── Header scroll effect ───
@@ -450,4 +452,70 @@ function initJourneyMap() {
 
   // Recompute on tab/visibility changes
   window.addEventListener('resize', () => map.invalidateSize());
+}
+
+
+// ─── Slideshow for project cards ───
+function initSlideshow() {
+    document.querySelectorAll('.card-slideshow').forEach(slideshow => {
+        const track = slideshow.querySelector('.slideshow-track');
+        const dotsContainer = slideshow.querySelector('.slide-dots');
+        if (!track) return;
+
+        // Collect all slide images
+        const slides = Array.from(track.querySelectorAll('.slide-img'));
+        if (slides.length === 0) return;
+
+        // Update data-count for CSS (hide controls if only 1 slide)
+        slideshow.setAttribute('data-count', slides.length);
+
+        // Create dots
+        if (dotsContainer) {
+            slides.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.addEventListener('click', () => goTo(i));
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        let current = 0;
+
+        function goTo(index) {
+            current = (index + slides.length) % slides.length;
+            track.style.transform = `translateX(-${current * 100}%)`;
+            dotsContainer && dotsContainer.querySelectorAll('.slide-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === current);
+            });
+        }
+
+        const prev = slideshow.querySelector('.slide-prev');
+        const next = slideshow.querySelector('.slide-next');
+        if (prev) prev.addEventListener('click', () => goTo(current - 1));
+        if (next) next.addEventListener('click', () => goTo(current + 1));
+
+        // Auto-advance if multiple slides
+        if (slides.length > 1) {
+            setInterval(() => goTo(current + 1), 4000);
+        }
+    });
+}
+
+// ─── Canvas pause when off-screen (performance) ───
+function initCanvasPause() {
+    const canvases = [
+        { id: 'hero-canvas', animRef: '_heroAnimId' },
+        { id: 'sim-canvas', animRef: '_simAnimId' }
+    ];
+    if (!('IntersectionObserver' in window)) return;
+    canvases.forEach(({ id }) => {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
+        canvas._paused = false;
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(en => { canvas._paused = !en.isIntersecting; });
+        }, { threshold: 0.01 });
+        io.observe(canvas);
+    });
 }
