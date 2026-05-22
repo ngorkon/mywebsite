@@ -84,8 +84,8 @@ function initReveal() {
                             io.unobserve(en.target);
                   }
           });
-    }, { threshold: 0.12 });
-    els.forEach(e => io.observe(e));
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+    els.forEach(e => io.observe(e));    setTimeout(() => els.forEach(e => e.classList.add('visible')), 2000);
 }
 
 // ─── Background star canvas ───
