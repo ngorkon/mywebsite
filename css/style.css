@@ -81,7 +81,7 @@ a:hover { color: var(--cyan2); }
 
 /* ─── Reveal animations ──────────────────── */
 .reveal {
-  opacity: 0; transform: translateY(40px);
+  opacity: 1; transform: translateY(0);
   transition: opacity .6s ease, transform .6s ease;
   transition-delay: calc(var(--i, 0) * 0.1s);
 }
