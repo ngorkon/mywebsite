@@ -1156,5 +1156,393 @@ a:hover { color: var(--cyan2); }
     border: 1pt solid #ccc !important;
     break-inside: avoid;
   }
+
+   /* ══════════════════════════════════════════
+   EXPERIENCE SECTION — REDESIGNED
+   ══════════════════════════════════════════ */
+
+   /* Override experience background for a richer look */
+   .experience {
+        background: linear-gradient(180deg, #050814 0%, #080d1e 40%, #050f20 100%);
+        position: relative;
+        overflow: hidden;
+   }
+   .experience::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,200,255,0.06) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+   }
+
+   /* Journey wrapper — side-by-side map + steps */
+   .journey-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 32px;
+        margin-top: 40px;
+        align-items: start;
+        position: relative;
+        z-index: 1;
+   }
+   @media (max-width: 960px) {
+        .journey-wrapper { grid-template-columns: 1fr; }
+   }
+
+   /* Map — taller, more refined border */
+   .journey-map {
+        width: 100%;
+        height: 560px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(0,200,255,0.3);
+        box-shadow:
+          0 0 0 1px rgba(0,200,255,0.08),
+               0 0 50px rgba(0,200,255,0.12),
+               0 20px 60px rgba(0,0,0,0.5);
+        background: #07101e;
+        position: relative;
+        z-index: 1;
+   }
+   .journey-map .leaflet-container { background: #07101e; font-family: var(--font-bd); }
+   .journey-map .leaflet-control-attribution {
+        background: rgba(5,8,20,0.8);
+        color: #7090b0;
+        font-size: 10px;
+   }
+   .journey-map .leaflet-control-attribution a { color: var(--cyan); }
+   .journey-map .leaflet-control-zoom a {
+        background: rgba(8,16,35,0.95);
+        color: var(--cyan);
+        border: 1px solid rgba(0,200,255,0.3);
+        font-size: 16px;
+        width: 30px; height: 30px; line-height: 30px;
+   }
+   .journey-map .leaflet-control-zoom a:hover { background: var(--cyan); color: #001018; }
+
+   /* Journey steps panel */
+   .journey-steps {
+        list-style: none;
+        padding: 0; margin: 0;
+        display: flex; flex-direction: column;
+        gap: 16px;
+   }
+   .jm-step {
+        position: relative;
+        background: rgba(8,16,35,0.9);
+        border: 1px solid rgba(0,200,255,0.18);
+        border-radius: 16px;
+        padding: 20px 20px 20px 68px;
+        transition: var(--trans);
+        cursor: pointer;
+   }
+   .jm-step:hover {
+        border-color: rgba(0,200,255,0.55);
+        background: rgba(0,200,255,0.04);
+        box-shadow: 0 8px 30px rgba(0,200,255,0.12);
+        transform: translateY(-2px);
+   }
+   .jm-step-num {
+        position: absolute;
+        left: 16px; top: 18px;
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00e5ff 0%, #0078d4 100%);
+        color: #001018;
+        font-family: var(--font-hd);
+        font-weight: 900;
+        font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 0 3px rgba(0,200,255,0.2), 0 0 16px rgba(0,200,255,0.6);
+        flex-shrink: 0;
+   }
+   .jm-step-body h3 {
+        color: var(--cyan);
+        font-family: var(--font-hd);
+        font-size: 15px;
+        margin: 0 0 8px;
+        line-height: 1.3;
+   }
+   .jm-step-body p { color: var(--text-dim); font-size: 13px; line-height: 1.6; margin: 0; }
+   .jm-step-date {
+        display: block;
+        font-size: 11px;
+        color: var(--cyan2);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+        opacity: 0.85;
+   }
+
+   /* Popup */
+   .leaflet-popup-content-wrapper {
+        background: linear-gradient(135deg, rgba(8,16,40,0.98), rgba(5,10,25,0.98));
+        color: var(--text);
+        border: 1px solid rgba(0,200,255,0.4);
+        border-radius: 14px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(0,200,255,0.15);
+   }
+   .leaflet-popup-tip { background: rgba(0,200,255,0.3); }
+   .leaflet-popup-content { margin: 16px 18px; min-width: 230px; }
+   .jm-popup h4 { color: var(--cyan); font-family: var(--font-hd); font-size: 15px; margin: 6px 0 4px; }
+   .jm-popup-date { font-size: 11px; color: var(--cyan2); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+   .jm-popup-role { font-size: 12px; color: #aac3da; font-weight: 600; margin-bottom: 8px; }
+   .jm-popup p { font-size: 12px; color: var(--text-dim); line-height: 1.55; margin: 0; }
+   .leaflet-popup-close-button { color: var(--cyan) !important; font-size: 18px !important; }
+
+   /* Pin marker */
+   .jm-pin { background: transparent; border: none; }
+   .jm-pin-inner {
+        width: 38px; height: 38px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #00e5ff 0%, #0078d4 70%);
+        color: #001018; font-family: var(--font-hd); font-weight: 900; font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 0 4px rgba(0,200,255,0.25), 0 0 18px rgba(0,200,255,0.9);
+        animation: jmPulse 2.4s ease-in-out infinite;
+   }
+   @keyframes jmPulse {
+        0%,100% { box-shadow: 0 0 0 4px rgba(0,200,255,0.25), 0 0 18px rgba(0,200,255,0.9); }
+        50% { box-shadow: 0 0 0 10px rgba(0,200,255,0.05), 0 0 28px rgba(0,200,255,1); }
+   }
+
+   /* Subsection titles in experience */
+   .subsection-title {
+        font-family: var(--font-hd);
+        font-size: 1.15rem;
+        color: var(--cyan);
+        margin: 56px 0 28px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: 0.9;
+        position: relative;
+   }
+   .subsection-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px; left: 50%; transform: translateX(-50%);
+        width: 40px; height: 2px;
+        background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+        border-radius: 1px;
+   }
+
+   /* Timeline — classic vertical line with hoverable cards */
+   .timeline {
+        max-width: 740px;
+        margin: 0 auto;
+        position: relative;
+        padding-left: 48px;
+   }
+   .timeline::before {
+        content: '';
+        position: absolute;
+        left: 16px; top: 8px; bottom: 8px;
+        width: 2px;
+        background: linear-gradient(180deg, transparent 0%, var(--cyan) 15%, var(--cyan) 85%, transparent 100%);
+        opacity: 0.35;
+   }
+   .jm-step.tl-step {
+        padding: 22px 24px 22px 24px;
+        margin-bottom: 0;
+   }
+   /* If timeline uses plain .jm-step inside .timeline */
+   .timeline .jm-step {
+        padding: 22px 24px;
+   }
+
+   /* GitHub Repos — improved grid cards */
+   .github-feed {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 8px;
+   }
+   .repo-card {
+        display: flex; flex-direction: column; gap: 10px;
+        padding: 22px;
+        background: rgba(8,16,35,0.9);
+        border: 1px solid rgba(0,200,255,0.18);
+        border-radius: 16px;
+        text-decoration: none;
+        transition: var(--trans);
+        color: var(--text);
+        position: relative;
+        overflow: hidden;
+   }
+   .repo-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--cyan), var(--blue));
+        opacity: 0;
+        transition: opacity var(--trans);
+   }
+   .repo-card:hover {
+        border-color: rgba(0,200,255,0.5);
+        box-shadow: 0 12px 40px rgba(0,200,255,0.14);
+        transform: translateY(-4px);
+        color: var(--text);
+   }
+   .repo-card:hover::before { opacity: 1; }
+   .repo-head {
+        display: flex; align-items: center; gap: 10px;
+   }
+   .repo-icon { font-size: 1.3rem; flex-shrink: 0; }
+   .repo-name {
+        font-family: var(--font-hd);
+        color: var(--cyan);
+        font-size: 15px;
+        font-weight: 600;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+   }
+   .repo-desc {
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 1.6;
+        flex: 1;
+   }
+   .repo-meta {
+        display: flex; flex-wrap: wrap; gap: 12px;
+        font-size: 11px; color: var(--text-dim);
+        letter-spacing: 0.3px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(0,200,255,0.1);
+        margin-top: auto;
+   }
+   .repo-meta > span { display: inline-flex; align-items: center; gap: 4px; }
+   .repo-lang { font-weight: 600; color: #88ccff; }
+   .repo-updated { font-size: 11px; color: var(--text-dim); opacity: 0.7; letter-spacing: 0.3px; }
+   .repo-grid { display: contents; }
+
+   /* ══════════════════════════════════════════
+   MUSIC PLAYER (Interstellar)
+   ══════════════════════════════════════════ */
+   .music-player {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(5,8,20,0.92);
+        border: 1px solid rgba(0,200,255,0.3);
+        border-radius: 50px;
+        padding: 10px 20px 10px 10px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,200,255,0.1);
+        backdrop-filter: blur(16px);
+        transition: all 0.3s ease;
+        min-width: 0;
+        max-width: 340px;
+   }
+   .music-player:hover {
+        border-color: rgba(0,200,255,0.55);
+        box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 30px rgba(0,200,255,0.2);
+   }
+   .music-btn {
+        width: 42px; height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--cyan), var(--blue));
+        border: none;
+        color: #001018;
+        font-size: 18px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 14px rgba(0,200,255,0.4);
+   }
+   .music-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 22px rgba(0,200,255,0.7);
+   }
+   .music-info {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+   }
+   .music-title {
+        font-family: var(--font-hd);
+        font-size: 11px;
+        color: var(--cyan);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+   }
+   .music-artist {
+        font-size: 11px;
+        color: var(--text-dim);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+   }
+   .music-progress-bar {
+        width: 100%;
+        height: 3px;
+        background: rgba(0,200,255,0.15);
+        border-radius: 2px;
+        margin-top: 5px;
+        overflow: hidden;
+   }
+   .music-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--cyan), var(--blue));
+        border-radius: 2px;
+        width: 0%;
+        transition: width 1s linear;
+   }
+   .music-volume {
+        display: flex; align-items: center; gap: 6px;
+   }
+   .music-vol-icon { font-size: 14px; color: var(--text-dim); cursor: pointer; }
+   .music-vol-icon:hover { color: var(--cyan); }
+   input[type=range].music-vol-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 60px; height: 3px;
+        background: rgba(0,200,255,0.2);
+        border-radius: 2px;
+        outline: none;
+        cursor: pointer;
+   }
+   input[type=range].music-vol-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 12px; height: 12px;
+        border-radius: 50%;
+        background: var(--cyan);
+        cursor: pointer;
+        box-shadow: 0 0 6px rgba(0,200,255,0.6);
+   }
+   .music-player.collapsed .music-info,
+   .music-player.collapsed .music-volume { display: none; }
+   .music-player.collapsed { padding: 8px; }
+   .music-waveform {
+        display: flex; align-items: flex-end; gap: 2px;
+        height: 20px;
+        opacity: 0;
+        transition: opacity 0.3s;
+   }
+   .music-player.playing .music-waveform { opacity: 1; }
+   .music-bar {
+        width: 3px; background: var(--cyan); border-radius: 2px;
+        animation: waveAnim 0.8s ease-in-out infinite alternate;
+   }
+   .music-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+   .music-bar:nth-child(2) { height: 16px; animation-delay: 0.15s; }
+   .music-bar:nth-child(3) { height: 12px; animation-delay: 0.3s; }
+   .music-bar:nth-child(4) { height: 20px; animation-delay: 0.1s; }
+   .music-bar:nth-child(5) { height: 10px; animation-delay: 0.25s; }
+   @keyframes waveAnim {
+        from { transform: scaleY(0.4); opacity: 0.7; }
+        to { transform: scaleY(1); opacity: 1; }
+   }
+   @media (max-width: 480px) {
+        .music-player { bottom: 16px; right: 16px; }
+        .music-player .music-info, .music-player .music-volume { display: none; }
+   }
   .site-footer { border-top: 1pt solid #ccc; margin-top: 20pt; }
 }
