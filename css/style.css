@@ -1248,3 +1248,719 @@ input[type=range].music-vol-slider::-webkit-slider-thumb {
   .section { padding: 20pt 0; }
   .project-card, .honor-card, .skill-card { border: 1pt solid #ccc !important; break-inside: avoid; }
 }
+
+
+/* ═══════════════════════════════════════════════
+   A. WORMHOLE TUNNEL SCROLL SPINE
+   A vertical glowing tube behind all sections
+═══════════════════════════════════════════════ */
+.wormhole-spine {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.wormhole-spine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 200%;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(0,200,255,0.04) 10%,
+    rgba(0,200,255,0.12) 30%,
+    rgba(245,200,66,0.08) 50%,
+    rgba(0,200,255,0.12) 70%,
+    rgba(0,200,255,0.04) 90%,
+    transparent 100%
+  );
+  animation: spineFlow 6s linear infinite;
+}
+.wormhole-spine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -8px;
+  width: 18px;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(0,200,255,0.06) 0%, transparent 70%);
+  animation: spineGlow 4s ease-in-out infinite alternate;
+}
+@keyframes spineFlow {
+  from { transform: translateY(-50%); }
+  to   { transform: translateY(0%); }
+}
+@keyframes spineGlow {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+
+/* Scroll progress ring in bottom-left */
+.scroll-progress-ring {
+  position: fixed;
+  bottom: 32px;
+  left: 32px;
+  z-index: 9998;
+  pointer-events: none;
+}
+.scroll-progress-ring svg { transform: rotate(-90deg); }
+.scroll-progress-ring .ring-bg {
+  fill: none;
+  stroke: rgba(0,200,255,0.1);
+  stroke-width: 2;
+}
+.scroll-progress-ring .ring-fill {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 100.53; /* 2π×16 */
+  stroke-dashoffset: 100.53;
+  transition: stroke-dashoffset 0.1s linear;
+  filter: drop-shadow(0 0 4px rgba(0,200,255,0.8));
+}
+@media (max-width: 768px) { .scroll-progress-ring { display: none; } }
+
+/* ═══════════════════════════════════════════════
+   B. EINSTEIN RING — hero photo
+   Replaces simple orbit rings with a real lensing arc
+═══════════════════════════════════════════════ */
+.einstein-ring-wrap {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+}
+.einstein-ring {
+  border-radius: 50%;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.er-1 {
+  width: calc(clamp(220px,26vw,340px) + 44px);
+  height: calc(clamp(220px,26vw,340px) + 44px);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(0,200,255,0.6) 30deg,
+    rgba(0,200,255,1) 60deg,
+    rgba(255,255,255,0.8) 90deg,
+    rgba(0,200,255,0.6) 120deg,
+    transparent 150deg,
+    transparent 360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 48%, black 49%, black 51%, transparent 52%);
+  mask: radial-gradient(circle, transparent 48%, black 49%, black 51%, transparent 52%);
+  animation: einsteinSpin 8s linear infinite;
+  filter: blur(1px);
+}
+.er-2 {
+  width: calc(clamp(220px,26vw,340px) + 90px);
+  height: calc(clamp(220px,26vw,340px) + 90px);
+  background: conic-gradient(
+    from 180deg,
+    transparent 0deg,
+    rgba(245,200,66,0.3) 20deg,
+    rgba(245,200,66,0.7) 50deg,
+    rgba(245,200,66,0.3) 80deg,
+    transparent 100deg,
+    transparent 360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 46%, black 47%, black 53%, transparent 54%);
+  mask: radial-gradient(circle, transparent 46%, black 47%, black 53%, transparent 54%);
+  animation: einsteinSpin 14s linear infinite reverse;
+  filter: blur(0.5px);
+}
+.er-3 {
+  width: calc(clamp(220px,26vw,340px) + 148px);
+  height: calc(clamp(220px,26vw,340px) + 148px);
+  border: 1px solid rgba(0,200,255,0.08);
+  animation: einsteinSpin 30s linear infinite;
+  box-shadow: 0 0 20px rgba(0,200,255,0.04);
+}
+@keyframes einsteinSpin {
+  from { transform: translate(-50%,-50%) rotate(0deg); }
+  to   { transform: translate(-50%,-50%) rotate(360deg); }
+}
+
+/* Lens flare spot */
+.lens-flare {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 6px 3px rgba(0,200,255,1), 0 0 20px 8px rgba(0,200,255,0.5);
+  top: 10%; left: 15%;
+  animation: flareOrbit 8s linear infinite;
+  z-index: 4;
+}
+@keyframes flareOrbit {
+  from { transform: rotate(0deg) translateX(calc(clamp(110px,13vw,170px) + 22px)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(calc(clamp(110px,13vw,170px) + 22px)) rotate(-360deg); }
+}
+
+/* ═══════════════════════════════════════════════
+   C. PER-SECTION PLANET COLOUR IDENTITIES
+═══════════════════════════════════════════════ */
+/* About — soft blue nebula */
+.about {
+  --sect-glow: rgba(30,80,180,0.15);
+  --sect-accent: #4499ff;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 50%, rgba(20,60,160,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 30%, rgba(0,40,120,0.1) 0%, transparent 50%),
+    linear-gradient(180deg, var(--void) 0%, #030b1a 50%, var(--void) 100%);
+}
+.about .section-title { color: #4499ff; text-shadow: 0 0 30px rgba(68,153,255,0.6); }
+.about .section-title::after {
+  background: linear-gradient(90deg, transparent, #4499ff, #88ccff, #4499ff, transparent);
+}
+
+/* Simulation — supernova red/orange */
+.simulation {
+  --sect-glow: rgba(200,60,20,0.1);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(160,40,10,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(80,20,0,0.08) 0%, transparent 50%),
+    var(--void);
+}
+.simulation .section-title { color: #ff7744; text-shadow: 0 0 30px rgba(255,120,60,0.6); }
+.simulation .section-title::after {
+  background: linear-gradient(90deg, transparent, #ff7744, #ffaa66, #ff7744, transparent);
+}
+.simulation .sim-btn:hover, .simulation .sim-btn.active {
+  background: rgba(255,100,40,0.12);
+  border-color: #ff7744; color: #ff7744;
+}
+
+/* Projects — deep purple cosmic cloud */
+.projects {
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 30%, rgba(100,20,160,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 20% 70%, rgba(60,0,120,0.1) 0%, transparent 50%),
+    linear-gradient(180deg, var(--void) 0%, #05020f 50%, var(--void) 100%);
+}
+.projects .section-title { color: #cc88ff; text-shadow: 0 0 30px rgba(200,120,255,0.6); }
+.projects .section-title::after {
+  background: linear-gradient(90deg, transparent, #cc88ff, #eeddff, #cc88ff, transparent);
+}
+.projects .filter-btn:hover, .projects .filter-btn.active {
+  background: rgba(200,120,255,0.1);
+  border-color: #cc88ff; color: #cc88ff;
+  box-shadow: 0 0 16px rgba(200,120,255,0.2);
+}
+
+/* Experience — teal pulsar */
+.experience {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(0,180,160,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,100,120,0.1) 0%, transparent 50%),
+    linear-gradient(180deg, var(--void) 0%, #010e0e 50%, var(--void) 100%);
+}
+.experience .section-title { color: #00eedd; text-shadow: 0 0 30px rgba(0,238,221,0.6); }
+.experience .section-title::after {
+  background: linear-gradient(90deg, transparent, #00eedd, #aaffee, #00eedd, transparent);
+}
+.experience .subsection-title { color: #00eedd; text-shadow: 0 0 20px rgba(0,238,221,0.4); }
+
+/* Honors — golden stardust */
+.honors {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(180,140,0,0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 20% 20%, rgba(120,80,0,0.08) 0%, transparent 50%),
+    var(--void);
+}
+.honors .section-title { color: var(--amber); text-shadow: 0 0 30px rgba(245,200,66,0.6); }
+.honors .section-title::after {
+  background: linear-gradient(90deg, transparent, var(--amber), #ffe066, var(--amber), transparent);
+}
+.honors .honor-card:hover {
+  border-color: rgba(245,200,66,0.4);
+  box-shadow: 0 14px 50px rgba(0,0,0,0.4), 0 0 30px rgba(245,200,66,0.1);
+}
+
+/* Connect — green transmission */
+.connect {
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 60%, rgba(0,160,80,0.08) 0%, transparent 55%),
+    linear-gradient(180deg, var(--void) 0%, #010a05 100%);
+}
+.connect .section-title { color: #44ffaa; text-shadow: 0 0 30px rgba(68,255,170,0.6); }
+.connect .section-title::after {
+  background: linear-gradient(90deg, transparent, #44ffaa, #aaffdd, #44ffaa, transparent);
+}
+
+/* ═══════════════════════════════════════════════
+   D. HOLOGRAPHIC TILT CARDS
+   3D tilt effect on project cards + holographic shimmer
+═══════════════════════════════════════════════ */
+.project-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+  will-change: transform;
+}
+.project-card .holo-shimmer {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    rgba(255,255,255,0.04) 30%,
+    rgba(0,200,255,0.06) 40%,
+    transparent 50%,
+    rgba(200,120,255,0.04) 60%,
+    rgba(245,200,66,0.03) 70%,
+    transparent 80%
+  );
+  background-size: 200% 200%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+}
+.project-card:hover .holo-shimmer {
+  opacity: 1;
+  animation: holoShimmer 1.5s ease infinite;
+}
+@keyframes holoShimmer {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+/* Scan line overlay */
+.project-card .scan-lines {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,200,255,0.015) 2px,
+    rgba(0,200,255,0.015) 4px
+  );
+  pointer-events: none; z-index: 6;
+  opacity: 0; transition: opacity 0.3s;
+}
+.project-card:hover .scan-lines { opacity: 1; }
+
+/* ═══════════════════════════════════════════════
+   E. MISSION LOG TIMELINE
+═══════════════════════════════════════════════ */
+.timeline {
+  max-width: 780px; margin: 0 auto;
+  position: relative; padding: 0 0 0 60px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 20px; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    #00eedd 10%,
+    #00eedd 90%,
+    transparent 100%
+  );
+  opacity: 0.25;
+}
+/* Mission marker dot */
+.tl-node {
+  position: absolute;
+  left: 14px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: #00eedd;
+  box-shadow: 0 0 0 3px rgba(0,238,221,0.2), 0 0 12px rgba(0,238,221,0.8);
+  animation: nodePulse 3s ease-in-out infinite;
+  top: 28px;
+}
+@keyframes nodePulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(0,238,221,0.2), 0 0 12px rgba(0,238,221,0.8); }
+  50%      { box-shadow: 0 0 0 8px rgba(0,238,221,0.05), 0 0 24px rgba(0,238,221,1); }
+}
+.tl-node:nth-child(2) { animation-delay: 1s; }
+.tl-node:nth-child(3) { animation-delay: 2s; }
+
+/* Mission log card */
+.tl-card-wrap {
+  position: relative; margin-bottom: 28px;
+}
+.tl-card-wrap .tl-node { top: 20px; }
+
+.jm-step.tl-entry {
+  border-left: 2px solid rgba(0,238,221,0.3);
+  border-radius: 0 16px 16px 0;
+  padding: 20px 22px 20px 64px;
+  position: relative;
+  background: linear-gradient(90deg, rgba(0,30,28,0.6) 0%, rgba(4,10,28,0.85) 100%);
+}
+.jm-step.tl-entry::before {
+  content: 'MISSION LOG';
+  position: absolute;
+  top: -10px; left: 60px;
+  font-family: var(--font-hd);
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: #00eedd;
+  opacity: 0.5;
+  background: var(--void);
+  padding: 0 6px;
+}
+.tl-year-badge {
+  position: absolute;
+  right: 18px; top: 18px;
+  font-family: var(--font-hd);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(0,238,221,0.5);
+  border: 1px solid rgba(0,238,221,0.15);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* ═══════════════════════════════════════════════
+   F. ORBITAL SKILL RINGS
+   Skill cards get a planetary feel
+═══════════════════════════════════════════════ */
+.skills-wrap {
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+.skill-card {
+  position: relative; overflow: visible;
+}
+.skill-card::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: calc(var(--radius) + 4px);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  pointer-events: none;
+}
+.skill-card:hover::after {
+  border-color: var(--sect-accent, var(--cyan));
+  box-shadow: 0 0 20px rgba(68,153,255,0.15), inset 0 0 20px rgba(68,153,255,0.03);
+}
+/* Orbiting dot on each skill card */
+.skill-orbit-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4499ff;
+  box-shadow: 0 0 6px rgba(68,153,255,0.9);
+  top: 50%; left: 50%;
+  transform-origin: 0 0;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.skill-card:hover .skill-orbit-dot { opacity: 1; }
+
+/* ═══════════════════════════════════════════════
+   G. SIGNAL TRANSMISSION CONTACT FORM
+═══════════════════════════════════════════════ */
+.contact-form-wrap {
+  position: relative;
+}
+.contact-form-wrap::before {
+  content: 'TRANSMISSION TERMINAL';
+  font-family: var(--font-hd);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(68,255,170,0.4);
+  display: block;
+  margin-bottom: 18px;
+}
+/* Scan line on focused inputs */
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: rgba(68,255,170,0.5);
+  box-shadow: 0 0 0 3px rgba(68,255,170,0.06), 0 0 20px rgba(68,255,170,0.06);
+  background: rgba(0,20,10,0.5);
+}
+/* Submit button — radar ping */
+.btn-submit {
+  background: linear-gradient(135deg, #00cc88, #00aa66) !important;
+  border-radius: 40px !important;
+  position: relative; overflow: hidden;
+  letter-spacing: 2px;
+}
+.btn-submit::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 60%);
+  transform: scale(0);
+  transition: transform 0.5s ease;
+}
+.btn-submit:hover::before { transform: scale(2); }
+.btn-submit.transmitting {
+  pointer-events: none;
+  animation: radarPing 1s ease infinite;
+}
+@keyframes radarPing {
+  0%   { box-shadow: 0 0 0 0 rgba(68,255,170,0.6); }
+  70%  { box-shadow: 0 0 0 20px rgba(68,255,170,0); }
+  100% { box-shadow: 0 0 0 0 rgba(68,255,170,0); }
+}
+/* Signal sent overlay */
+.signal-sent {
+  display: none;
+  position: absolute; inset: 0;
+  background: rgba(0,20,12,0.95);
+  border-radius: var(--radius);
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px; z-index: 10;
+}
+.signal-sent.visible { display: flex; }
+.signal-sent-icon {
+  font-size: 3rem;
+  animation: signalPop 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+.signal-sent-text {
+  font-family: var(--font-hd);
+  font-size: .8rem; letter-spacing: 3px;
+  color: #44ffaa; text-transform: uppercase;
+  animation: signalPop 0.5s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+}
+.signal-sent-sub {
+  font-size: .8rem; color: var(--dim);
+  animation: signalPop 0.5s 0.2s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes signalPop {
+  from { opacity: 0; transform: translateY(10px) scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
+/* Radar ring around send button */
+.radar-wrap {
+  position: relative; display: inline-block; width: 100%;
+}
+.radar-ring {
+  position: absolute;
+  inset: -4px; border-radius: 44px;
+  border: 1px solid rgba(68,255,170,0.3);
+  pointer-events: none;
+  animation: radarExpand 2s ease-out infinite;
+  opacity: 0;
+}
+.radar-ring:nth-child(2) { animation-delay: 0.7s; }
+@keyframes radarExpand {
+  0%   { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   H. CUSTOM COSMIC CURSOR
+═══════════════════════════════════════════════ */
+* { cursor: none !important; }
+.cosmic-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+}
+/* Outer ring */
+.cursor-ring {
+  width: 28px; height: 28px;
+  border: 1.5px solid rgba(0,200,255,0.7);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 99999;
+  top: 0; left: 0;
+}
+.cursor-ring.hovering {
+  width: 44px; height: 44px;
+  border-color: rgba(245,200,66,0.9);
+  background: rgba(245,200,66,0.04);
+}
+/* Inner dot */
+.cursor-dot {
+  width: 5px; height: 5px;
+  background: var(--cyan);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 99999;
+  top: 0; left: 0;
+  box-shadow: 0 0 6px rgba(0,200,255,0.8);
+  transition: opacity 0.2s;
+}
+/* Cursor trail dots */
+.cursor-trail {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  background: var(--cyan);
+  animation: trailFade 0.5s ease forwards;
+}
+@keyframes trailFade {
+  from { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%,-50%) scale(0.2); }
+}
+/* Crosshair lines */
+.cursor-cross-h, .cursor-cross-v {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99997;
+  background: rgba(0,200,255,0.12);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+  top: 0; left: 0;
+}
+.cursor-cross-h { width: 30px; height: 1px; }
+.cursor-cross-v { width: 1px; height: 30px; }
+
+/* ═══════════════════════════════════════════════
+   I. WARP SPEED TRANSITION FLASH
+   Fires between sections on scroll
+═══════════════════════════════════════════════ */
+.warp-flash {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99990;
+  overflow: hidden;
+  opacity: 0;
+}
+.warp-streak {
+  position: absolute;
+  top: 50%;
+  left: -10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,200,255,0.8), rgba(255,255,255,0.9), rgba(0,200,255,0.8), transparent);
+  transform-origin: left center;
+}
+.warp-flash.firing {
+  animation: warpFire 0.35s ease-out forwards;
+}
+@keyframes warpFire {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   J. STARMAP FOOTER COORDINATES
+═══════════════════════════════════════════════ */
+.site-footer {
+  padding: 50px 0 32px;
+}
+.footer-starmap {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0,200,255,0.05);
+}
+.starmap-coord {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.starmap-label {
+  font-family: var(--font-hd);
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--dim);
+  opacity: 0.6;
+}
+.starmap-value {
+  font-family: var(--font-hd);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(0,200,255,0.4);
+}
+.starmap-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--cyan);
+  opacity: 0.3;
+  animation: starmapPulse 3s ease-in-out infinite;
+}
+.starmap-coord:nth-child(2) .starmap-dot { animation-delay: 1s; }
+.starmap-coord:nth-child(3) .starmap-dot { animation-delay: 2s; }
+@keyframes starmapPulse {
+  0%,100% { opacity: 0.2; transform: scale(1); }
+  50%      { opacity: 0.7; transform: scale(1.5); }
+}
+
+/* ═══════════════════════════════════════════════
+   HONOR CARD — stardust sparkle
+═══════════════════════════════════════════════ */
+.honor-card {
+  position: relative; overflow: hidden;
+}
+.honor-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,0.08) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.honor-card:hover::after { opacity: 1; }
+
+/* ═══════════════════════════════════════════════
+   MUSIC PLAYER — enhanced with progress arc
+═══════════════════════════════════════════════ */
+.music-player.playing {
+  animation: playerPulse 3s ease-in-out infinite;
+}
+@keyframes playerPulse {
+  0%,100% { box-shadow: 0 8px 50px rgba(0,0,0,0.7), 0 0 30px rgba(0,200,255,0.12); }
+  50%      { box-shadow: 0 8px 50px rgba(0,0,0,0.7), 0 0 50px rgba(0,200,255,0.25); }
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION ENTRANCE — stagger children
+═══════════════════════════════════════════════ */
+.section.in-view > .container > * {
+  animation: sectionChildIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+.section.in-view > .container > *:nth-child(1) { animation-delay: 0.05s; }
+.section.in-view > .container > *:nth-child(2) { animation-delay: 0.15s; }
+.section.in-view > .container > *:nth-child(3) { animation-delay: 0.25s; }
+.section.in-view > .container > *:nth-child(4) { animation-delay: 0.35s; }
+@keyframes sectionChildIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ═══════════════════════════════════════════════
+   SCROLLBAR — themed
+═══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--cyan), var(--amber));
+  border-radius: 3px;
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  * { cursor: auto !important; }
+  .cursor-ring, .cursor-dot, .cursor-cross-h, .cursor-cross-v { display: none; }
+  .footer-starmap { gap: 20px; }
+  .warp-flash { display: none; }
+}
