@@ -5,7 +5,7 @@
 // gravitational shimmer, floating debris, section reveals
 // ═══════════════════════════════════════════════
 
-document.addEventListener('DOMContentLoaded', () => {
+function runInit() {
   initWormholeLoader();
   initHeader();
   initNav();
@@ -24,7 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initCanvasPause();
   initMusicPlayer();
   initSectionTransitions();
-});
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', runInit);
+} else {
+  runInit();
+}
 
 // ─── Wormhole loader (cinematic intro) ───
 function initWormholeLoader() {
