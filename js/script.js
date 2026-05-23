@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initJourneyMap();
     initSlideshow();
     initCanvasPause();
+        initMusicPlayer();
 });
 
 // ─── Header scroll effect ───
@@ -518,4 +519,148 @@ function initCanvasPause() {
         }, { threshold: 0.01 });
         io.observe(canvas);
     });
+}
+
+// ─── Interstellar Music Player ───
+function initMusicPlayer() {
+        // Build the player HTML
+        const playerHTML = `
+        <div class="music-player" id="music-player" role="region" aria-label="Music player">
+          <button class="music-btn" id="music-play-btn" aria-label="Play Interstellar theme">&#9654;</button>
+            <div class="music-waveform" aria-hidden="true">
+                <span class="music-bar"></span>
+                    <span class="music-bar"></span>
+                        <span class="music-bar"></span>
+                            <span class="music-bar"></span>
+                                <span class="music-bar"></span>
+                                  </div>
+                                    <div class="music-info">
+                                        <div class="music-title">Interstellar Main Theme</div>
+                                            <div class="music-artist">Hans Zimmer</div>
+                                                <div class="music-progress-bar"><div class="music-progress-fill" id="music-progress"></div></div>
+                                                  </div>
+                                                    <div class="music-volume">
+                                                        <span class="music-vol-icon" id="music-mute-btn" title="Mute/unmute">&#128266;</span>
+                                                            <input type="range" class="music-vol-slider" id="music-vol" min="0" max="100" value="60" aria-label="Volume">
+                                                              </div>
+                                                              </div>`;
+        document.body.insertAdjacentHTML('beforeend', playerHTML);
+
+        const player = document.getElementById('music-player');
+        const playBtn = document.getElementById('music-play-btn');
+        const volSlider = document.getElementById('music-vol');
+        const muteBtn = document.getElementById('music-mute-btn');
+        const progressFill = document.getElementById('music-progress');
+
+        let audio = null;
+        let isPlaying = false;
+        let isMuted = false;
+        let progressInterval = null;
+
+        // Use a free-to-use version of the Interstellar theme via a public domain / CC audio source
+        // We embed it via a hidden iframe (YouTube) and control via postMessage
+        // Or use the HTML5 Audio API with a CORS-friendly source
+
+        function createAudio() {
+                    if (audio) return;
+                    // Interstellar Main Theme - Hans Zimmer
+                    // Using a YouTube embed for audio
+                    const iframe = document.createElement('iframe');
+                    iframe.id = 'yt-audio-frame';
+                    iframe.style.cssText = 'position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;pointer-events:none;';
+                    iframe.allow = 'autoplay';
+                    // YouTube video ID for Interstellar Main Theme (official Hans Zimmer channel or widely available)
+                    iframe.src = 'https://www.youtube.com/embed/UDVtMYqUAyw?autoplay=0&controls=0&loop=1&playlist=UDVtMYqUAyw&enablejsapi=1&origin=' + window.location.origin;
+                    document.body.appendChild(iframe);
+
+                    // Use YouTube IFrame API
+                    if (!window.YT) {
+                                    const tag = document.createElement('script');
+                                    tag.src = 'https://www.youtube.com/iframe_api';
+                                    document.head.appendChild(tag);
+                    }
+
+                    window._ytPlayerReady = false;
+                    window.onYouTubeIframeAPIReady = function() {
+                                    audio = new YT.Player('yt-audio-frame', {
+                                                        events: {
+                                                                                onReady: function(e) {
+                                                                                                            window._ytPlayerReady = true;
+                                                                                                            e.target.setVolume(parseInt(volSlider.value));
+                                                                                                            if (isPlaying) e.target.playVideo();
+                                                                                    },
+                                                                                onStateChange: function(e) {
+                                                                                                            if (e.data === YT.PlayerState.ENDED) {
+                                                                                                                                            e.target.playVideo(); // loop
+                                                                                                                }
+                                                                                    }
+                                                        }
+                                    });
+                    };
+                    // If YT already loaded
+                    if (window.YT && window.YT.Player) {
+                                    window.onYouTubeIframeAPIReady();
+                    }
+        }
+
+        function updateProgress() {
+                    if (!audio || !window._ytPlayerReady) return;
+                    try {
+                                    const dur = audio.getDuration ? audio.getDuration() : 0;
+                                    const cur = audio.getCurrentTime ? audio.getCurrentTime() : 0;
+                                    if (dur > 0) progressFill.style.width = ((cur / dur) * 100) + '%';
+                    } catch(e) {}
+        }
+
+        function setPlayState(playing) {
+                    isPlaying = playing;
+                    playBtn.innerHTML = playing ? '&#9646;&#9646;' : '&#9654;';
+                    playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play Interstellar theme');
+                    player.classList.toggle('playing', playing);
+                    if (playing) {
+                                    progressInterval = setInterval(updateProgress, 1000);
+                    } else {
+                                    clearInterval(progressInterval);
+                    }
+        }
+
+        playBtn.addEventListener('click', function() {
+                    if (!audio) createAudio();
+                    isPlaying = !isPlaying;
+                    setPlayState(isPlaying);
+                    if (window._ytPlayerReady && audio) {
+                                    if (isPlaying) audio.playVideo();
+                                    else audio.pauseVideo();
+                    } else if (isPlaying) {
+                                    // Wait for player to be ready
+                                    const checkReady = setInterval(function() {
+                                                        if (window._ytPlayerReady && audio) {
+                                                                                audio.playVideo();
+                                                                                clearInterval(checkReady);
+                                                        }
+                                    }, 300);
+                    }
+        });
+
+        volSlider.addEventListener('input', function() {
+                    const vol = parseInt(this.value);
+                    if (window._ytPlayerReady && audio) audio.setVolume(vol);
+                    muteBtn.innerHTML = vol === 0 ? '&#128263;' : vol < 50 ? '&#128265;' : '&#128266;';
+        });
+
+        muteBtn.addEventListener('click', function() {
+                    isMuted = !isMuted;
+                    muteBtn.innerHTML = isMuted ? '&#128263;' : '&#128266;';
+                    if (window._ytPlayerReady && audio) {
+                                    if (isMuted) audio.mute();
+                                    else audio.unMute();
+                    }
+        });
+
+        // Keyboard shortcut: M to toggle music
+        document.addEventListener('keydown', function(e) {
+                    if (e.key === 'm' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                                    playBtn.click();
+                    }
+        });
 }
