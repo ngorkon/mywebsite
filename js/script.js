@@ -185,9 +185,6 @@ function initBgCanvas() {
       if (n.x > c.width + n.r) n.x = -n.r;
       if (n.y < -n.r) n.y = c.height + n.r;
       if (n.y > c.height + n.r) n.y = -n.r;
-      const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
-      grd.addColorStop(0, n.color.replace(')', ',' + n.a + ')').replace('#', 'rgba(') );
-      // Use simple rgba instead
       ctx.save();
       ctx.globalAlpha = n.a;
       ctx.beginPath();
