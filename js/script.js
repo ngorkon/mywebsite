@@ -24,6 +24,18 @@ function runInit() {
   initCanvasPause();
   initMusicPlayer();
   initSectionTransitions();
+  // New cosmic features
+  initWormholeSpine();
+  initEinsteinRing();
+  initCosmicCursor();
+  initHoloCards();
+  initWarpFlash();
+  initScrollProgress();
+  initOrbitalSkills();
+  initSignalForm();
+  initStarmapFooter();
+  initMissionLogTimeline();
+  initSectionColors();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', runInit);
@@ -777,4 +789,342 @@ function initMusicPlayer() {
       if (playBtn) playBtn.click();
     }
   });
+}
+
+
+// ─── A. Wormhole spine + scroll progress ring ───
+function initWormholeSpine() {
+  // Spine
+  const spine = document.createElement('div');
+  spine.className = 'wormhole-spine';
+  document.body.appendChild(spine);
+
+  // Scroll progress ring
+  const ring = document.createElement('div');
+  ring.className = 'scroll-progress-ring';
+  ring.innerHTML = `<svg width="36" height="36" viewBox="0 0 36 36">
+    <circle class="ring-bg" cx="18" cy="18" r="16"/>
+    <circle class="ring-fill" id="scroll-ring-fill" cx="18" cy="18" r="16"/>
+  </svg>`;
+  document.body.appendChild(ring);
+
+  const fill = document.getElementById('scroll-ring-fill');
+  const circumference = 2 * Math.PI * 16; // ~100.53
+  fill.style.strokeDasharray = circumference;
+  fill.style.strokeDashoffset = circumference;
+
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    const offset = circumference - scrolled * circumference;
+    fill.style.strokeDashoffset = offset;
+  }, { passive: true });
+}
+
+// ─── B. Einstein ring around profile photo ───
+function initEinsteinRing() {
+  const wrap = document.querySelector('.hero-img-wrap');
+  if (!wrap) return;
+
+  // Remove old orbit rings
+  wrap.querySelectorAll('.orbit-ring').forEach(r => r.remove());
+  if (wrap.querySelector('.grav-shimmer')) wrap.querySelector('.grav-shimmer').remove();
+
+  const eWrap = document.createElement('div');
+  eWrap.className = 'einstein-ring-wrap';
+  eWrap.innerHTML = `
+    <div class="einstein-ring er-1"></div>
+    <div class="einstein-ring er-2"></div>
+    <div class="einstein-ring er-3"></div>
+    <div class="lens-flare"></div>
+  `;
+  wrap.appendChild(eWrap);
+}
+
+// ─── C. Section color identity (adds in-view class) ───
+function initSectionColors() {
+  if (!('IntersectionObserver' in window)) return;
+  const sections = document.querySelectorAll('main section');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) en.target.classList.add('in-view');
+      else en.target.classList.remove('in-view');
+    });
+  }, { threshold: 0.1 });
+  sections.forEach(s => io.observe(s));
+}
+
+// ─── H. Cosmic cursor with trail ───
+function initCosmicCursor() {
+  if (window.innerWidth < 768) return; // skip on mobile
+
+  const ring = document.createElement('div');
+  ring.className = 'cursor-ring';
+  const dot = document.createElement('div');
+  dot.className = 'cursor-dot';
+  const crossH = document.createElement('div');
+  crossH.className = 'cursor-cross-h';
+  const crossV = document.createElement('div');
+  crossV.className = 'cursor-cross-v';
+  document.body.append(ring, dot, crossH, crossV);
+
+  let mx = -100, my = -100;
+  let rx = -100, ry = -100;
+  let trailTimer = null;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+    crossH.style.left = mx + 'px';
+    crossH.style.top  = my + 'px';
+    crossV.style.left = mx + 'px';
+    crossV.style.top  = my + 'px';
+
+    // Trail
+    clearTimeout(trailTimer);
+    trailTimer = setTimeout(() => {
+      const t = document.createElement('div');
+      t.className = 'cursor-trail';
+      t.style.left = mx + 'px';
+      t.style.top  = my + 'px';
+      t.style.width  = (Math.random() * 3 + 2) + 'px';
+      t.style.height = t.style.width;
+      t.style.background = Math.random() > 0.7 ? '#f5c842' : '#00c8ff';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 500);
+    }, 10);
+  });
+
+  // Smooth ring follow
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Hover state
+  document.querySelectorAll('a, button, .project-card, .skill-card, .honor-card, .repo-card').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
+  });
+}
+
+// ─── D. Holographic tilt cards ───
+function initHoloCards() {
+  document.querySelectorAll('.project-card').forEach(card => {
+    // Add shimmer + scanline divs
+    if (!card.querySelector('.holo-shimmer')) {
+      const shimmer = document.createElement('div');
+      shimmer.className = 'holo-shimmer';
+      card.appendChild(shimmer);
+      const scan = document.createElement('div');
+      scan.className = 'scan-lines';
+      card.appendChild(scan);
+    }
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width  / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      const tiltX = dy * -8;  // up to 8deg
+      const tiltY = dx *  8;
+      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-8px) scale(1.02)`;
+
+      // Move shimmer with mouse
+      const shimmer = card.querySelector('.holo-shimmer');
+      if (shimmer) {
+        const pctX = ((e.clientX - rect.left) / rect.width)  * 100;
+        const pctY = ((e.clientY - rect.top)  / rect.height) * 100;
+        shimmer.style.background = `radial-gradient(ellipse at ${pctX}% ${pctY}%, rgba(255,255,255,0.07) 0%, rgba(0,200,255,0.04) 30%, transparent 60%)`;
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      const shimmer = card.querySelector('.holo-shimmer');
+      if (shimmer) shimmer.style.background = '';
+    });
+  });
+}
+
+// ─── E. Mission log timeline ───
+function initMissionLogTimeline() {
+  const timeline = document.querySelector('.timeline');
+  if (!timeline) return;
+
+  const steps = timeline.querySelectorAll('.jm-step');
+  const years = ['2012–2020', '2021–2023', '2024–Now'];
+
+  steps.forEach((step, i) => {
+    step.classList.add('tl-entry');
+
+    // Add year badge
+    if (!step.querySelector('.tl-year-badge')) {
+      const badge = document.createElement('div');
+      badge.className = 'tl-year-badge';
+      badge.textContent = years[i] || '';
+      step.appendChild(badge);
+    }
+
+    // Add glowing node to timeline line
+    const node = document.createElement('div');
+    node.className = 'tl-node';
+    node.style.top = (step.offsetTop + 20) + 'px';
+    timeline.appendChild(node);
+  });
+}
+
+// ─── F. Orbital skill dots ───
+function initOrbitalSkills() {
+  document.querySelectorAll('.skill-card').forEach((card, i) => {
+    const colors = ['#4499ff', '#ff7744', '#cc88ff', '#44ffaa'];
+    const dot = document.createElement('div');
+    dot.className = 'skill-orbit-dot';
+    dot.style.background = colors[i % colors.length];
+    dot.style.boxShadow = `0 0 6px ${colors[i % colors.length]}`;
+    card.appendChild(dot);
+
+    let angle = 0;
+    let animId = null;
+    const radius = Math.max(card.offsetWidth, card.offsetHeight) * 0.55;
+
+    card.addEventListener('mouseenter', () => {
+      function orbit() {
+        angle += 0.025;
+        const cx = card.offsetWidth  / 2;
+        const cy = card.offsetHeight / 2;
+        const x = cx + Math.cos(angle) * radius - 3;
+        const y = cy + Math.sin(angle) * radius - 3;
+        dot.style.left = x + 'px';
+        dot.style.top  = y + 'px';
+        dot.style.transform = 'none';
+        animId = requestAnimationFrame(orbit);
+      }
+      orbit();
+    });
+    card.addEventListener('mouseleave', () => {
+      cancelAnimationFrame(animId);
+    });
+  });
+}
+
+// ─── G. Signal transmission form ───
+function initSignalForm() {
+  const form = document.querySelector('.contact-form');
+  const wrap = document.querySelector('.contact-form-wrap');
+  if (!form || !wrap) return;
+
+  // Add signal-sent overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'signal-sent';
+  overlay.innerHTML = `
+    <div class="signal-sent-icon">📡</div>
+    <div class="signal-sent-text">Signal transmitted</div>
+    <div class="signal-sent-sub">Message received. I'll respond from Earth.</div>
+  `;
+  wrap.style.position = 'relative';
+  wrap.appendChild(overlay);
+
+  // Wrap submit button in radar wrap
+  const submitBtn = form.querySelector('.btn-submit');
+  if (submitBtn) {
+    const radarWrap = document.createElement('div');
+    radarWrap.className = 'radar-wrap';
+    submitBtn.parentNode.insertBefore(radarWrap, submitBtn);
+    radarWrap.appendChild(submitBtn);
+    radarWrap.insertAdjacentHTML('beforeend', '<div class="radar-ring"></div><div class="radar-ring"></div>');
+  }
+
+  form.addEventListener('submit', e => {
+    if (submitBtn) {
+      submitBtn.classList.add('transmitting');
+      submitBtn.textContent = 'Transmitting...';
+    }
+    // Show overlay after short delay (let formspree handle it)
+    setTimeout(() => {
+      overlay.classList.add('visible');
+    }, 1200);
+  });
+}
+
+// ─── I. Warp speed flash between sections ───
+function initWarpFlash() {
+  const flash = document.createElement('div');
+  flash.className = 'warp-flash';
+  flash.id = 'warp-flash';
+
+  // Generate streaks
+  for (let i = 0; i < 8; i++) {
+    const streak = document.createElement('div');
+    streak.className = 'warp-streak';
+    const width = Math.random() * 300 + 100;
+    const top = 20 + Math.random() * 60;
+    const opacity = Math.random() * 0.6 + 0.3;
+    streak.style.cssText = `width:${width}px;top:${top}%;opacity:${opacity};transform:scaleX(0) translateY(-50%);`;
+    flash.appendChild(streak);
+  }
+  document.body.appendChild(flash);
+
+  let lastSection = -1;
+  const sections = Array.from(document.querySelectorAll('main section'));
+
+  window.addEventListener('scroll', () => {
+    const mid = window.scrollY + window.innerHeight / 2;
+    const cur = sections.findIndex(s => s.offsetTop <= mid && s.offsetTop + s.offsetHeight > mid);
+    if (cur !== lastSection && lastSection !== -1) {
+      fireWarp();
+    }
+    lastSection = cur;
+  }, { passive: true });
+
+  function fireWarp() {
+    flash.classList.remove('firing');
+    void flash.offsetWidth; // reflow
+    flash.classList.add('firing');
+
+    // Animate each streak
+    flash.querySelectorAll('.warp-streak').forEach((s, i) => {
+      setTimeout(() => {
+        s.style.transition = 'transform 0.25s ease-out, opacity 0.25s ease-out';
+        s.style.transform = `scaleX(1) translateY(-50%)`;
+        setTimeout(() => {
+          s.style.transform = `scaleX(0) translateX(200%) translateY(-50%)`;
+        }, 150);
+      }, i * 20);
+    });
+
+    setTimeout(() => flash.classList.remove('firing'), 400);
+  }
+}
+
+// ─── J. Starmap footer ───
+function initStarmapFooter() {
+  const footer = document.querySelector('.site-footer .container');
+  if (!footer) return;
+
+  const starmap = document.createElement('div');
+  starmap.className = 'footer-starmap';
+  starmap.innerHTML = `
+    <div class="starmap-coord">
+      <div class="starmap-dot"></div>
+      <div class="starmap-label">Kakuma, Kenya</div>
+      <div class="starmap-value">3.7167° N · 34.8667° E</div>
+    </div>
+    <div class="starmap-coord">
+      <div class="starmap-dot"></div>
+      <div class="starmap-label">Maastricht, Netherlands</div>
+      <div class="starmap-value">50.8514° N · 5.6910° E</div>
+    </div>
+    <div class="starmap-coord">
+      <div class="starmap-dot"></div>
+      <div class="starmap-label">College of Idaho, USA</div>
+      <div class="starmap-value">43.6629° N · 116.6873° W</div>
+    </div>
+  `;
+  footer.insertBefore(starmap, footer.firstChild);
 }
