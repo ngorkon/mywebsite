@@ -24,18 +24,21 @@ function runInit() {
   initCanvasPause();
   initMusicPlayer();
   initSectionTransitions();
-  // New cosmic features
+  // New cosmic features — core ones first
   initWormholeSpine();
   initEinsteinRing();
   initCosmicCursor();
-  initHoloCards();
   initWarpFlash();
   initScrollProgress();
-  initOrbitalSkills();
-  initSignalForm();
-  initStarmapFooter();
-  initMissionLogTimeline();
   initSectionColors();
+  // DOM-dependent features need a tick after rendering
+  setTimeout(() => {
+    initHoloCards();
+    initOrbitalSkills();
+    initSignalForm();
+    initStarmapFooter();
+    initMissionLogTimeline();
+  }, 100);
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', runInit);
