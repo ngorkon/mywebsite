@@ -545,6 +545,23 @@ function initMusicPlayer() {
                                                               </div>
                                                               </div>`;
         document.body.insertAdjacentHTML('beforeend', playerHTML);
+        // Apply critical inline styles for the fixed player to override any CSS cache issues
+        const _p = document.getElementById('music-player');
+        if (_p) {
+                    _p.style.cssText = 'position:fixed!important;bottom:28px!important;right:28px!important;z-index:9999!important;display:flex!important;align-items:center;gap:14px;background:rgba(5,8,20,0.92);border:1px solid rgba(0,200,255,0.3);border-radius:50px;padding:10px 20px 10px 10px;box-shadow:0 8px 40px rgba(0,0,0,0.5),0 0 20px rgba(0,200,255,0.1);backdrop-filter:blur(16px);max-width:340px;';
+                    const _btn = _p.querySelector('.music-btn');
+                    if (_btn) _btn.style.cssText = 'width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#00c8ff,#0078d4);border:none;color:#001018;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 0 14px rgba(0,200,255,0.4);';
+                    const _info = _p.querySelector('.music-info');
+                    if (_info) _info.style.cssText = 'flex:1;min-width:0;overflow:hidden;';
+                    const _title = _p.querySelector('.music-title');
+                    if (_title) _title.style.cssText = 'font-family:Orbitron,sans-serif;font-size:11px;color:#00c8ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;text-transform:uppercase;';
+                    const _artist = _p.querySelector('.music-artist');
+                    if (_artist) _artist.style.cssText = 'font-size:11px;color:#8aaecf;white-space:nowrap;';
+                    const _pb = _p.querySelector('.music-progress-bar');
+                    if (_pb) _pb.style.cssText = 'width:100%;height:3px;background:rgba(0,200,255,0.15);border-radius:2px;margin-top:5px;overflow:hidden;';
+                    const _vol = _p.querySelector('.music-volume');
+                    if (_vol) _vol.style.cssText = 'display:flex;align-items:center;gap:6px;';
+        }
 
         const player = document.getElementById('music-player');
         const playBtn = document.getElementById('music-play-btn');
