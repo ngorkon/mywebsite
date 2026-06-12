@@ -1,16 +1,16 @@
 'use strict';
 /* ═══════════════════════════════════════════════════════════
-   QUANTUM FIELD — Three.js morphing particle engine
-   One fixed 3D scene behind the whole site.
-   The particle cloud morphs between physics objects
-   as you scroll: Galaxy → Orbital → Torus Knot → Globe → Core
+   QUANTUM FIELD v2 — Three.js morphing particle engine
+   Cinematic ~25° elevated camera · per-shape spectral coloring
+   Galaxy: 2-arm grand design with dense golden core + glow
+   Shapes: Galaxy → Orbital → Torus Knot → Globe → Core
 ═══════════════════════════════════════════════════════════ */
 
 (function () {
   if (typeof THREE === 'undefined') return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const numParticles = 22000;
+  const numParticles = 24000;
   const canvas = document.getElementById('scene-canvas');
   if (!canvas) return;
 
@@ -21,63 +21,100 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x05070f, 0.035);
+  scene.fog = new THREE.FogExp2(0x05070f, 0.018);
 
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
-  camera.position.set(0, 0, 16);
+  // Elevated camera — sees the galaxy disc at an inclination, like a Hubble shot
+  const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 220);
+  const camBase = new THREE.Vector3(0, 6.8, 14.5);
+  camera.position.copy(camBase);
+  camera.lookAt(0, 0, 0);
 
-  /* ── Soft glow sprite texture (fake bloom via additive blending) ── */
+  /* ── Soft glow sprite texture (fake bloom) ── */
   function makeGlowTexture() {
     const cnv = document.createElement('canvas');
     cnv.width = cnv.height = 64;
     const ctx = cnv.getContext('2d');
     const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
     g.addColorStop(0, 'rgba(255,255,255,1)');
-    g.addColorStop(0.25, 'rgba(255,255,255,0.6)');
-    g.addColorStop(0.6, 'rgba(255,255,255,0.12)');
+    g.addColorStop(0.3, 'rgba(255,255,255,0.55)');
+    g.addColorStop(0.65, 'rgba(255,255,255,0.1)');
     g.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, 64, 64);
-    const tex = new THREE.CanvasTexture(cnv);
-    return tex;
+    return new THREE.CanvasTexture(cnv);
+  }
+  const glowTex = makeGlowTexture();
+
+  /* ── Spectral color ramp: golden core → cyan mid → violet rim ── */
+  const cCore = new THREE.Color(0xfff3d0);
+  const cGold = new THREE.Color(0xffc94d);
+  const cCyan = new THREE.Color(0x37e2ff);
+  const cViolet = new THREE.Color(0xa78bff);
+  const tmpC = new THREE.Color();
+
+  function rampColor(t, out) {
+    // t in [0,1] = normalized radius
+    if (t < 0.18) out.copy(cCore).lerp(cGold, t / 0.18);
+    else if (t < 0.55) out.copy(cGold).lerp(cCyan, (t - 0.18) / 0.37);
+    else out.copy(cCyan).lerp(cViolet, Math.min(1, (t - 0.55) / 0.45));
+    return out;
   }
 
-  /* ── Shape generators — each returns Float32Array(numParticles*3) ── */
+  /* ── Shape generators — return { pos, maxR, brightBoost(r,t) } ── */
   function shapeGalaxy() {
-    const arr = new Float32Array(numParticles * 3);
-    const arms = 4;
+    const pos = new Float32Array(numParticles * 3);
+    const arms = 2;
+    const Rmax = 11;
     for (let i = 0; i < numParticles; i++) {
-      const t = Math.random();
-      const radius = Math.pow(t, 0.6) * 11;
-      const armOffset = (i % arms) * (Math.PI * 2 / arms);
-      const spin = radius * 0.42;
-      const spread = (1 - t) * 0.9 + 0.12;
-      const angle = armOffset + spin + (Math.random() - 0.5) * spread * 2.2;
-      const wobble = (Math.random() - 0.5);
-      arr[i * 3]     = Math.cos(angle) * radius + (Math.random() - 0.5) * spread * 2;
-      arr[i * 3 + 1] = wobble * (1.4 - t) * 1.1;
-      arr[i * 3 + 2] = Math.sin(angle) * radius + (Math.random() - 0.5) * spread * 2;
+      const k = i * 3;
+      const u = Math.random();
+      if (u < 0.28) {
+        // Central bulge — dense gaussian blob, slightly flattened
+        const r = Math.pow(Math.random(), 2.2) * 2.4;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        pos[k]     = r * Math.sin(phi) * Math.cos(theta);
+        pos[k + 1] = r * Math.cos(phi) * 0.55;
+        pos[k + 2] = r * Math.sin(phi) * Math.sin(theta);
+      } else if (u < 0.86) {
+        // Two grand-design spiral arms — tight, well defined
+        const t = Math.pow(Math.random(), 0.62);
+        const radius = 1.6 + t * (Rmax - 1.6);
+        const armOffset = (Math.random() < 0.5 ? 0 : Math.PI);
+        const spin = radius * 0.52;
+        const spread = 0.16 + (1 - t) * 0.22;   // arms tighten outward slightly
+        const angle = armOffset + spin + (Math.random() - 0.5) * spread * 2;
+        const rJit = (Math.random() - 0.5) * spread * 2.4;
+        pos[k]     = Math.cos(angle) * (radius + rJit);
+        pos[k + 2] = Math.sin(angle) * (radius + rJit);
+        pos[k + 1] = (Math.random() - 0.5) * 0.4 * (1.3 - t); // thin disc
+      } else {
+        // Inter-arm haze — faint scattered disc dust
+        const t = Math.pow(Math.random(), 0.5);
+        const radius = 1.6 + t * (Rmax - 1.6);
+        const angle = Math.random() * Math.PI * 2;
+        pos[k]     = Math.cos(angle) * radius;
+        pos[k + 2] = Math.sin(angle) * radius;
+        pos[k + 1] = (Math.random() - 0.5) * 0.5;
+      }
     }
-    return arr;
+    return { pos, maxR: Rmax };
   }
 
   function shapeOrbital() {
-    // 3d_z2-like orbital: two lobes + torus ring — looks unmistakably "quantum"
-    const arr = new Float32Array(numParticles * 3);
+    const pos = new Float32Array(numParticles * 3);
     for (let i = 0; i < numParticles; i++) {
-      const pick = Math.random();
+      const k = i * 3;
       let x, y, z;
-      if (pick < 0.62) {
-        // two teardrop lobes along Y
+      if (Math.random() < 0.62) {
         const sign = Math.random() < 0.5 ? 1 : -1;
         const u = Math.random();
         const r = Math.pow(Math.random(), 0.5) * 3.2 * Math.sin(Math.PI * u);
         const theta = Math.random() * Math.PI * 2;
         x = Math.cos(theta) * r * 0.75;
         z = Math.sin(theta) * r * 0.75;
-        y = sign * (u * 7.2 + 0.6);
+        y = sign * (u * 7.0 + 0.6);
       } else {
-        // equatorial torus
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.random() * Math.PI * 2;
         const R = 5.4, tube = 0.85 * Math.pow(Math.random(), 0.5);
@@ -85,96 +122,99 @@
         z = (R + tube * Math.cos(phi)) * Math.sin(theta);
         y = tube * Math.sin(phi) * 0.8;
       }
-      arr[i * 3] = x; arr[i * 3 + 1] = y; arr[i * 3 + 2] = z;
+      pos[k] = x; pos[k + 1] = y; pos[k + 2] = z;
     }
-    return arr;
+    return { pos, maxR: 7.8 };
   }
 
   function shapeTorusKnot() {
-    const arr = new Float32Array(numParticles * 3);
-    const p = 2, q = 3, scale = 4.4;
+    const pos = new Float32Array(numParticles * 3);
+    const p = 2, q = 3, scale = 2.45;
     for (let i = 0; i < numParticles; i++) {
+      const k = i * 3;
       const t = (i / numParticles) * Math.PI * 2;
       const r = 2 + Math.cos(q * t);
-      const cx = r * Math.cos(p * t) * 1.0;
-      const cy = Math.sin(q * t) * 1.0;
-      const cz = r * Math.sin(p * t) * 1.0;
-      const jitter = 0.34;
-      arr[i * 3]     = cx * scale * 0.55 + (Math.random() - 0.5) * jitter;
-      arr[i * 3 + 1] = cy * scale * 0.55 + (Math.random() - 0.5) * jitter;
-      arr[i * 3 + 2] = cz * scale * 0.55 + (Math.random() - 0.5) * jitter;
+      const jitter = 0.36;
+      pos[k]     = r * Math.cos(p * t) * scale + (Math.random() - 0.5) * jitter;
+      pos[k + 1] = Math.sin(q * t) * scale + (Math.random() - 0.5) * jitter;
+      pos[k + 2] = r * Math.sin(p * t) * scale + (Math.random() - 0.5) * jitter;
     }
-    return arr;
+    return { pos, maxR: 7.4 };
   }
 
   function shapeGlobe() {
-    const arr = new Float32Array(numParticles * 3);
-    const R = 6.4;
+    const pos = new Float32Array(numParticles * 3);
+    const R = 6.2;
     for (let i = 0; i < numParticles; i++) {
-      // Fibonacci-ish sphere with latitude bands emphasized
+      const k = i * 3;
       const y = 1 - (i / (numParticles - 1)) * 2;
       const radius = Math.sqrt(1 - y * y);
       const theta = i * 2.39996 + Math.random() * 0.06;
-      const band = Math.random() < 0.12 ? 1.04 : 1.0; // sparse outer shell
-      arr[i * 3]     = Math.cos(theta) * radius * R * band;
-      arr[i * 3 + 1] = y * R * band;
-      arr[i * 3 + 2] = Math.sin(theta) * radius * R * band;
+      const band = Math.random() < 0.12 ? 1.05 : 1.0;
+      pos[k]     = Math.cos(theta) * radius * R * band;
+      pos[k + 1] = y * R * band;
+      pos[k + 2] = Math.sin(theta) * radius * R * band;
     }
-    return arr;
+    return { pos, maxR: R * 1.05 };
   }
 
   function shapeCore() {
-    // dense pulsing core + sparse halo — for the contact section
-    const arr = new Float32Array(numParticles * 3);
+    const pos = new Float32Array(numParticles * 3);
     for (let i = 0; i < numParticles; i++) {
+      const k = i * 3;
       const r = (Math.random() < 0.8)
         ? Math.pow(Math.random(), 1.8) * 3.4
         : 4 + Math.pow(Math.random(), 0.5) * 8;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      arr[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-      arr[i * 3 + 1] = r * Math.cos(phi);
-      arr[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+      pos[k]     = r * Math.sin(phi) * Math.cos(theta);
+      pos[k + 1] = r * Math.cos(phi);
+      pos[k + 2] = r * Math.sin(phi) * Math.sin(theta);
     }
-    return arr;
+    return { pos, maxR: 12 };
   }
 
-  const shapes = [shapeGalaxy(), shapeOrbital(), shapeTorusKnot(), shapeGlobe(), shapeCore()];
+  const defs = [shapeGalaxy(), shapeOrbital(), shapeTorusKnot(), shapeGlobe(), shapeCore()];
 
-  /* ── Geometry with morph state ── */
-  const positions = new Float32Array(shapes[0]); // current
-  const fromPos = new Float32Array(shapes[0]);
-  const toPos = new Float32Array(shapes[0]);
-  const colors = new Float32Array(numParticles * 3);
-  const sizes = new Float32Array(numParticles);
+  /* ── Per-shape color arrays from the spectral ramp ── */
+  function colorsFor(def) {
+    const out = new Float32Array(numParticles * 3);
+    const p = def.pos;
+    for (let i = 0; i < numParticles; i++) {
+      const k = i * 3;
+      const r = Math.sqrt(p[k] * p[k] + p[k + 1] * p[k + 1] + p[k + 2] * p[k + 2]);
+      const t = Math.min(1, r / def.maxR);
+      rampColor(t, tmpC);
+      // brightness: hot near center, slight random sparkle everywhere
+      const b = (1.25 - t * 0.55) * (0.75 + Math.random() * 0.45);
+      out[k]     = Math.min(1, tmpC.r * b);
+      out[k + 1] = Math.min(1, tmpC.g * b);
+      out[k + 2] = Math.min(1, tmpC.b * b);
+    }
+    return out;
+  }
+  const shapeCols = defs.map(colorsFor);
+
+  /* ── Buffers + morph state ── */
+  const positions = new Float32Array(defs[0].pos);
+  const colors = new Float32Array(shapeCols[0]);
+  const fromPos = new Float32Array(defs[0].pos);
+  const toPos = new Float32Array(defs[0].pos);
+  const fromCol = new Float32Array(shapeCols[0]);
+  const toCol = new Float32Array(shapeCols[0]);
   const seeds = new Float32Array(numParticles);
-
-  // Spectrum palette: violet → cyan → gold
-  const palette = [
-    new THREE.Color(0xa78bff),
-    new THREE.Color(0x34e0ff),
-    new THREE.Color(0xffc94d),
-    new THREE.Color(0xe9f2ff)
-  ];
-  for (let i = 0; i < numParticles; i++) {
-    const c = palette[
-      Math.random() < 0.5 ? 1 : Math.random() < 0.6 ? 0 : Math.random() < 0.7 ? 2 : 3
-    ];
-    colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
-    sizes[i] = Math.random() * 1.5 + 0.4;
-    seeds[i] = Math.random() * Math.PI * 2;
-  }
+  for (let i = 0; i < numParticles; i++) seeds[i] = Math.random() * Math.PI * 2;
 
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 0.085,
-    map: makeGlowTexture(),
+    size: 0.13,
+    map: glowTex,
     vertexColors: true,
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.95,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
     sizeAttenuation: true
@@ -183,11 +223,27 @@
   const points = new THREE.Points(geometry, material);
   scene.add(points);
 
-  /* ── Distant static starfield (second, cheaper layer) ── */
-  const starCount = 1600;
+  /* ── Central glow — bright golden nucleus ── */
+  const coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTex, color: 0xffd98a, transparent: true,
+    opacity: 0.75, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  coreGlow.scale.set(7, 7, 1);
+  scene.add(coreGlow);
+  const haloGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTex, color: 0x2aa8ff, transparent: true,
+    opacity: 0.22, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  haloGlow.scale.set(20, 20, 1);
+  scene.add(haloGlow);
+  // glow intensity per shape (galaxy & core bright, knot subtle)
+  const glowLevels = [0.75, 0.35, 0.18, 0.25, 0.9];
+
+  /* ── Distant starfield ── */
+  const starCount = 1800;
   const starPos = new Float32Array(starCount * 3);
   for (let i = 0; i < starCount; i++) {
-    const r = 60 + Math.random() * 80;
+    const r = 60 + Math.random() * 90;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     starPos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
@@ -196,24 +252,24 @@
   }
   const starGeo = new THREE.BufferGeometry();
   starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-  const starMat = new THREE.PointsMaterial({
-    size: 0.16, color: 0x8aa6d6, map: makeGlowTexture(),
-    transparent: true, opacity: 0.5, depthWrite: false,
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
+    size: 0.18, color: 0x9db4e0, map: glowTex,
+    transparent: true, opacity: 0.45, depthWrite: false,
     blending: THREE.AdditiveBlending
-  });
-  scene.add(new THREE.Points(starGeo, starMat));
+  })));
 
-  /* ── Morph control driven by scroll sections ── */
+  /* ── Morph control ── */
   let currentShape = 0;
-  let morphT = 1;            // 1 = settled
-  const morphSpeed = 0.016;
+  let morphT = 1;
+  const morphSpeed = 0.014;
 
   function setShape(idx) {
-    idx = Math.max(0, Math.min(shapes.length - 1, idx));
+    idx = Math.max(0, Math.min(defs.length - 1, idx));
     if (idx === currentShape) return;
-    // snapshot current animated positions as morph start
     fromPos.set(geometry.attributes.position.array);
-    toPos.set(shapes[idx]);
+    fromCol.set(geometry.attributes.color.array);
+    toPos.set(defs[idx].pos);
+    toCol.set(shapeCols[idx]);
     currentShape = idx;
     morphT = 0;
     document.dispatchEvent(new CustomEvent('shapechange', { detail: idx }));
@@ -221,7 +277,7 @@
   window.__setFieldShape = setShape;
 
   /* ── Mouse parallax + scroll rotation ── */
-  let mouseX = 0, mouseY = 0, targetRX = 0, targetRY = 0;
+  let mouseX = 0, mouseY = 0, easeX = 0, easeY = 0;
   document.addEventListener('mousemove', (e) => {
     mouseX = (e.clientX / window.innerWidth - 0.5);
     mouseY = (e.clientY / window.innerHeight - 0.5);
@@ -230,10 +286,9 @@
   let scrollRot = 0;
   window.addEventListener('scroll', () => {
     const max = document.body.scrollHeight - window.innerHeight;
-    scrollRot = max > 0 ? (window.scrollY / max) * Math.PI * 2 : 0;
+    scrollRot = max > 0 ? (window.scrollY / max) * Math.PI * 1.6 : 0;
   }, { passive: true });
 
-  /* ── Visibility pause ── */
   let running = true;
   document.addEventListener('visibilitychange', () => {
     running = !document.hidden;
@@ -248,39 +303,49 @@
     requestAnimationFrame(animate);
     const elapsed = clock.getElapsedTime();
     const posAttr = geometry.attributes.position;
+    const colAttr = geometry.attributes.color;
     const arr = posAttr.array;
+    const carr = colAttr.array;
 
     if (morphT < 1) {
       morphT = Math.min(1, morphT + morphSpeed);
       const e = easeInOut(morphT);
       for (let i = 0; i < numParticles * 3; i++) {
         arr[i] = fromPos[i] + (toPos[i] - fromPos[i]) * e;
+        carr[i] = fromCol[i] + (toCol[i] - fromCol[i]) * e;
       }
+      colAttr.needsUpdate = true;
     } else {
-      // ambient breathing on the settled shape
-      const base = shapes[currentShape];
+      const base = defs[currentShape].pos;
       for (let i = 0; i < numParticles; i++) {
         const k = i * 3;
         const s = seeds[i];
-        const breathe = Math.sin(elapsed * 0.7 + s) * 0.05;
-        arr[k]     = base[k]     * (1 + breathe * 0.4);
-        arr[k + 1] = base[k + 1] + Math.sin(elapsed * 0.9 + s * 1.7) * 0.06;
+        const breathe = Math.sin(elapsed * 0.7 + s) * 0.04;
+        arr[k]     = base[k] * (1 + breathe * 0.4);
+        arr[k + 1] = base[k + 1] + Math.sin(elapsed * 0.9 + s * 1.7) * 0.05;
         arr[k + 2] = base[k + 2] * (1 + breathe * 0.4);
       }
     }
     posAttr.needsUpdate = true;
 
-    // slow self-rotation, different per shape
-    const spinRates = [0.05, 0.12, 0.18, 0.08, 0.1];
-    points.rotation.y = elapsed * spinRates[currentShape] + scrollRot * 0.6;
-    points.rotation.x = Math.sin(elapsed * 0.1) * 0.08;
+    // glow nucleus breathes; intensity tracks current shape
+    const gl = glowLevels[currentShape];
+    coreGlow.material.opacity = gl * (0.85 + Math.sin(elapsed * 1.4) * 0.12);
+    haloGlow.material.opacity = gl * 0.3;
 
-    // camera parallax (eased)
-    targetRX += ((mouseY * 2.2) - targetRX) * 0.04;
-    targetRY += ((mouseX * 2.6) - targetRY) * 0.04;
-    camera.position.x = targetRY;
-    camera.position.y = -targetRX;
-    camera.lookAt(0, 0, 0);
+    // shape-specific spin rates; galaxy tilted slightly for depth
+    const spinRates = [0.06, 0.12, 0.16, 0.07, 0.1];
+    points.rotation.y = elapsed * spinRates[currentShape] + scrollRot * 0.5;
+    points.rotation.x = (currentShape === 0 ? 0.12 : 0) + Math.sin(elapsed * 0.1) * 0.05;
+    points.rotation.z = currentShape === 0 ? 0.1 : 0;
+
+    // eased camera parallax around the elevated base position
+    easeX += ((mouseX * 2.4) - easeX) * 0.04;
+    easeY += ((mouseY * 1.6) - easeY) * 0.04;
+    camera.position.x = camBase.x + easeX;
+    camera.position.y = camBase.y - easeY;
+    camera.position.z = camBase.z;
+    camera.lookAt(0, 0.5, 0);
 
     renderer.render(scene, camera);
   }
