@@ -1,1 +1,33 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>404 Not Found | Ng'or Kon</title><link rel="stylesheet" href="css/style.css"><style>.e{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;z-index:1;position:relative}.c{font-family:Orbitron,sans-serif;font-size:clamp(5rem,18vw,11rem);font-weight:900;color:transparent;-webkit-text-stroke:2px #00c8ff;line-height:1;margin-bottom:16px}.t{font-family:Orbitron,sans-serif;font-size:1.6rem;color:#e8f0ff;margin-bottom:12px}.d{color:#8aaecf;max-width:400px;margin-bottom:36px}.b{padding:14px 32px;background:linear-gradient(135deg,#00c8ff,#0078d4);color:#050814;font-family:Orbitron,sans-serif;font-size:.85rem;font-weight:700;border-radius:8px;text-decoration:none}</style></head><body><canvas id="bg-canvas" aria-hidden="true"></canvas><div class="e"><div class="c" aria-hidden="true">404</div><h1 class="t">Page Not Found</h1><p class="d">This page drifted into the quantum void. Let's get you back.</p><a href="/" class="b">Back to Portfolio</a></div><script defer src="js/script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>404 — Signal Lost | Ng'or Kon</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#05070f;color:#aebcdb;font-family:'DM Mono',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.e{text-align:center;padding:40px;position:relative;z-index:1}
+.c{font-family:'Syne',sans-serif;font-size:clamp(5rem,18vw,11rem);font-weight:800;line-height:1;background:linear-gradient(90deg,#a78bff,#34e0ff,#ffc94d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.t{font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:#34e0ff;margin-bottom:14px}
+.d{font-size:.78rem;color:#6d7da3;max-width:380px;margin:0 auto 36px;line-height:1.8}
+.b{display:inline-block;padding:14px 32px;border:1px solid rgba(52,224,255,.4);color:#34e0ff;text-decoration:none;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;transition:.3s}
+.b:hover{background:rgba(52,224,255,.1);border-color:#34e0ff}
+canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="e">
+  <div class="c" aria-hidden="true">404</div>
+  <div class="t">// signal lost</div>
+  <p class="d">This coordinate doesn't exist in the field. Particle decoherence, probably.</p>
+  <a href="/" class="b">Return to origin →</a>
+</div>
+<script>
+const c=document.getElementById('bg'),x=c.getContext('2d');let s=[];
+function rs(){c.width=innerWidth;c.height=innerHeight;s=[];for(let i=0;i<200;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.2+.2,a:Math.random()*.6+.1,v:Math.random()*.01+.003});}
+function d(){x.clearRect(0,0,c.width,c.height);s.forEach(p=>{p.a+=p.v*(Math.random()>.5?1:-1);p.a=Math.max(.05,Math.min(.7,p.a));x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fillStyle='rgba(52,224,255,'+p.a+')';x.fill();});requestAnimationFrame(d);}
+rs();addEventListener('resize',rs);d();
+</script>
+</body>
+</html>
